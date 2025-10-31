@@ -1,18 +1,19 @@
 //********************************************abdelrahman Tarek    ************************************** */
 #pragma once
-#include "Requests.h"
+#include "Request.h"
 #include "../Rovers/polar_Rovers.h"
 #include "../Rovers/Normal_Rovers.h"
 #include "../Rovers/Digging_Rovers.h"
+#include  "../Mars_Station.h"
 
 
-class New_Request : public Request {
+class New_Request : public REQUEST {
     int location_distance;
     int mission_duration;
     char rover_type; // 'P' for Polar, 'N' for Normal, 'D' for Digging
 public:
     New_Request(int id, int day, int loc, int duration, char type)
-        : Request(id, day), location_distance(loc), mission_duration(duration), rover_type(type) {}
+        : REQUEST(id, day), location_distance(loc), mission_duration(duration), rover_type(type) {}
 
     int getLocation() const {
         return location_distance;
@@ -23,18 +24,30 @@ public:
     }
 
     int getRequestID() const override {
-        return Request::request_id;
+        return REQUEST::request_id;
     }
     int getRequestDay() const override {
-        return Request::request_day;
+        return REQUEST::request_day;
     }
     char getRoverType() const {
         return rover_type;
     }
+
+    void operate(Mars_Station& station) {
+       if (rover_type == 'P') {
+            Mission *thisMission = new Mission(getRequestID(),getLocation(), getMissionDuration(), rover_type);
+            station.getReadyPolarMissions().enqueue(thisMission);
+        } else if (rover_type == 'N') {
+            Mission *thisMission = new Mission(getRequestID(),getLocation(), getMissionDuration(), rover_type);
+            station.getReadyNormalMissions().enqueue(thisMission);
+        } else if (rover_type == 'D') {
+            Mission *thisMission = new Mission(getRequestID(),getLocation(), getMissionDuration(), rover_type);
+            station.getReadyDiggingMissions().enqueue(thisMission);
+        }
+    }
   
 };
-#ifndef _NEW_REQUEST_H_
-#define _NEW_REQUEST_H_
+
 std::ostream& operator<<(std::ostream& os, const New_Request& req) {
     os << "New Request ID: " << req.getRequestID() << "\n"
        << "Request Day: " << req.getRequestDay() << "\n"
@@ -44,4 +57,3 @@ std::ostream& operator<<(std::ostream& os, const New_Request& req) {
 
     return os;
 }
-#endif
