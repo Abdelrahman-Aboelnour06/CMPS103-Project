@@ -2,19 +2,19 @@
 #include "ADT/ArrayStack.h"
 #include "ADT/LinkedQueue.h"
 #include "ADT/priQueue.h"
-#include "Request/Requests.h"
+#include "Request/Request.h"
 #include "Request/New_Request.h"
+#include "Request/Abort_Request.h"
 #include "Rovers/Rover.h"
 #include "Rovers/Digging_Rovers.h"
 #include "Rovers/Normal_Rovers.h"
 #include "Rovers/polar_Rovers.h"
-#include "header.h"
 #include <fstream>
 using namespace std;
 
 /*-----------------------------Omar Syed-----------------------------*/
 
-void readData(string fileName,int*roverCounts,int*roverSpeed,int* &checkupDurations,int &checkupNum,LinkedQueue<Request*> &requestQueue) {
+void readData(string fileName,int*roverCounts,int*roverSpeed,int* &checkupDurations,int &checkupNum,LinkedQueue<REQUEST*> &requestQueue) {
 	//read data from a file and store it into data structures
 	//open the file
 	ifstream file(fileName);
@@ -48,7 +48,7 @@ void readData(string fileName,int*roverCounts,int*roverSpeed,int* &checkupDurati
 	char request;
 	while (requestNum--){
 	file >> request;
-	Request* requestptr = nullptr;
+	REQUEST* requestptr = nullptr;
 	if (request == 'R') {
 		char type;
 		int RDAY,ID,TLOC,DUR;
@@ -83,7 +83,7 @@ int main() {
 	int roverSpeed[3] = { 0 ,0,0};
 	int* checkupDurations = nullptr;
 	int checkupNum = 0;
-	LinkedQueue<Request*> requestQueue;
+	LinkedQueue<REQUEST*> requestQueue;
 
 	cout << "\n=== Testing File Reading ===" << endl;
 	readData("input.txt", roverCount, roverSpeed, checkupDurations, checkupNum, requestQueue);
@@ -103,7 +103,7 @@ int main() {
 		cout << "Duration[" << i << "] = " << checkupDurations[i] << endl;
 
 	cout << "\n--- Requests Queue ---" << endl;
-	Request* temp;
+	REQUEST* temp;
 	int count = 1;
 	while (requestQueue.dequeue(temp)) {
 		cout << "Request " << count++ << ": ";
