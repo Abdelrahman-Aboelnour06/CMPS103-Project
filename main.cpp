@@ -14,7 +14,8 @@ using namespace std;
 
 /*-----------------------------Omar Syed-----------------------------*/
 
-void readData(string fileName,int*roverCounts,int*roverSpeed,int* &checkupDurations,int &checkupNum,LinkedQueue<Request*> &requestQueue) {
+void readData(string fileName, int* roverCounts, int* roverSpeed, int*& checkupDurations, int& checkupNum, LinkedQueue<Request*>& requestQueue)
+{
 	//read data from a file and store it into data structures
 	//open the file
 	ifstream file(fileName);
@@ -35,7 +36,7 @@ void readData(string fileName,int*roverCounts,int*roverSpeed,int* &checkupDurati
 		i++;
 	}
 	file >> checkupNum;
-	 checkupDurations = new int[checkupNum];
+	checkupDurations = new int[checkupNum];
 	i = 0;
 	while (i < checkupNum)
 	{
@@ -46,24 +47,25 @@ void readData(string fileName,int*roverCounts,int*roverSpeed,int* &checkupDurati
 	int requestNum;
 	file >> requestNum;
 	char request;
-	while (requestNum--){
-	file >> request;
-	Request* requestptr = nullptr;
-	if (request == 'R') {
-		char type;
-		int RDAY,ID,TLOC,DUR;
-		file >>type >>RDAY >> ID >> TLOC >> DUR;
-		//cast the requestptr
-		requestptr = new New_Request(ID, RDAY, TLOC, DUR, type);
-	}
-	else if (request == 'X') {
-		int Xday;
-		int id;
-		file >> Xday >> id;
-	    requestptr = new Abort_Request(Xday,id);
-	}
+	while (requestNum--) {
+		file >> request;
+		Request* requestptr = nullptr;
+		if (request == 'R') {
+			char type;
+			int RDAY, ID, TLOC, DUR;
+			file >> type >> RDAY >> ID >> TLOC >> DUR;
+			//cast the requestptr
+			requestptr = new New_Request(ID, RDAY, TLOC, DUR, type);
+		}
+		else if (request == 'X') {
+			int Xday;
+			int id;
+			file >> Xday >> id;
+			requestptr = new Abort_Request(Xday, id);
+		}
 		//store in the request queue
-		requestQueue.enqueue(requestptr);
+		if (requestptr)
+			requestQueue.enqueue(requestptr);
 	}
 	file.close();
 
@@ -80,7 +82,7 @@ int main() {
 
 	//test file reading function
 	int roverCount[3] = { 0,0,0 };
-	int roverSpeed[3] = { 0 ,0,0};
+	int roverSpeed[3] = { 0 ,0,0 };
 	int* checkupDurations = nullptr;
 	int checkupNum = 0;
 	LinkedQueue<Request*> requestQueue;
@@ -107,7 +109,9 @@ int main() {
 	int count = 1;
 	while (requestQueue.dequeue(temp)) {
 		cout << "Request " << count++ << ": ";
-		cout << temp;
+		if (dynamic_cast<New_Request*>(temp))
+			cout << *dynamic_cast<New_Request*>(temp);
+		cout << *dynamic_cast<Abort_Request*>(temp);
 		cout << endl;
 		delete temp; // free memory
 	}
