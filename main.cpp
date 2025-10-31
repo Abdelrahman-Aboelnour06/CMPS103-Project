@@ -36,7 +36,7 @@ void readData(string fileName,int*roverCounts,int*roverSpeed,int* checkupDuratio
 		i++;
 	}
 	file >> checkupNum;
-	int* checkupDurations = new int[checkupNum];
+	 checkupDurations = new int[checkupNum];
 	i = 0;
 	while (i < checkupNum)
 	{
