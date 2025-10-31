@@ -1,4 +1,5 @@
 #pragma once
+#include <iostream>
 class Rover {
 protected:
     const int speed;
@@ -11,7 +12,7 @@ public:
     Rover(int s, int dbc, int cd)
         : speed(s), Days_before_checkup(dbc), checkup_duration(cd),
           rover_id(++id_counter), missions_done(0) {}
-    virtual ~Rover() = 0;
+     ~Rover(){};
 
     virtual int  getSpeed() const = 0;
     virtual int  getDaysBeforeCheckup() const = 0;
@@ -19,7 +20,6 @@ public:
     virtual int  getRoverID() const = 0;
     virtual int  getMissionsDone() const = 0;
     virtual void incrementMissionsDone() = 0;
-    virtual void operator<<(Rover& r) = 0;
 };
 
 

@@ -1,5 +1,4 @@
 #include "Rover.h"
-#include <iostream>
 #pragma once
 
 
@@ -35,15 +34,16 @@ public:
     void incrementMissionsDone() override {
         ++missions_done;
     }
-    std::ostream& operator<<(std::ostream& os) {
-        os << "Normal Rover ID: " << getRoverID() << "\n"
-           << "Speed: " << getSpeed() << "\n"
-           << "Days Before Checkup: " << getDaysBeforeCheckup() << "\n"
-           << "Checkup Duration: " << getCheckupDuration() << "\n"
-           << "Missions Done: " << getMissionsDone() << "\n";
-        return os;
-    }
+   
 };
 
-
+std::ostream& operator<<(std::ostream& os, const Normal_Rovers& rover) {
+        os << "Normal Rover ID: " << rover.getRoverID() << "\n"
+           << "Speed: " << rover.getSpeed() << "\n"
+           << "Days Before Checkup: " << rover.getDaysBeforeCheckup() << "\n"
+           << "Checkup Duration: " << rover.getCheckupDuration() << "\n"
+           << "Missions Done: " << rover.getMissionsDone() << "\n" << std::endl;
+    return os;
+}
+ 
 
