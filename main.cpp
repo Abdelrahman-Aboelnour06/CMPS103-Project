@@ -111,7 +111,8 @@ int main() {
 		cout << "Request " << count++ << ": ";
 		if (dynamic_cast<New_Request*>(temp))
 			cout << *dynamic_cast<New_Request*>(temp);
-		cout << *dynamic_cast<Abort_Request*>(temp);
+		if (dynamic_cast<Abort_Request*>(temp))
+			cout << *dynamic_cast<Abort_Request*>(temp);
 		cout << endl;
 		delete temp; // free memory
 	}
