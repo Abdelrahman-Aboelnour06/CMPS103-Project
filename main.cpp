@@ -14,7 +14,7 @@ using namespace std;
 
 /*-----------------------------Omar Syed-----------------------------*/
 
-void readData(string fileName,int*roverCounts,int*roverSpeed,int* checkupDurations,int &checkupNum,LinkedQueue<Request*> requestQueue) {
+void readData(string fileName,int*roverCounts,int*roverSpeed,int* &checkupDurations,int &checkupNum,LinkedQueue<Request*> &requestQueue) {
 	//read data from a file and store it into data structures
 	//open the file
 	ifstream file(fileName);
@@ -51,9 +51,8 @@ void readData(string fileName,int*roverCounts,int*roverSpeed,int* checkupDuratio
 	Request* requestptr = nullptr;
 	if (request == 'R') {
 		char type;
-		file >> type;
 		int RDAY,ID,TLOC,DUR;
-		file >> RDAY >> ID >> TLOC >> DUR;
+		file >>type >>RDAY >> ID >> TLOC >> DUR;
 		//cast the requestptr
 		requestptr = new New_Request(ID, RDAY, TLOC, DUR, type);
 	}
@@ -80,13 +79,42 @@ int main() {
 
 
 	//test file reading function
+	int roverCount[3] = { 0,0,0 };
+	int roverSpeed[3] = { 0 ,0,0};
+	int* checkupDurations = nullptr;
+	int checkupNum = 0;
+	LinkedQueue<Request*> requestQueue;
 
-	/*int roverCount[3];
-	int roverSpeed[3];
-	int* checkupDurations;
-	int chekupNum=0;
-	LinkedQueue<Request*>requestQueue;
-	readData("input.txt", roverCount, roverSpeed, checkupDurations, chekupNum, requestQueue);*/
+	cout << "\n=== Testing File Reading ===" << endl;
+	readData("input.txt", roverCount, roverSpeed, checkupDurations, checkupNum, requestQueue);
+
+	// TEST OUTPUTS DIRECTLY
+	cout << "\n--- Rover Counts ---" << endl;
+	for (int i = 0; i < 3; i++)
+		cout << "Rover Count [" << i << "] = " << roverCount[i] << endl;
+
+	cout << "\n--- Rover Speeds ---" << endl;
+	for (int i = 0; i < 3; i++)
+		cout << "Rover Speed [" << i << "] = " << roverSpeed[i] << endl;
+
+	cout << "\n--- Checkup Durations ---" << endl;
+	cout << "CheckupNum = " << checkupNum << endl;
+	for (int i = 0; i < checkupNum; i++)
+		cout << "Duration[" << i << "] = " << checkupDurations[i] << endl;
+
+	cout << "\n--- Requests Queue ---" << endl;
+	Request* temp;
+	int count = 1;
+	while (requestQueue.dequeue(temp)) {
+		cout << "Request " << count++ << ": ";
+		cout << temp;
+		cout << endl;
+		delete temp; // free memory
+	}
+
+	delete[] checkupDurations;
+
+	cout << "\n=== File Reading Test Complete ===" << endl;
 
 	/*-----------------------------Omar Syed-----------------------------*/
 	return 0;
