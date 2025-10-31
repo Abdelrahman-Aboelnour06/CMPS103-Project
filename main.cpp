@@ -2,6 +2,12 @@
 #include "ADT/ArrayStack.h"
 #include "ADT/LinkedQueue.h"
 #include "ADT/priQueue.h"
+#include "Request/Requests.h"
+#include "Request/New_Request.h"
+#include "Rovers/Rover.h"
+#include "Rovers/Digging_Rovers.h"
+#include "Rovers/Normal_Rovers.h"
+#include "Rovers/polar_Rovers.h"
 #include "header.h"
 #include <fstream>
 
@@ -9,7 +15,7 @@ using namespace std;
 
 /*-----------------------------Omar Syed-----------------------------*/
 
-void readData(string fileName,int*roverCounts,int*roverSpeed,int* checkupDurations,int checkupNum,LinkedQueue<request*> requestQueue) {
+void readData(string fileName,int*roverCounts,int*roverSpeed,int* checkupDurations,int checkupNum,LinkedQueue<Request*> requestQueue) {
 	//read data from a file and store it into data structures
 	//open the file
 	ifstream file(fileName);
@@ -45,11 +51,14 @@ void readData(string fileName,int*roverCounts,int*roverSpeed,int* checkupDuratio
 	char request;
 	while (file.eof() == false){
 	file >> request;
+	Request* requestptr = nullptr;
 	if (request == 'R') {
 		char type;
 		file >> type;
 		int RDAY,ID,TLOC,DUR;
 		file >> RDAY >> ID >> TLOC >> DUR;
+		//cast the requestptr
+		requestptr = new New_Request(ID, RDAY, TLOC, DUR, type);
 	}
 	else if (request == 'X') {
 		int Xday;
@@ -58,6 +67,7 @@ void readData(string fileName,int*roverCounts,int*roverSpeed,int* checkupDuratio
 
 	}
 		//store in the request queue
+
 	}
 	file.close();
 
