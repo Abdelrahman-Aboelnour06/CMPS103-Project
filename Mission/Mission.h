@@ -12,4 +12,5 @@ protected:
 public:
     Mission(int id, int loc, int duration, char type)
         : mission_id(id), location_distance(loc), mission_duration(duration), rover_type(type) {}
+	int getID() const { return mission_id; }
 };
