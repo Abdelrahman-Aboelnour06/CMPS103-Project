@@ -2,7 +2,9 @@
 
 #pragma once
 #include "header.h"
+#include "Request/Abort_Request.h"
 #include "Request/Request.h"
+#include "Request/New_Request.h"
 
 
 

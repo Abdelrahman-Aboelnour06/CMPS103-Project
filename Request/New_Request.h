@@ -23,10 +23,10 @@ public:
         return mission_duration;
     }
 
-    int getRequestID() const override {
+    int getRequestID() const  {
         return REQUEST::request_id;
     }
-    int getRequestDay() const override {
+    int getRequestDay() const  {
         return REQUEST::request_day;
     }
     char getRoverType() const {
