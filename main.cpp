@@ -12,7 +12,7 @@
 #include <fstream>
 using namespace std;
 
-/*-----------------------------Omar  Syed-----------------------------*/
+/*-----------------------------Omar Syed-----------------------------*/
 
 void readData(string fileName,int*roverCounts,int*roverSpeed,int* checkupDurations,int &checkupNum,LinkedQueue<Request*> requestQueue) {
 	//read data from a file and store it into data structures
@@ -56,17 +56,15 @@ void readData(string fileName,int*roverCounts,int*roverSpeed,int* checkupDuratio
 		file >> RDAY >> ID >> TLOC >> DUR;
 		//cast the requestptr
 		requestptr = new New_Request(ID, RDAY, TLOC, DUR, type);
-		requestQueue.enqueue(requestptr);
 	}
 	else if (request == 'X') {
 		int Xday;
 		int id;
 		file >> Xday >> id;
-
+	    requestptr = new Abort_Request(Xday,id);
 	}
 		//store in the request queue
 		requestQueue.enqueue(requestptr);
-
 	}
 	file.close();
 
