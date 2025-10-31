@@ -91,6 +91,7 @@ int main() {
 	readData("input.txt", roverCount, roverSpeed, checkupDurations, checkupNum, requestQueue);
 
 
+	/*-----------------------------Omar Syed-----------------------------*/
 	while (!requestQueue.isEmpty()) {
 		Request* temp = nullptr;
 		requestQueue.dequeue(temp);
@@ -101,7 +102,5 @@ int main() {
 
 		delete temp;
 	}
-	0
-	/*-----------------------------Omar Syed-----------------------------*/
 	return 0;
 }
