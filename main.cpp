@@ -65,7 +65,6 @@ void readData(string fileName,int*roverCounts,int*roverSpeed,int* checkupDuratio
 
 	}
 		//store in the request queue
-		
 		requestQueue.enqueue(requestptr);
 
 	}
@@ -76,7 +75,21 @@ void readData(string fileName,int*roverCounts,int*roverSpeed,int* checkupDuratio
 /*-----------------------------Omar Syed-----------------------------*/
 
 int main() {
+	/*-----------------------------Omar Syed-----------------------------*/
+
+	//Data Structures Testing at least 10 object
+
+
+
 	//test file reading function
 
+	/*int roverCount[3];
+	int roverSpeed[3];
+	int* checkupDurations;
+	int chekupNum=0;
+	LinkedQueue<Request*>requestQueue;
+	readData("input.txt", roverCount, roverSpeed, checkupDurations, chekupNum, requestQueue);*/
+
+	/*-----------------------------Omar Syed-----------------------------*/
 	return 0;
 }
