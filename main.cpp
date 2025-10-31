@@ -10,7 +10,6 @@
 #include "Rovers/polar_Rovers.h"
 #include "header.h"
 #include <fstream>
-#pragma once
 using namespace std;
 
 /*-----------------------------Omar Syed -----------------------------*/
