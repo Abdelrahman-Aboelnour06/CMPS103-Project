@@ -46,7 +46,7 @@ void readData(string fileName,int*roverCounts,int*roverSpeed,int* checkupDuratio
 	int requestNum;
 	file >> requestNum;
 	char request;
-	while (file.eof() == false){
+	while (requestNum--){
 	file >> request;
 	Request* requestptr = nullptr;
 	if (request == 'R') {
@@ -65,7 +65,7 @@ void readData(string fileName,int*roverCounts,int*roverSpeed,int* checkupDuratio
 
 	}
 		//store in the request queue
-
+		
 		requestQueue.enqueue(requestptr);
 
 	}
