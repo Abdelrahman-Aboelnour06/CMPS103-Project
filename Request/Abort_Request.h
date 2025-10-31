@@ -5,8 +5,8 @@
 class Abort_Request : public Request {
     int aborted_request_id;
 public:
-    Abort_Request(int id, int day, int aborted_id)
-        : Request(id, day), aborted_request_id(aborted_id) {}
+    Abort_Request(int day, int aborted_id)
+        : Request(0, day), aborted_request_id(aborted_id) {}
 
     int getAbortedRequestID() const {
         return aborted_request_id;

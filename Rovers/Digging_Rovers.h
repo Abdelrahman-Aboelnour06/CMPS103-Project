@@ -5,9 +5,10 @@
 
 class Digging_Rovers : public Rover
 {
+    const int speed; // Assuming a constant speed for Digging Rovers
 public:
     Digging_Rovers(int s, int dbc, int cd)
-        : Rover(s, dbc, cd) {}
+        : Rover(dbc, cd), speed(s) {}
 
     ~Digging_Rovers() {}
 

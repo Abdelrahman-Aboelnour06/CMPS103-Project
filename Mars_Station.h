@@ -1,3 +1,5 @@
+//********************************************abdelrahman Tarek    ************************************** */
+
 #pragma once
 #include "header.h"
 
@@ -22,7 +24,11 @@ private:
     LinkedQueue<Polar_Rovers*>   Checkup_Polar_Rovers;
     LinkedQueue<Digging_Rovers*> Checkup_Digging_Rovers;
     public:
+    Mars_Station() : current_day(0) {}
+    ~Mars_Station() {}
+
     
+
 
 
 };

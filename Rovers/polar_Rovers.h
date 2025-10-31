@@ -4,15 +4,18 @@
 #pragma once
 class Polar_Rovers : public Rover
 {
+    private:
+    const int speed; // Assuming a constant speed for Polar Rovers
     public:
-    Polar_Rovers(int s, int dbc, int cd)
-        : Rover(s, dbc, cd) {}
+    Polar_Rovers(int s,int dbc, int cd)
+        : Rover(dbc, cd), speed(s) {}
     ~Polar_Rovers() {}
-    int getSpeed() const override {
-        return speed;
-    }
+
     int getDaysBeforeCheckup() const override {
         return Days_before_checkup;
+    }
+    int getSpeed() const {
+        return speed;
     }
     int getCheckupDuration() const override {
         return checkup_duration;

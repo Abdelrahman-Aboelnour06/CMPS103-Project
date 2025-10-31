@@ -4,18 +4,16 @@
 #include <iostream>
 class Rover {
 protected:
-    const int speed;
     const int Days_before_checkup;
     const int checkup_duration;
     static int id_counter;
     const int rover_id;
     int missions_done;
 public:
-    Rover(int s, int dbc, int cd)
-        : speed(s), Days_before_checkup(dbc), checkup_duration(cd),
+    Rover(int dbc, int cd)
+        : Days_before_checkup(dbc), checkup_duration(cd),
           rover_id(++id_counter), missions_done(0) {}
      ~Rover(){};
-
     virtual int  getSpeed() const = 0;
     virtual int  getDaysBeforeCheckup() const = 0;
     virtual int  getCheckupDuration() const = 0;
