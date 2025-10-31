@@ -1,0 +1,7 @@
+# Ignore Visual Studio cache and build files
+.vs/
+*.db
+*.db-shm
+*.db-wal
+*.opendb
+*.ipch
