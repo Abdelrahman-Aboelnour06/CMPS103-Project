@@ -1,4 +1,5 @@
 #include "Rover.h"
+#include <iostream>
 #pragma once
 class Polar_Rovers : public Rover
 {
@@ -23,6 +24,14 @@ class Polar_Rovers : public Rover
     }
     void incrementMissionsDone() override {
         ++missions_done;
+    }
+    std::ostream& operator<<(std::ostream& os) {
+        os << "Polar Rover ID: " << getRoverID() << "\n"
+           << "Speed: " << getSpeed() << "\n"
+           << "Days Before Checkup: " << getDaysBeforeCheckup() << "\n"
+           << "Checkup Duration: " << getCheckupDuration() << "\n"
+           << "Missions Done: " << getMissionsDone() << "\n";
+        return os;
     }
 
 };

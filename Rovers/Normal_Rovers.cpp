@@ -1,4 +1,5 @@
 #include "Rover.h"
+#include <iostream>
 #pragma once
 
 
@@ -10,7 +11,7 @@ public:
         : Rover(s, dbc, cd) {}
 
     ~Normal_Rovers() {}
-    
+
     int getSpeed() const override {
         return speed;
     }
@@ -33,6 +34,14 @@ public:
 
     void incrementMissionsDone() override {
         ++missions_done;
+    }
+    std::ostream& operator<<(std::ostream& os) {
+        os << "Normal Rover ID: " << getRoverID() << "\n"
+           << "Speed: " << getSpeed() << "\n"
+           << "Days Before Checkup: " << getDaysBeforeCheckup() << "\n"
+           << "Checkup Duration: " << getCheckupDuration() << "\n"
+           << "Missions Done: " << getMissionsDone() << "\n";
+        return os;
     }
 };
 
