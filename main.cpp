@@ -89,37 +89,17 @@ int main() {
 	cout << "\n=== Testing File Reading ===" << endl;
 	readData("input.txt", roverCount, roverSpeed, checkupDurations, checkupNum, requestQueue);
 
-	// TEST OUTPUTS DIRECTLY
-	cout << "\n--- Rover Counts ---" << endl;
-	for (int i = 0; i < 3; i++)
-		cout << "Rover Count [" << i << "] = " << roverCount[i] << endl;
-
-	cout << "\n--- Rover Speeds ---" << endl;
-	for (int i = 0; i < 3; i++)
-		cout << "Rover Speed [" << i << "] = " << roverSpeed[i] << endl;
-
-	cout << "\n--- Checkup Durations ---" << endl;
-	cout << "CheckupNum = " << checkupNum << endl;
-	for (int i = 0; i < checkupNum; i++)
-		cout << "Duration[" << i << "] = " << checkupDurations[i] << endl;
-
-	cout << "\n--- Requests Queue ---" << endl;
-	REQUEST* temp;
-	int count = 1;
-	while (requestQueue.dequeue(temp)) {
-		cout << "Request " << count++ << ": ";
-		if (dynamic_cast<New_Request*>(temp))
-			cout << *dynamic_cast<New_Request*>(temp);
-		if (dynamic_cast<Abort_Request*>(temp))
-			cout << *dynamic_cast<Abort_Request*>(temp);
-		cout << endl;
-		delete temp; // free memory
-	}
-
-	delete[] checkupDurations;
-
-	cout << "\n=== File Reading Test Complete ===" << endl;
 
 	/*-----------------------------Omar Syed-----------------------------*/
+	while (!requestQueue.isEmpty()) {
+		Request* temp = nullptr;
+		requestQueue.dequeue(temp);
+		if (New_Request* n = dynamic_cast<New_Request*>(temp))
+			cout << *n;
+		else if (Abort_Request* a = dynamic_cast<Abort_Request*>(temp))
+			cout << *a;
+
+		delete temp;
+	}
 	return 0;
 }
