@@ -46,6 +46,7 @@ void readData(string fileName,int*roverCounts,int*roverSpeed,int* &checkupDurati
 	int requestNum;
 	file >> requestNum;
 	char request;
+	
 	while (requestNum--){
 	file >> request;
 	
