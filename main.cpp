@@ -10,7 +10,7 @@
 #include "Rovers/polar_Rovers.h"
 #include "header.h"
 #include <fstream>
-
+#pragma once
 using namespace std;
 
 /*-----------------------------Omar Syed -----------------------------*/
@@ -35,8 +35,6 @@ void readData(string fileName,int*roverCounts,int*roverSpeed,int* checkupDuratio
 		file >> roverSpeed[i];
 		i++;
 	}
-
-	int checkupNum;
 	file >> checkupNum;
 	int* checkupDurations = new int[checkupNum];
 	i = 0;
