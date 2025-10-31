@@ -4,3 +4,7 @@
 #include "Rovers/Normal_Rovers.h"
 #include "Rovers/Digging_Rovers.h"
 #include "Request/New_Request.h"
+#include "Request/Abort_Request.h"
+#include "ADT/LinkedQueue.h"
+#include "ADT/priQueue.h"
+#include "ADT/ArrayStack.h"
