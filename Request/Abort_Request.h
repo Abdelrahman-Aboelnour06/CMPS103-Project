@@ -1,29 +1,27 @@
-#include "Request.h"
+#include "REQUEST.h"
 #include "../header.h"
 #include "../Mars_Station.h"
 #include <iostream>
 #pragma once
 
-class Abort_Request : public REQUEST
+class Abort_Request : public request
 {
     int aborted_request_id;
 public:
     Abort_Request(int day, int aborted_id)
-        : REQUEST(0, day), aborted_request_id(aborted_id) {}
+        : request(0, day), aborted_request_id(aborted_id) {}
 
     int getAbortedRequestID() const {
         return aborted_request_id;
     }
 
-    int getRequestID() const override {
-        return REQUEST::request_id;
+    int getRequestID() const  {
+        return request::request_id;
     }
-    int getRequestDay() const override {
-        return REQUEST::request_day;
+    int getRequestDay() const  {
+        return request::request_day;
     }
-     void operate(Mars_Station& station) override {
-        station.getRequestsQueue().enqueue(this);
-    }
+   
 
 };
 

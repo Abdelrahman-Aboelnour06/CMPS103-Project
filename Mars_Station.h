@@ -9,7 +9,7 @@
 class Mars_Station {
 private:
     int current_day;
-    LinkedQueue<REQUEST*> requests;
+    LinkedQueue<request*> requests;
     LinkedQueue<Mission*> Ready_Digging_Missions;
     LinkedQueue<Mission*> Ready_Polar_Missions;
     LinkedQueue<Mission*> Ready_Normal_Missions;
@@ -26,7 +26,7 @@ private:
     public:
     Mars_Station() : current_day(0) {}
     ~Mars_Station() {}
-    LinkedQueue<REQUEST*> getRequestsQueue() const {
+    LinkedQueue<request*> getRequestsQueue() const {
         return requests;
     }
     LinkedQueue<Mission*> getReadyDiggingMissions() const {
