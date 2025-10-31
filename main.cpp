@@ -56,6 +56,7 @@ void readData(string fileName,int*roverCounts,int*roverSpeed,int* checkupDuratio
 		file >> RDAY >> ID >> TLOC >> DUR;
 		//cast the requestptr
 		requestptr = new New_Request(ID, RDAY, TLOC, DUR, type);
+		requestQueue.enqueue(requestptr);
 	}
 	else if (request == 'X') {
 		int Xday;
@@ -64,6 +65,8 @@ void readData(string fileName,int*roverCounts,int*roverSpeed,int* checkupDuratio
 
 	}
 		//store in the request queue
+
+		requestQueue.enqueue(requestptr);
 
 	}
 	file.close();
