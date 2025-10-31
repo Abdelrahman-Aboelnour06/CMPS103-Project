@@ -14,7 +14,8 @@ class New_Request : public request
     char rover_type; // 'P' for Polar, 'N' for Normal, 'D' for Digging
 public:
     New_Request(int id, int day, int loc, int duration, char type)
-        : request(id, day), location_distance(loc), mission_duration(duration), rover_type(type) {}
+        : request(id, day), location_distance(loc), mission_duration(duration), rover_type(type) {
+    }
 
     int getLocation() const {
         return location_distance;
@@ -25,25 +26,25 @@ public:
     }
 
     int getRequestID() const override {
-        return REQUEST::request_id;
+        return request::request_id;
     }
     int getRequestDay() const override {
-        return REQUEST::request_day;
+        return request::request_day;
     }
     char getRoverType() const {
         return rover_type;
     }
 
 
-  
+
 };
 
 std::ostream& operator<<(std::ostream& os, const New_Request& req) {
     os << "New Request ID: " << req.getRequestID() << "\n"
-       << "Request Day: " << req.getRequestDay() << "\n"
-       << "Location Distance: " << req.getLocation() << "\n"
-       << "New_Request Duration: " << req.getMissionDuration() << "\n"
-       << "New_Request Type: " << req.getRoverType() << "\n" << std::endl;
+        << "Request Day: " << req.getRequestDay() << "\n"
+        << "Location Distance: " << req.getLocation() << "\n"
+        << "New_Request Duration: " << req.getMissionDuration() << "\n"
+        << "New_Request Type: " << req.getRoverType() << "\n" << std::endl;
 
     return os;
 }
