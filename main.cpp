@@ -15,7 +15,7 @@ using namespace std;
 
 /*-----------------------------Omar Syed-----------------------------*/
 
-void readData(string fileName,int*roverCounts,int*roverSpeed,int* checkupDurations,int checkupNum,LinkedQueue<Request*> requestQueue) {
+void readData(string fileName,int*roverCounts,int*roverSpeed,int* checkupDurations,int &checkupNum,LinkedQueue<Request*> requestQueue) {
 	//read data from a file and store it into data structures
 	//open the file
 	ifstream file(fileName);
