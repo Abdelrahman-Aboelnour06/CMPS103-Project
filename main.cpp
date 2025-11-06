@@ -73,7 +73,12 @@ void readData(string fileName, int* roverCounts, int* roverSpeed, int*& checkupD
 
 }
 
+
 /*-----------------------------Omar Syed-----------------------------*/
+
+
+
+//Test All Data Structures
 
 int main() {
 	/*-----------------------------Omar Syed-----------------------------*/
@@ -88,12 +93,8 @@ int main() {
 	int* checkupDurations = nullptr;
 	int checkupNum = 0;
 	LinkedQueue<request*> requestQueue;
-
 	cout << "\n=== Testing File Reading ===" << endl;
 	readData("input.txt", roverCount, roverSpeed, checkupDurations, checkupNum, requestQueue);
-
-
-	/*-----------------------------Omar Syed-----------------------------*/
 	while (!requestQueue.isEmpty()) {
 		request* temp = nullptr;
 		requestQueue.dequeue(temp);
@@ -104,5 +105,7 @@ int main() {
 
 		delete temp;
 	}
+
+	/*-----------------------------Omar Syed-----------------------------*/
 	return 0;
 }
