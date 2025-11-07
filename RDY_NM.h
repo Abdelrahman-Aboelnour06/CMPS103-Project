@@ -1,4 +1,6 @@
 // Created by Kirolos Ashraf
+#ifndef RDY_NM_H
+#define RDY_NM_H
 #include <iostream>
 #include "ADT/LinkedQueue.h"
 #include "Mission/Mission.h"
@@ -65,3 +67,4 @@ public:
 		return nullptr; // Mission with the given ID not found
 	}
 };
+#endif
