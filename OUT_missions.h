@@ -1,3 +1,4 @@
+// Created by Kirolos Ashraf
 #pragma once
 #include <iostream>
 #include "Mission/Mission.h"
@@ -42,7 +43,8 @@ public:
 		int pri; // to hold priority
 		while (current != nullptr) {
 			Mission* currentMission = current->getItem(pri);
-			if (currentMission != nullptr && currentMission->getID() == ID) {
+
+			if (currentMission != nullptr && currentMission->getMissionType() == 'N' && currentMission->getID() == ID) {
 				// Found the mission to abort
 				if (previous == nullptr) {
 					// The mission to abort is at the head
@@ -58,5 +60,6 @@ public:
 			previous = current;
 			current = current->getNext();
 		}
+		return nullptr; // Mission with the given ID not found
 	}
 };
