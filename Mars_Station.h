@@ -5,16 +5,21 @@
 #include "Request/Request.h"
 #include <fstream>
 #include <iostream>
-
+#include <RDY_NM.h>
+#include "OUT_missions.h"
 
 
 class Mars_Station {
 private:
     int current_day;
+    int NORMAL_ROVER_SPEED;
+    int POLAR_ROVER_SPEED;
+    int DIGGING_ROVER_SPEED;
     LinkedQueue<request*> requests;
     LinkedQueue<Mission*> Ready_Digging_Missions;
     LinkedQueue<Mission*> Ready_Polar_Missions;
-    LinkedQueue<Mission*> Ready_Normal_Missions;
+    RDY_NM Ready_Normal_Missions;
+    OUT_missions Out_Missions;
     priQueue<Mission*> ExecMissions;
     priQueue<Mission*> BackMissions;
     ArrayStack<Mission*> CompletedMissions;
@@ -37,10 +42,12 @@ private:
     LinkedQueue<Mission*> getReadyPolarMissions() const {
         return Ready_Polar_Missions;
     }
-    LinkedQueue<Mission*> getReadyNormalMissions() const {
+    RDY_NM getReadyNormalMissions() const {
         return Ready_Normal_Missions;
     }
-    
+    OUT_missions getOutMissions() const {
+        return Out_Missions;
+    }
 
 
 
