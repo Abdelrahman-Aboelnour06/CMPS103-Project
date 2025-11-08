@@ -14,7 +14,7 @@ using namespace std;
 
 /*-----------------------------Omar Syed-----------------------------*/
 
-void readData(string fileName, int* roverCounts, int* roverSpeed, int*& checkupDurations, int& checkupNum, LinkedQueue<request*>& requestQueue) {
+void FILE_LOADING(string fileName, int* roverCounts, int* roverSpeed, int*& checkupDurations, int& checkupNum, LinkedQueue<request*>& requestQueue) {
 	//read data from a file and store it into data structures
 	//open the file
 	ifstream file(fileName);
@@ -72,6 +72,7 @@ void readData(string fileName, int* roverCounts, int* roverSpeed, int*& checkupD
 	file.close();
 
 }
+
 void DATA_STRUCT_TESTING() {
 	cout << "--Testing Queue--\n";
 	cout << "--Creating a Queue to missions--\n";
@@ -236,7 +237,7 @@ int main() {
 	int checkupNum = 0;
 	LinkedQueue<request*> requestQueue;
 	cout << "\n=== Testing File Reading ===" << endl;
-	readData("input.txt", roverCount, roverSpeed, checkupDurations, checkupNum, requestQueue);
+	FILE_LOADING("input.txt", roverCount, roverSpeed, checkupDurations, checkupNum, requestQueue);
 	while (!requestQueue.isEmpty()) {
 		request* temp = nullptr;
 		requestQueue.dequeue(temp);
