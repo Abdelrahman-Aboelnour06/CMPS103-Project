@@ -122,7 +122,7 @@ void DATA_STRUCT_TESTING() {
 	/*===================Dequeue=========================*/
 
 	cout << "--Check IS Empty()--\n";
-	MISSION_QUEUE.isEmpty();
+	MISSION_QUEUE.isEmpty() ? cout << "The MISSION_QUEUE is Empty\n" : cout << "MISSION_QUEUE is not empty\n";
 	cout << "==Ending MISSION_QUEUE Testing==\n";
 
 	/*===================Destructor=========================*/
@@ -164,9 +164,9 @@ void DATA_STRUCT_TESTING() {
 		cout << temp_obj;
 		/*===================Peek=========================*/
 
-		cout << "==Poping All Elements==\n";
+		cout << "==Popping All Elements==\n";
 		while (DONE_MISSION_STACK.pop(Mptr)) {
-			cout << "==The Poped Element is : \n";
+			cout << "==The Popped Element is : \n";
 			temp_obj = *Mptr;
 			cout << temp_obj;
 		}
@@ -176,8 +176,41 @@ void DATA_STRUCT_TESTING() {
 	/*===================Stack=========================*/
 
 	/*===================PriQueue=========================*/
+		cout << "== Testing PriQueue == \n";
+		priQueue<Mission*>  MISSION_PRQUEUE;
+		cout << "Testing IS empty\n";
+		MISSION_PRQUEUE.isEmpty() ? cout << "==MISSION_PriQUEUE is empty==\n" : cout << "==MISSION_PriQUEUE is not empty==\n";
+		for (int i = 0; i < 12; i++) {
+			if (i % 3 == 0) {
+				Mptr = new Mission(i, 2 * i, 4 * i, 'D', 3 * i);
+			}
+			else if (i % 3 == 1) {
+				Mptr = new Mission(i, 2 * i, 4 * i, 'P', 3 * i);
+			}
+			else {
+				Mptr = new Mission(i, 2 * i, 4 * i, 'N', 3 * i);
+			}
+			cout << "--Enqueue mission no. " << i << " \n";
+			MISSION_PRQUEUE.enqueue(Mptr,i%6);
+		}
+		cout << "Testing IS empty\n";
+		MISSION_PRQUEUE.isEmpty() ? cout << "==MISSION_PriQUEUE is empty==\n" : cout << "==MISSION_PriQUEUE is not empty==\n";
 
+		cout << "==Testing Peek==\n";
+		int c=1;
+		MISSION_PRQUEUE.peek(temp, c);
+		temp_obj = *temp;
+		cout << temp_obj <<" Pri is : " << c<<endl;
 
+		cout << "== Testing Dequeue == \n ";
+		while (MISSION_PRQUEUE.dequeue(temp, c)) {
+			temp_obj = *temp;
+			cout << "Dequeued Element is : ";
+			cout << temp_obj << " Pri is : " << c << endl;
+		}
+
+		cout << "==Ending PriQUEUE testing==\n";
+		
 	/*===================PriQueue=========================*/
 
 }
