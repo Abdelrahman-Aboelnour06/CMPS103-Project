@@ -84,13 +84,13 @@ void DATA_STRUCT_TESTING() {
 	Mission* Mptr;
 	for (int i = 0; i < 12; i++) {
 		if (i % 3 == 0) {
-			Mptr = new Mission(i, 2 * i, 4 * i, 'D');
+			Mptr = new Mission(i, 2 * i, 4 * i, 'D',3*i);
 		}
 		else if (i % 3 == 1) {
-			Mptr = new Mission(i, 2 * i, 4 * i, 'P');
+			Mptr = new Mission(i, 2* i, 4 * i, 'P',3*i);
 		}
 		else {
-			Mptr = new Mission(i, 2 * i, 4 * i, 'N');
+			Mptr = new Mission(i, 2 * i, 4 * i, 'N', 3 * i);
 		}
 		cout << "--Enqueue mission no. " << i << " \n";
 		MISSION_QUEUE.enqueue(Mptr);
@@ -138,13 +138,13 @@ void DATA_STRUCT_TESTING() {
 	cout << "--Testing Pushing 12 missions--\n";
 	for (int i = 0; i < 12; i++) {
 		if (i % 3 == 0) {
-			Mptr = new Mission(i, 2 * i, 4 * i, 'D');
+			Mptr = new Mission(i, 2 * i, 4 * i, 'D', 3 * i);
 		}
 		else if(i% 3 == 1){
-			Mptr = new Mission(i, 2 * i, 4 * i, 'P');
+			Mptr = new Mission(i, 2 * i, 4 * i, 'P', 3 * i);
 		}
 		else {
-			Mptr = new Mission(i, 2 * i, 4 * i, 'N');
+			Mptr = new Mission(i, 2 * i, 4 * i, 'N', 3 * i);
 		}
 		cout << "--Pushing mission no. " << i << " \n";
 		DONE_MISSION_STACK.push(Mptr);

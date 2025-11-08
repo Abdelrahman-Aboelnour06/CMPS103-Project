@@ -67,3 +67,14 @@ public:
 	int getTDYs() const { return TDYs; }
 	int getFDY() const { return FDY; }
 };
+
+//omar syed
+std::ostream& operator<<(std::ostream& output, const Mission& m) {
+    output << "Mission ID: " << m.getID() << "\n"
+        << "location_distance: " << m.getLocation()<< "\n"
+        << "mission_duration: " << m.getmissionDuration()<< "\n"
+        << "mission_type: " << m.getMissionType()<< "\n"
+        << "RDY : " << m.getRDY()<< "\n" << std::endl;
+
+    return output;
+}
