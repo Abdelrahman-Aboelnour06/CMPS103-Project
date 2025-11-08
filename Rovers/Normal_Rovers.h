@@ -18,7 +18,7 @@ public:
     }
 
     int getDaysBeforeCheckup() const override {
-        return Days_before_checkup;
+        return NUM_OF_MISSION_BEFORE_CHECKUP;
     }
 
     int getCheckupDuration() const override {

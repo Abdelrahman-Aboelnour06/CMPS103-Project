@@ -19,7 +19,7 @@ protected:
     int LDY; // the day the mission was assigned to a rover
     int WDYs; // Waiting days
     int JDYs; // the number of days the journey would take to get to the distination (vice versa)
-	int EDY; // the day the mission starts executing
+  	int EDY; // the day the mission starts executing
     int TDYs; // Total time(days) for a rover to reach the target location then execute the mission then come back to the station
 	int FDY; // the day the mission was finished
 public:
@@ -67,3 +67,14 @@ public:
 	int getTDYs() const { return TDYs; }
 	int getFDY() const { return FDY; }
 };
+
+//omar syed
+std::ostream& operator<<(std::ostream& output, const Mission& m) {
+    output << "Mission ID: " << m.getID() << "\n"
+        << "location_distance: " << m.getLocation()<< "\n"
+        << "mission_duration: " << m.getmissionDuration()<< "\n"
+        << "mission_type: " << m.getMissionType()<< "\n"
+        << "RDY : " << m.getRDY()<< "\n" << std::endl;
+
+    return output;
+}

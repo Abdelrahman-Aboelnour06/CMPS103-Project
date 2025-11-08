@@ -1,17 +1,28 @@
 #//********************************************abdelrahman Tarek    ************************************** */
 
 build:
-	gcc main.c -o main.out
-	gcc Mars_Station.h -o Mars_Station.out
-	gcc Rovers/Rover.h -o Rover.out
-	gcc Rovers/Normal_Rovers.h -o Normal_Rovers.out
-	gcc Rovers/Digging_Rovers.h -o Digging_Rovers.out
-	gcc Rovers/polar_Rovers.h -o polar_Rovers.out
-	gcc Request/Request.h -o Request.out
-	gcc Request/New_Request.h -o New_Request.out
-	gcc ADT/ArrayStack.h -o ArrayStack.out
-	gcc ADT/LinkedQueue.h -o LinkedQueue.out
-	gcc ADT/priQueue.h -o priQueue.out
+	g++ main.c -o main.out
+	g++ Mars_Station.h -o Mars_Station.out
+#   Rovers
+	g++ Rovers/Rover.h -o Rover.out
+	g++ Rovers/Normal_Rovers.h -o Normal_Rovers.out
+	g++ Rovers/Digging_Rovers.h -o Digging_Rovers.out
+	g++ Rovers/polar_Rovers.h -o polar_Rovers.out
+#   Requests
+	g++ Request/Request.h -o Request.out
+	g++ Request/New_Request.h -o New_Request.out
+	g++ Request/Abort_Request.h -o Abort_Request.out
+#   ADTs
+	g++ ADT/ArrayStack.h -o ArrayStack.out
+	g++ ADT/LinkedQueue.h -o LinkedQueue.out
+	g++ ADT/priQueue.h -o priQueue.out
+	g++ ADT/Node.h -o Node.out
+	g++ OUT_mission.h -o OUT_mission.out
+	g++ RDY_mission.h -o RDY_mission.out
+#	Mission
+	g++ Mission/Mission.h -o Mission.out
+	
+
 clean:
 	rm -f *.out
 all:
