@@ -210,7 +210,7 @@ void DATA_STRUCT_TESTING() {
 		}
 
 		cout << "==Ending PriQUEUE testing==\n";
-		
+		delete temp;
 	/*===================PriQueue=========================*/
 
 }
