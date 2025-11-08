@@ -35,7 +35,9 @@ public:
     void incrementMissionsDone() override {
         ++missions_done;
     }
-
+    char getType() const override {
+        return 'D';
+    }
   
 };
 

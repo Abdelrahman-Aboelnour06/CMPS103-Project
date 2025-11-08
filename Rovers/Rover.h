@@ -20,6 +20,7 @@ public:
     virtual int  getRoverID() const = 0;
     virtual int  getMissionsDone() const = 0;
     virtual void incrementMissionsDone() = 0;
+    virtual char getType() const = 0;
 };
 
 

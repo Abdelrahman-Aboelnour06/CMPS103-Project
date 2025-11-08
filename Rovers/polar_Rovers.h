@@ -29,7 +29,9 @@ class Polar_Rovers : public Rover
     void incrementMissionsDone() override {
         ++missions_done;
     }
-    
+    char getType() const override {
+        return 'P';
+    }
 
 };
 

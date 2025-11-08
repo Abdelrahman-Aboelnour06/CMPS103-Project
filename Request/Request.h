@@ -13,7 +13,7 @@ public:
     ~request() {}
     virtual int getRequestID() const = 0;
     virtual int getRequestDay() const = 0;
-
+    
 };
 
 #endif

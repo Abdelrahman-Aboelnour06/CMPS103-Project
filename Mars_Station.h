@@ -65,7 +65,7 @@ private:
     }
 
     
-
+    
     void SET_REQUEST_QUEUE(request* requestptr) {
         requests.enqueue(requestptr);
     }
