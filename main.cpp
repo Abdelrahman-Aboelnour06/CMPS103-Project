@@ -301,6 +301,9 @@ void FILE_LOADING(string fileName,Mars_Station*&MSTATION) {
 		if (requestptr)
 			MSTATION->SET_REQUEST_QUEUE(requestptr);
 	}
+	delete nDptr;
+	delete nPptr;
+	delete nNptr;
 	file.close();
 
 }
