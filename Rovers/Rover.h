@@ -21,6 +21,7 @@ public:
     virtual int  getMissionsDone() const = 0;
     virtual void incrementMissionsDone() = 0;
     virtual char getType() const = 0;
+    virtual int  getspeed() const = 0;
 };
 
 
