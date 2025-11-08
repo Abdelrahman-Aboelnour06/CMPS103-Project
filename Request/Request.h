@@ -4,6 +4,8 @@
 #include "../Mars_Station.h"
 #ifndef REQUEST_H
 #define REQUEST_H
+class Mars_Station;
+
 class request {
 protected:
     int request_id;
