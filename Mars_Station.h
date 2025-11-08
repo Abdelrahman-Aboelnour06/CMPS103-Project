@@ -16,20 +16,20 @@ private:
     int POLAR_ROVER_SPEED;
     int DIGGING_ROVER_SPEED;
     LinkedQueue<request*> requests;
-    LinkedQueue<Mission*> Ready_Digging_Missions;
-    LinkedQueue<Mission*> Ready_Polar_Missions;
-    RDY_NM Ready_Normal_Missions;
+    LinkedQueue<Mission*> Ready_Digging_Missions;//Will Be Loaded From Request List
+    LinkedQueue<Mission*> Ready_Polar_Missions;  //Will Be Loaded From Request List
+    RDY_NM Ready_Normal_Missions;                //Will Be Loaded From Request List
     OUT_missions Out_Missions;
     priQueue<Mission*> ExecMissions;
     priQueue<Mission*> BackMissions;
     ArrayStack<Mission*> CompletedMissions;
     ArrayStack<Mission*> AbortedMissions;
-    LinkedQueue<Normal_Rovers*> available_Normal_Rovers;
-    LinkedQueue<Polar_Rovers*> available_Polar_Rovers;
-    LinkedQueue<Digging_Rovers*> available_Digging_Rovers;
-    LinkedQueue<Normal_Rovers*> Checkup_Normal_Rovers;
-    LinkedQueue<Polar_Rovers*> Checkup_Polar_Rovers;
-    LinkedQueue<Digging_Rovers*> Checkup_Digging_Rovers;
+    LinkedQueue<Normal_Rovers*> available_Normal_Rovers;   //Will Be Loaded From Request List
+    LinkedQueue<Polar_Rovers*> available_Polar_Rovers;     //Will Be Loaded From Request List
+    LinkedQueue<Digging_Rovers*> available_Digging_Rovers; //Will Be Loaded From Request List
+    LinkedQueue<Normal_Rovers*> Checkup_Normal_Rovers;     //Will Be Loaded From Request List
+    LinkedQueue<Polar_Rovers*> Checkup_Polar_Rovers;       //Will Be Loaded From Request List
+    LinkedQueue<Digging_Rovers*> Checkup_Digging_Rovers;   //Will Be Loaded From Request List
     public:
     Mars_Station() : current_day(1) {}
     ~Mars_Station() {}
@@ -48,17 +48,20 @@ private:
     OUT_missions getOutMissions() const {
         return Out_Missions;
     }
-
+    /*======================================Omar Syed======================================*/
     void SET_AVAIL_PR(Polar_Rovers*&Avail_PR) {
         available_Polar_Rovers.enqueue(Avail_PR);
+        POLAR_ROVER_SPEED = Avail_PR->getSpeed();
     }
 
     void SET_AVAIL_DR(Digging_Rovers*&Avail_DR) {
         available_Digging_Rovers.enqueue(Avail_DR);
+        DIGGING_ROVER_SPEED = Avail_DR->getSpeed();
     }
 
     void SET_AVAIL_NR(Normal_Rovers*&Avail_NR) {
         available_Normal_Rovers.enqueue(Avail_NR);
+        NORMAL_ROVER_SPEED = Avail_NR->getSpeed();
     }
 
     
@@ -75,4 +78,15 @@ private:
     LinkedQueue<Normal_Rovers*>GET_AVAIL_NR()const {
         return available_Normal_Rovers;
     }
+    /*void SET_RDM(Mission*DM) {
+        Ready_Digging_Missions.enqueue(DM);
+    }
+    void SET_RPM(Mission*PM) {
+        Ready_Digging_Missions.enqueue(PM);
+    }
+    void SET_RNM(Mission*NM) {
+        Ready_Digging_Missions.enqueue(NM);
+    }*/
+
+    /*======================================Omar Syed======================================*/
 }; 
