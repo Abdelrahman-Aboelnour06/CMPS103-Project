@@ -7,6 +7,8 @@
 #include <iostream>
 #include "RDY_NM.h"
 #include "OUT_missions.h"
+#include <cstdlib>
+#include <ctime>
 
 
 class Mars_Station {
@@ -44,12 +46,71 @@ private:
 			temp->operate(*this);
 		}
     }
+    void movebacktodone()
+    {
+        Mission* backmission = nullptr;
+        int pri;
+        if (!BackMissions.isEmpty())
+        {
+            BackMissions.dequeue(backmission, pri);
+            CompletedMissions.push(backmission);
+        }
+        if (rand() % 100 < 20)
+        {
+            Rover* donerover = nullptr;
+			donerover = backmission->getassignedRover();
+        }
+	}
+    void moveNRfromcheckup()
+    {
+        Normal_Rovers* firstNrover = nullptr;
+        if (Checkup_Normal_Rovers.dequeue(firstNrover))
+        {
+            available_Normal_Rovers.enqueue(firstNrover);
+        }
+    }
+    void movePRfromcheckup()
+    {
+        Polar_Rovers* firstProver = nullptr;
+        if (Checkup_Polar_Rovers.dequeue(firstProver))
+        {
+            available_Polar_Rovers.enqueue(firstProver);
+        }
+    }
+    void moveDRfromcheckup()
+    {
+        Digging_Rovers* firstDrover = nullptr;
+        if (Checkup_Digging_Rovers.dequeue(firstDrover))
+        {
+            available_Digging_Rovers.enqueue(firstDrover);
+        }
+    }
+    void moveroversfromcheckuptoavailable()
+    {
+        if (rand() % 100 < 70)
+        {
+            if (!Checkup_Normal_Rovers.isEmpty())
+            {
+                moveNRfromcheckup();
+            }
+            else if (!Checkup_Polar_Rovers.isEmpty())
+            {
+                movePRfromcheckup();
+            }
+            else if(!Checkup_Digging_Rovers.isEmpty())
+            {
+            moveDRfromcheckup();
+            }
+        }
+	}
     void incrementDay() {
         current_day++;
 	}
     void simulator()
     {
                 ChecknewRequests();
+                moveroversfromcheckuptoavailable();
+                incrementDay();
     }
     LinkedQueue<request*> getRequestsQueue() const {
         return requests;

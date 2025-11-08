@@ -316,7 +316,8 @@ int main() {
 	DATA_STRUCT_TESTING();
 	cout << "\n=== Testing File Loading ===" << endl;
 	Mars_Station* Mstation=nullptr;
-	FILE_LOADING("input.txt",Mstation);
+	FILE_LOADING("input.txt", Mstation);
 	/*-----------------------------Omar Syed-----------------------------*/
+	Mstation->simulator();
 	return 0;
 }
