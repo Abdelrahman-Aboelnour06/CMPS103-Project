@@ -5,7 +5,7 @@
 #include "../Rovers/Normal_Rovers.h"
 #include "../Rovers/Digging_Rovers.h"
 #include "../Mars_Station.h"
-
+#include "../Mission/Mission.h"
 
 class New_Request : public request
 {
