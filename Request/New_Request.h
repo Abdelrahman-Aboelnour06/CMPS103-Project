@@ -35,22 +35,7 @@ public:
     char getMissionType() const {
         return mission_type;
     }
-    void operate(Mars_Station& station)
-    {
-        Mission* newMission = new Mission(getRequestID(), location_distance, mission_duration, mission_type, getRequestDay());
-        char type = getMissionType();
-        if (type == 'N') {
-            station.getReadyNormalMissions().enqueue(newMission);
-        }
-        else if (type == 'P') {
-            station.getReadyPolarMissions().enqueue(newMission);
-        }
-        else if (type == 'D') {
-            station.getReadyDiggingMissions().enqueue(newMission);
-        }
-	}
-
-
+    void operate(Mars_Station& station) override;
 
 };
 

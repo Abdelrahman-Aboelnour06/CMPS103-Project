@@ -2,9 +2,11 @@
 
 #include <iostream>
 #include "../Mars_Station.h"
+#include "../Mission/mission.h"
 #pragma once
 #ifndef REQUEST_H
 #define REQUEST_H
+class Mars_Station;
 class request {
 protected:
     int request_id;

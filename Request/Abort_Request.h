@@ -2,6 +2,7 @@
 #include "REQUEST.h"
 #include "../header.h"
 #include "../Mars_Station.h"
+#include "../Mission/mission.h"
 #include <iostream>
 #pragma once
 
@@ -22,10 +23,7 @@ public:
     int getRequestDay() const  {
         return request::request_day;
     }
-    void operate(Mars_Station& station)
-    {
-        // The operation for aborting a mission will be handled in Mars_Station
-	}
+    void operate(Mars_Station& station) override;
 };
 
 std::ostream& operator<<(std::ostream& os, const Abort_Request& req) {

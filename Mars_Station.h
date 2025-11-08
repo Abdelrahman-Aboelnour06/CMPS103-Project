@@ -1,6 +1,5 @@
 //********************************************abdelrahman Tarek    ************************************** */
-#ifndef MARS_STATION_H
-#define MARS_STATION_H
+
 #pragma once
 #include "header.h"
 #include "Request/Request.h"
@@ -8,6 +7,7 @@
 #include <iostream>
 #include "RDY_NM.h"
 #include "OUT_missions.h"
+#include "Mission/mission.h"
 
 
 class Mars_Station {
@@ -229,4 +229,24 @@ private:
 
     /*======================================Omar Syed======================================*/
 }; 
-#endif
+
+
+void New_Request::operate(Mars_Station& station)
+    {
+        Mission* newMission = new Mission(getRequestID(), location_distance, mission_duration, mission_type, getRequestDay());
+        char type = getMissionType();
+        if (type == 'N') {
+            station.getReadyNormalMissions().enqueue(newMission);
+        }
+        else if (type == 'P') {
+            station.getReadyPolarMissions().enqueue(newMission);
+        }
+        else if (type == 'D') {
+            station.getReadyDiggingMissions().enqueue(newMission);
+        }
+	}
+
+void Abort_Request::operate(Mars_Station& station)
+    {
+        // The operation for aborting a mission will be handled in Mars_Station
+    }
