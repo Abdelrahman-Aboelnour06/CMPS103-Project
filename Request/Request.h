@@ -16,7 +16,7 @@ public:
     ~request() {}
     virtual int getRequestID() const = 0;
     virtual int getRequestDay() const = 0;
-    virtual void operate(Mars_Station& station) = 0;
+    virtual void operate (Mars_Station& station) = 0;
 
 };
 

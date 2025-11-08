@@ -3,6 +3,7 @@
 #include "../header.h"
 #include "../Mars_Station.h"
 #include "../Mission/mission.h"
+#include "../Mission/Mission.h"
 #include <iostream>
 #pragma once
 

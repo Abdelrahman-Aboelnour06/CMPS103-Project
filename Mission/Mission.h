@@ -55,6 +55,14 @@ public:
     void setFDY() {
 		FDY = RDY + WDYs + TDYs;
     }
+    void setMissionParameters(int currentDay) {
+		this->setLDY(currentDay);
+		this->setWDYs();
+		this->setEDY();
+		this->setJDYs();
+		this->setTDYs();
+		this->setFDY();
+    }
 	int getID() const { return mission_id; }
 	int getLocation() const { return location_distance; }
 	int getmissionDuration() const { return mission_duration; }
