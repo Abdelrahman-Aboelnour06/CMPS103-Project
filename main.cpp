@@ -320,6 +320,9 @@ int main() {
 	cout << "\n=== Testing File Loading ===" << endl;
 	Mars_Station* Mstation=nullptr;
 	FILE_LOADING("input.txt",Mstation);
+	Mstation->getReadyDiggingMissions().print();
+	Mstation->getReadyNormalMissions().print();
+	Mstation->getReadyPolarMissions().print();
 	/*while (!requestQueue.isEmpty()) {
 		request* temp = nullptr;
 		requestQueue.dequeue(temp);
