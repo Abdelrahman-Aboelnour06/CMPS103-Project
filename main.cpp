@@ -221,6 +221,87 @@ void SIMULATOR_FUN() {
 	
 }
 
+void FILE_LOADING(string fileName,Mars_Station*MSTATION) {
+	//read data from a file and store it into data structures
+	//open the file
+	int roverCounts[3] = { 0,0,0 };
+	int roverSpeed[3] = { 0 ,0,0 };
+	int* checkupDurations = nullptr;
+	int checkupNum = 0;
+	LinkedQueue<Rover*>Avail_PR;
+	LinkedQueue<Rover*>Avail_DR;
+	LinkedQueue<Rover*>Avail_NR;
+	ifstream file(fileName);
+	if (!file.is_open()) {
+		cout << "Error opening file!" << endl;
+		return;
+	}
+	//read data from the file
+	int i = 0;
+
+	while (i < 3) {
+		file >> roverCounts[i];
+		i++;
+	}
+	i = 0;
+	
+	while (i < 3) {
+		file >> roverSpeed[i];
+		i++;
+	}
+	file >> checkupNum;
+	checkupDurations = new int[checkupNum];
+	i = 0;
+	while (i < checkupNum)
+	{
+		file >> checkupDurations[i];
+		i++;
+
+	}
+	Rover* nRptr;
+	for (int j = 0; j < roverCounts[0]; j++) {
+		nRptr = new Digging_Rovers(roverSpeed[0], checkupNum, checkupDurations[0]);
+		Avail_DR.enqueue(nRptr);
+	}
+	for (int j = 0; j < roverCounts[1]; j++) {
+		nRptr = new Digging_Rovers(roverSpeed[1], checkupNum, checkupDurations[1]);
+		Avail_PR.enqueue(nRptr);
+	}
+	for (int j = 0; j < roverCounts[2]; j++) {
+		nRptr = new Digging_Rovers(roverSpeed[2], checkupNum, checkupDurations[2]);
+		Avail_NR.enqueue(nRptr);
+	}
+	int requestNum;
+	file >> requestNum;
+	char requestType;
+
+	while (requestNum--) {
+		file >> requestType;
+
+		request* requestptr = nullptr;
+
+		if (requestType == 'R') {
+			char type;
+			int RDAY, ID, TLOC, DUR;
+			file >> type >> RDAY >> ID >> TLOC >> DUR;
+			//cast the requestptr
+			requestptr = new New_Request(ID, RDAY, TLOC, DUR, type);
+		}
+		else if (requestType == 'X') {
+			int Xday;
+			int id;
+			file >> Xday >> id;
+			requestptr = new Abort_Request(Xday, id);
+		}
+		//store in the request queue in Mars Station
+		if (requestptr)
+			MSTATION->getRequestsQueue().enqueue(requestptr);
+	}
+	file.close();
+
+}
+
+
 /*-----------------------------Omar Syed-----------------------------*/
 
 int main() {
