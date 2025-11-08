@@ -218,7 +218,7 @@ void DATA_STRUCT_TESTING() {
 }
 
 void SIMULATOR_FUN() {
-
+	
 }
 
 /*-----------------------------Omar Syed-----------------------------*/
