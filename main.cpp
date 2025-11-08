@@ -14,64 +14,64 @@ using namespace std;
 
 /*-----------------------------Omar Syed-----------------------------*/
 
-void FILE_LOADING(string fileName, int* roverCounts, int* roverSpeed, int*& checkupDurations, int& checkupNum, LinkedQueue<request*>& requestQueue) {
-	//read data from a file and store it into data structures
-	//open the file
-	ifstream file(fileName);
-	if (!file.is_open()) {
-		cout << "Error opening file!" << endl;
-		return;
-	}
-	//read data from the file
-	int i = 0;
-
-	while (i < 3) {
-		file >> roverCounts[i];
-		i++;
-	}
-	i = 0;
-	while (i < 3) {
-		file >> roverSpeed[i];
-		i++;
-	}
-	file >> checkupNum;
-	checkupDurations = new int[checkupNum];
-	i = 0;
-	while (i < checkupNum)
-	{
-		file >> checkupDurations[i];
-		i++;
-
-	}
-	int requestNum;
-	file >> requestNum;
-	char requestType;
-
-	while (requestNum--) {
-		file >> requestType;
-
-		request* requestptr = nullptr;
-
-		if (requestType == 'R') {
-			char type;
-			int RDAY, ID, TLOC, DUR;
-			file >> type >> RDAY >> ID >> TLOC >> DUR;
-			//cast the requestptr
-			requestptr = new New_Request(ID, RDAY, TLOC, DUR, type);
-		}
-		else if (requestType == 'X') {
-			int Xday;
-			int id;
-			file >> Xday >> id;
-			requestptr = new Abort_Request(Xday, id);
-		}
-		//store in the request queue
-		if (requestptr)
-			requestQueue.enqueue(requestptr);
-	}
-	file.close();
-
-}
+//void FILE_LOADING(string fileName, int* roverCounts, int* roverSpeed, int*& checkupDurations, int& checkupNum, LinkedQueue<request*>& requestQueue) {
+//	//read data from a file and store it into data structures
+//	//open the file
+//	ifstream file(fileName);
+//	if (!file.is_open()) {
+//		cout << "Error opening file!" << endl;
+//		return;
+//	}
+//	//read data from the file
+//	int i = 0;
+//
+//	while (i < 3) {
+//		file >> roverCounts[i];
+//		i++;
+//	}
+//	i = 0;
+//	while (i < 3) {
+//		file >> roverSpeed[i];
+//		i++;
+//	}
+//	file >> checkupNum;
+//	checkupDurations = new int[checkupNum];
+//	i = 0;
+//	while (i < checkupNum)
+//	{
+//		file >> checkupDurations[i];
+//		i++;
+//
+//	}
+//	int requestNum;
+//	file >> requestNum;
+//	char requestType;
+//
+//	while (requestNum--) {
+//		file >> requestType;
+//
+//		request* requestptr = nullptr;
+//
+//		if (requestType == 'R') {
+//			char type;
+//			int RDAY, ID, TLOC, DUR;
+//			file >> type >> RDAY >> ID >> TLOC >> DUR;
+//			//cast the requestptr
+//			requestptr = new New_Request(ID, RDAY, TLOC, DUR, type);
+//		}
+//		else if (requestType == 'X') {
+//			int Xday;
+//			int id;
+//			file >> Xday >> id;
+//			requestptr = new Abort_Request(Xday, id);
+//		}
+//		//store in the request queue
+//		if (requestptr)
+//			requestQueue.enqueue(requestptr);
+//	}
+//	file.close();
+//
+//}
 
 void DATA_STRUCT_TESTING() {
 	cout << "--Testing Queue--\n";
@@ -224,6 +224,7 @@ void SIMULATOR_FUN() {
 void FILE_LOADING(string fileName,Mars_Station*MSTATION) {
 	//read data from a file and store it into data structures
 	//open the file
+	MSTATION = new Mars_Station;
 	int roverCounts[3] = { 0,0,0 };
 	int roverSpeed[3] = { 0 ,0,0 };
 	int* checkupDurations = nullptr;
@@ -273,6 +274,9 @@ void FILE_LOADING(string fileName,Mars_Station*MSTATION) {
 		nNptr = new Normal_Rovers(roverSpeed[2], checkupNum, checkupDurations[2]);
 		Avail_NR.enqueue(nNptr);
 	}
+	MSTATION->SET_AVAIL_DR(Avail_DR);
+	MSTATION->SET_AVAIL_PR(Avail_PR);
+	MSTATION->SET_AVAIL_NR(Avail_NR);
 	int requestNum;
 	file >> requestNum;
 	char requestType;
@@ -297,7 +301,7 @@ void FILE_LOADING(string fileName,Mars_Station*MSTATION) {
 		}
 		//store in the request queue in Mars Station
 		if (requestptr)
-			MSTATION->getRequestsQueue().enqueue(requestptr);
+			MSTATION->SET_REQUEST_QUEUE(requestptr);
 	}
 	file.close();
 
@@ -312,16 +316,10 @@ int main() {
 	//Data Structures Testing at least 10 object
 
 	DATA_STRUCT_TESTING();
-
-	//test file reading function
-	int roverCount[3] = { 0,0,0 };
-	int roverSpeed[3] = { 0 ,0,0 };
-	int* checkupDurations = nullptr;
-	int checkupNum = 0;
-	LinkedQueue<request*> requestQueue;
-	cout << "\n=== Testing File Reading ===" << endl;
-	FILE_LOADING("input.txt", roverCount, roverSpeed, checkupDurations, checkupNum, requestQueue);
-	while (!requestQueue.isEmpty()) {
+	cout << "\n=== Testing File Loading ===" << endl;
+	Mars_Station* Mstation=nullptr;
+	FILE_LOADING("input.txt",Mstation);
+	/*while (!requestQueue.isEmpty()) {
 		request* temp = nullptr;
 		requestQueue.dequeue(temp);
 		if (New_Request* n = dynamic_cast<New_Request*>(temp))
@@ -330,7 +328,7 @@ int main() {
 			cout << *a;
 
 		delete temp;
-	}
+	}*/
 
 	/*-----------------------------Omar Syed-----------------------------*/
 	return 0;

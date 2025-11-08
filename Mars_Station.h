@@ -49,8 +49,29 @@ private:
         return Out_Missions;
     }
 
+    void SET_AVAIL_PR(LinkedQueue<Polar_Rovers*>Avail_PR) {
+        Polar_Rovers* temp;
+        while (Avail_PR.dequeue(temp)) {
+            available_Polar_Rovers.enqueue(temp);
+        }
+    }
 
+    void SET_AVAIL_DR(LinkedQueue<Digging_Rovers*>Avail_DR) {
+        Digging_Rovers* temp;
+        while (Avail_DR.dequeue(temp)) {
+            available_Digging_Rovers.enqueue(temp);
+        }
+    }
 
+    void SET_AVAIL_NR(LinkedQueue<Normal_Rovers*>Avail_NR) {
+        Normal_Rovers* temp;
+        while (Avail_NR.dequeue(temp)) {
+            available_Normal_Rovers.enqueue(temp);
+        }
+    }
 
+    void SET_REQUEST_QUEUE(request* requestptr) {
+        requests.enqueue(requestptr);
+    }
 
-};
+}; 
