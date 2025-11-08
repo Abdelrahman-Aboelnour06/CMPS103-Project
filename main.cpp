@@ -72,6 +72,115 @@ void readData(string fileName, int* roverCounts, int* roverSpeed, int*& checkupD
 	file.close();
 
 }
+void DATA_STRUCT_TESTING() {
+	cout << "--Testing Queue--\n";
+	cout << "--Creating a Queue to missions--\n";
+	
+	/*===================enqueue=========================*/
+	LinkedQueue<Mission*> MISSION_QUEUE;
+	cout << "--Testing isEmpty()--\n";
+	MISSION_QUEUE.isEmpty() ? cout << "The MISSION_QUEUE is Empty\n" : cout << "MISSION_QUEUE is not empty\n";
+	cout << "--Testing enqueue 12  missions--\n";
+	Mission* Mptr;
+	for (int i = 0; i < 12; i++) {
+		if (i % 3 == 0) {
+			Mptr = new Mission(i, 2 * i, 4 * i, 'D');
+		}
+		else if (i % 3 == 1) {
+			Mptr = new Mission(i, 2 * i, 4 * i, 'P');
+		}
+		else {
+			Mptr = new Mission(i, 2 * i, 4 * i, 'N');
+		}
+		cout << "--Enqueue mission no. " << i << " \n";
+		MISSION_QUEUE.enqueue(Mptr);
+	}
+
+	/*===================enqueue=========================*/
+
+	/*===================Peek=========================*/
+	cout << "--testing Peek()--\n";
+	Mission *temp;
+	MISSION_QUEUE.peek(temp);
+	Mission temp_obj = *temp;
+	cout << "The Front Element in queue is :\n ";
+	cout << temp_obj;
+	/*===================Peek=========================*/
+
+	/*===================Print=========================*/
+	cout << "==Testing print()==\n";
+	MISSION_QUEUE.print();
+	/*===================Print=========================*/
+
+	/*===================Dequeue=========================*/
+	cout << "--Testing Dequeue--\n";
+	while (MISSION_QUEUE.dequeue(temp)) {
+		temp_obj = *temp;
+		cout << "Dequeued Element is  : ";
+		cout << temp_obj;
+	}
+	/*===================Dequeue=========================*/
+
+	cout << "--Check IS Empty()--\n";
+	MISSION_QUEUE.isEmpty();
+	cout << "==Ending MISSION_QUEUE Testing==\n";
+
+	/*===================Destructor=========================*/
+	MISSION_QUEUE.~LinkedQueue();
+	/*===================Destructor=========================*/
+
+	/*===================Stack=========================*/
+	
+	ArrayStack<Mission*>DONE_MISSION_STACK;
+	/*===================PUSH=========================*/
+	cout << "--Testing isEmpty()--\n";
+	DONE_MISSION_STACK.isEmpty() ? cout << "The DONE_MISSION_STACK is Empty\n" : cout << "DONE_MISSION_STACK is not empty\n";
+	cout << "--Testing Pushing 12 missions--\n";
+	for (int i = 0; i < 12; i++) {
+		if (i % 3 == 0) {
+			Mptr = new Mission(i, 2 * i, 4 * i, 'D');
+		}
+		else if(i% 3 == 1){
+			Mptr = new Mission(i, 2 * i, 4 * i, 'P');
+		}
+		else {
+			Mptr = new Mission(i, 2 * i, 4 * i, 'N');
+		}
+		cout << "--Pushing mission no. " << i << " \n";
+		DONE_MISSION_STACK.push(Mptr);
+	}
+	cout << "==Testing IS empty()==\n";
+	DONE_MISSION_STACK.isEmpty() ? cout << "The Stack IS Empty \n" : cout << "The Stack IS NOt Empty\n";
+
+	/*===================Print Stack=========================*/
+	cout << "==Testing Print()==\n";
+		DONE_MISSION_STACK.print();
+	/*===================Print Stack=========================*/
+
+		/*===================Peek=========================*/
+		cout << "==Testing Peek()==\n";
+		DONE_MISSION_STACK.peek(Mptr);
+		temp_obj = *Mptr;
+		cout << temp_obj;
+		/*===================Peek=========================*/
+
+		cout << "==Poping All Elements==\n";
+		while (DONE_MISSION_STACK.pop(Mptr)) {
+			cout << "==The Poped Element is : \n";
+			temp_obj = *Mptr;
+			cout << temp_obj;
+		}
+
+		cout << "== Ending Stack Testing ==\n";
+
+	/*===================Stack=========================*/
+
+	/*===================PriQueue=========================*/
+
+
+	/*===================PriQueue=========================*/
+
+}
 
 
 /*-----------------------------Omar Syed-----------------------------*/
@@ -85,7 +194,7 @@ int main() {
 
 	//Data Structures Testing at least 10 object
 
-
+	DATA_STRUCT_TESTING();
 
 	//test file reading function
 	int roverCount[3] = { 0,0,0 };

@@ -57,6 +57,15 @@ public:
 		return true;
 	}  // end peek
 
+	//Omar Syed
+	void print() const {
+		for (int i = top; i >= 0; i++) {
+			cout << items[i];
+		}
+		cout << "\n";
+	}
+	//Omar Syed
+
 }; // end ArrayStack
 
 #endif
