@@ -12,7 +12,7 @@ class Polar_Rovers : public Rover
     ~Polar_Rovers() {}
 
     int getDaysBeforeCheckup() const override {
-        return Days_before_checkup;
+        return NUM_OF_MISSION_BEFORE_CHECKUP;
     }
     int getSpeed() const {
         return speed;
