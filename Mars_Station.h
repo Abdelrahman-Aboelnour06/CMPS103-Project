@@ -1,5 +1,6 @@
 //********************************************abdelrahman Tarek    ************************************** */
-
+#ifndef MARS_STATION_H
+#define MARS_STATION_H
 #pragma once
 #include "header.h"
 #include "Request/Request.h"
@@ -93,7 +94,7 @@ private:
 			}
 			//set other mission parameters
             missionPtr->setMissionParameters(current_day);
-			//add to ÒUT missions
+			//add to Ã’UT missions
 			Out_Missions.enqueue(missionPtr, missionPtr->getEDY());
         }
     }
@@ -112,7 +113,7 @@ private:
 			}
 			//set other mission parameters
             missionPtr->setMissionParameters(current_day);
-			//add to ÒUT missions
+			//add to Ã’UT missions
 			Out_Missions.enqueue(missionPtr, missionPtr->getEDY());
         }
     }
@@ -137,7 +138,7 @@ private:
             }
 			//set other mission parameters
             missionPtr->setMissionParameters(current_day);
-			//add to ÒUT missions
+			//add to Ã’UT missions
 			Out_Missions.enqueue(missionPtr, missionPtr->getEDY());
         }
     }
@@ -192,7 +193,7 @@ private:
     }
 
     
-
+    
     void SET_REQUEST_QUEUE(request* requestptr) {
         requests.enqueue(requestptr);
     }
@@ -217,3 +218,4 @@ private:
 
     /*======================================Omar Syed======================================*/
 }; 
+#endif

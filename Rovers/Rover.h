@@ -9,6 +9,7 @@ protected:
     static int id_counter;
     const int rover_id;
     int missions_done;
+
 public:
     Rover(int dbc, int cd)
         : NUM_OF_MISSION_BEFORE_CHECKUP(dbc), checkup_duration(cd),
@@ -20,6 +21,7 @@ public:
     virtual int  getRoverID() const = 0;
     virtual int  getMissionsDone() const = 0;
     virtual void incrementMissionsDone() = 0;
+    virtual char getType() const = 0;
 };
 
 
