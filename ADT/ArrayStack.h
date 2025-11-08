@@ -60,7 +60,7 @@ public:
 
 	//Omar Syed
 	void print() const {
-		for (int i = top; i >= 0; i++) {
+		for (int i = top; i >= 0; i--) {
 			cout << items[i];
 		}
 		cout << "\n";
