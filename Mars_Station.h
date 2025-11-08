@@ -31,7 +31,7 @@ private:
     LinkedQueue<Polar_Rovers*> Checkup_Polar_Rovers;
     LinkedQueue<Digging_Rovers*> Checkup_Digging_Rovers;
     public:
-    Mars_Station() : current_day(0) {}
+    Mars_Station() : current_day(1) {}
     ~Mars_Station() {}
     LinkedQueue<request*> getRequestsQueue() const {
         return requests;
