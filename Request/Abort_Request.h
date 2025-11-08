@@ -22,8 +22,10 @@ public:
     int getRequestDay() const  {
         return request::request_day;
     }
-   
-
+    void operate(Mars_Station& station)
+    {
+        // The operation for aborting a mission will be handled in Mars_Station
+	}
 };
 
 std::ostream& operator<<(std::ostream& os, const Abort_Request& req) {

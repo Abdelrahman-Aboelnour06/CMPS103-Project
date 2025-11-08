@@ -31,8 +31,146 @@ private:
     LinkedQueue<Polar_Rovers*> Checkup_Polar_Rovers;       //Will Be Loaded From Request List
     LinkedQueue<Digging_Rovers*> Checkup_Digging_Rovers;   //Will Be Loaded From Request List
     public:
+
     Mars_Station() : current_day(1) {}
     ~Mars_Station() {}
+    void assigningMissionsToRovers() {
+        bool isPRsEmpty = available_Polar_Rovers.isEmpty();
+        bool isNRsEmpty = available_Normal_Rovers.isEmpty();
+        bool isDRsEmpty = available_Digging_Rovers.isEmpty();
+		if (isPRsEmpty && isNRsEmpty && isDRsEmpty) {
+            return;
+		}
+        if (!Ready_Polar_Missions.isEmpty()) {
+            assignPMs();
+        }
+        isPRsEmpty = available_Polar_Rovers.isEmpty();
+        isNRsEmpty = available_Normal_Rovers.isEmpty();
+        isDRsEmpty = available_Digging_Rovers.isEmpty();
+        if (isPRsEmpty && isNRsEmpty && isDRsEmpty) {
+            return;
+        }
+		if (!Ready_Digging_Missions.isEmpty()) {
+			assignDMs();
+		}
+		isPRsEmpty = available_Polar_Rovers.isEmpty();
+		isNRsEmpty = available_Normal_Rovers.isEmpty();
+		isDRsEmpty = available_Digging_Rovers.isEmpty();
+		if (isPRsEmpty && isNRsEmpty && isDRsEmpty) {
+			return;
+		}
+		if (!Ready_Normal_Missions.isEmpty()) {
+			assignNMs();
+		}
+    }
+    void assignPMs() {
+        while (!Ready_Polar_Missions.isEmpty()) {
+            Mission* missionPtr = nullptr;
+            if (!available_Polar_Rovers.isEmpty()) {
+                Ready_Polar_Missions.dequeue(missionPtr);
+                Polar_Rovers* roverPtr;
+                available_Polar_Rovers.dequeue(roverPtr);
+                missionPtr->setRover(roverPtr);
+            }
+			else if (!available_Normal_Rovers.isEmpty()) {
+				Ready_Polar_Missions.dequeue(missionPtr);
+				Normal_Rovers* roverPtr;
+				available_Normal_Rovers.dequeue(roverPtr);
+				missionPtr->setRover(roverPtr);
+			}
+			else if (!available_Digging_Rovers.isEmpty()) {
+				Ready_Polar_Missions.dequeue(missionPtr);
+				Digging_Rovers* roverPtr;
+				available_Digging_Rovers.dequeue(roverPtr);
+				missionPtr->setRover(roverPtr);
+			}
+			else {
+				// No available rovers
+				break;
+			}
+			//set other mission parameters
+			missionPtr->setLDY(current_day);
+			missionPtr->setWDYs();
+			missionPtr->setJDYs();
+			missionPtr->setEDY();
+			missionPtr->setTDYs();
+			missionPtr->setFDY();
+			//add to ÒUT missions
+			Out_Missions.enqueue(missionPtr, missionPtr->getEDY());
+        }
+    }
+    void assignDMs() {
+        while (!Ready_Digging_Missions.isEmpty()) {
+            Mission* missionPtr = nullptr;
+            if (!available_Digging_Rovers.isEmpty()) {
+                Ready_Digging_Missions.dequeue(missionPtr);
+                Digging_Rovers* roverPtr;
+                available_Digging_Rovers.dequeue(roverPtr);
+                missionPtr->setRover(roverPtr);
+            }
+			else {
+				// No available digging rovers
+				break;
+			}
+			//set other mission parameters
+			missionPtr->setLDY(current_day);
+			missionPtr->setWDYs();
+			missionPtr->setJDYs();
+			missionPtr->setEDY();
+			missionPtr->setTDYs();
+			missionPtr->setFDY();
+			//add to ÒUT missions
+			Out_Missions.enqueue(missionPtr, missionPtr->getEDY());
+        }
+    }
+    void assignNMs() {
+        while (!Ready_Normal_Missions.isEmpty()) {
+            Mission* missionPtr = nullptr;
+            if (!available_Normal_Rovers.isEmpty()) {
+                Ready_Normal_Missions.dequeue(missionPtr);
+                Normal_Rovers* roverPtr;
+                available_Normal_Rovers.dequeue(roverPtr);
+                missionPtr->setRover(roverPtr);
+            }
+            else if (!available_Polar_Rovers.isEmpty()) {
+				Ready_Normal_Missions.dequeue(missionPtr);
+				Polar_Rovers* roverPtr;
+				available_Polar_Rovers.dequeue(roverPtr);
+				missionPtr->setRover(roverPtr);
+			}
+            else {
+                // No available rovers
+                break;
+            }
+			//set other mission parameters
+			missionPtr->setLDY(current_day);
+			missionPtr->setWDYs();
+			missionPtr->setJDYs();
+			missionPtr->setEDY();
+			missionPtr->setTDYs();
+			missionPtr->setFDY();
+			//add to ÒUT missions
+			Out_Missions.enqueue(missionPtr, missionPtr->getEDY());
+        }
+    }
+
+
+    void ChecknewRequests()
+    {
+        request* temp = nullptr;
+        while(!requests.isEmpty() && requests.peek(temp) && temp->getRequestDay() == current_day)
+        {
+            requests.dequeue(temp);
+			temp->operate(*this);
+		}
+    }
+    void incrementDay() {
+        current_day++;
+	}
+    void simulator()
+    {
+                ChecknewRequests();
+    }
     LinkedQueue<request*> getRequestsQueue() const {
         return requests;
     }

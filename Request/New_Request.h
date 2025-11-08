@@ -11,12 +11,13 @@ class New_Request : public request
 {
     int location_distance;
     int mission_duration;
-    char rover_type; // 'P' for Polar, 'N' for Normal, 'D' for Digging
+    char mission_type; // 'P' for Polar, 'N' for Normal, 'D' for Digging
 public:
     New_Request(int id, int day, int loc, int duration, char type)
-        : request(id, day), location_distance(loc), mission_duration(duration), rover_type(type) {
-    }
+        : request(id, day), location_distance(loc), mission_duration(duration), mission_type(type) 
+    {
 
+    }
     int getLocation() const {
         return location_distance;
     }
@@ -31,9 +32,23 @@ public:
     int getRequestDay() const override {
         return request::request_day;
     }
-    char getRoverType() const {
-        return rover_type;
+    char getMissionType() const {
+        return mission_type;
     }
+    void operate(Mars_Station& station)
+    {
+        Mission* newMission = new Mission(getRequestID(), location_distance, mission_duration, mission_type, getRequestDay());
+        char type = getMissionType();
+        if (type == 'N') {
+            station.getReadyNormalMissions().enqueue(newMission);
+        }
+        else if (type == 'P') {
+            station.getReadyPolarMissions().enqueue(newMission);
+        }
+        else if (type == 'D') {
+            station.getReadyDiggingMissions().enqueue(newMission);
+        }
+	}
 
 
 
@@ -44,7 +59,7 @@ std::ostream& operator<<(std::ostream& os, const New_Request& req) {
         << "Request Day: " << req.getRequestDay() << "\n"
         << "Location Distance: " << req.getLocation() << "\n"
         << "New_Request Duration: " << req.getMissionDuration() << "\n"
-        << "New_Request Type: " << req.getRoverType() << "\n" << std::endl;
+        << "New_Request Type: " << req.getMissionType() << "\n" << std::endl;
 
     return os;
 }

@@ -6,13 +6,6 @@
 #include "Mission/Mission.h"
 using namespace std;
 
-//a class derived from Queue
-//class RDY_NM : public LinkedQueue<mission*>
-//{  //add "AbortMission(ID)"  function   }  
-
-//  Queue: The normal operation of the list is FCFS (by RDY day)
-//-Derived: to add AbortMission(ID) that removes the mission form the list and returns a pointer to it
-
 class RDY_NM : public LinkedQueue<Mission*> {
 public:
 //	Mission* AbortMission(int ID) {
