@@ -21,7 +21,7 @@ protected:
     int JDYs; // the number of days the journey would take to get to the distination (vice versa)
   	int EDY; // the day the mission starts executing
     int TDYs; // Total time(days) for a rover to reach the target location then execute the mission then come back to the station
-	  int FDY; // the day the mission was finished
+	int FDY; // the day the mission was finished
 public:
     Mission(int id, int loc, int duration, char M_type, int readyDay)
         : mission_id(id), location_distance(loc), mission_duration(duration), mission_type(M_type), RDY(readyDay) {
