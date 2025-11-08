@@ -5,6 +5,8 @@
 #pragma once
 #ifndef REQUEST_H
 #define REQUEST_H
+class Mars_Station;
+
 class request {
 protected:
     int request_id;

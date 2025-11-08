@@ -35,35 +35,38 @@ private:
 
     Mars_Station() : current_day(1) {}
     ~Mars_Station() {}
+
+    // Created By Kirolos Ashraf to assign missions to available rovers
+    
+    bool isRoversQueuesEmpty() {
+        // function to check if there are any available rovers at all
+		return available_Polar_Rovers.isEmpty() && available_Normal_Rovers.isEmpty() && available_Digging_Rovers.isEmpty();
+    }
+
     void assigningMissionsToRovers() {
-        bool isPRsEmpty = available_Polar_Rovers.isEmpty();
-        bool isNRsEmpty = available_Normal_Rovers.isEmpty();
-        bool isDRsEmpty = available_Digging_Rovers.isEmpty();
-		if (isPRsEmpty && isNRsEmpty && isDRsEmpty) {
+		if (isRoversQueuesEmpty()) {
+            // if there are not available rovers, don't execute anything
             return;
 		}
+
         if (!Ready_Polar_Missions.isEmpty()) {
-            assignPMs();
+            assignPMs(); // start assigning PMs
         }
-        isPRsEmpty = available_Polar_Rovers.isEmpty();
-        isNRsEmpty = available_Normal_Rovers.isEmpty();
-        isDRsEmpty = available_Digging_Rovers.isEmpty();
-        if (isPRsEmpty && isNRsEmpty && isDRsEmpty) {
+
+        if (isRoversQueuesEmpty()) {
+            // if there are not available rovers, don't execute anything
             return;
         }
-		if (!Ready_Digging_Missions.isEmpty()) {
-			assignDMs();
+
+		if (!Ready_Digging_Missions.isEmpty() && !available_Digging_Rovers.isEmpty()) {
+			assignDMs(); // start assigning DMs
 		}
-		isPRsEmpty = available_Polar_Rovers.isEmpty();
-		isNRsEmpty = available_Normal_Rovers.isEmpty();
-		isDRsEmpty = available_Digging_Rovers.isEmpty();
-		if (isPRsEmpty && isNRsEmpty && isDRsEmpty) {
-			return;
-		}
-		if (!Ready_Normal_Missions.isEmpty()) {
-			assignNMs();
+
+		if (!Ready_Normal_Missions.isEmpty() && (!available_Normal_Rovers.isEmpty() || !available_Polar_Rovers.isEmpty())) {
+			assignNMs(); // start assigning NMs
 		}
     }
+
     void assignPMs() {
         while (!Ready_Polar_Missions.isEmpty()) {
             Mission* missionPtr = nullptr;
@@ -90,13 +93,8 @@ private:
 				break;
 			}
 			//set other mission parameters
-			missionPtr->setLDY(current_day);
-			missionPtr->setWDYs();
-			missionPtr->setJDYs();
-			missionPtr->setEDY();
-			missionPtr->setTDYs();
-			missionPtr->setFDY();
-			//add to �UT missions
+            missionPtr->setMissionParameters(current_day);
+			//add to ÒUT missions
 			Out_Missions.enqueue(missionPtr, missionPtr->getEDY());
         }
     }
@@ -114,13 +112,8 @@ private:
 				break;
 			}
 			//set other mission parameters
-			missionPtr->setLDY(current_day);
-			missionPtr->setWDYs();
-			missionPtr->setJDYs();
-			missionPtr->setEDY();
-			missionPtr->setTDYs();
-			missionPtr->setFDY();
-			//add to �UT missions
+            missionPtr->setMissionParameters(current_day);
+			//add to ÒUT missions
 			Out_Missions.enqueue(missionPtr, missionPtr->getEDY());
         }
     }
@@ -144,16 +137,12 @@ private:
                 break;
             }
 			//set other mission parameters
-			missionPtr->setLDY(current_day);
-			missionPtr->setWDYs();
-			missionPtr->setJDYs();
-			missionPtr->setEDY();
-			missionPtr->setTDYs();
-			missionPtr->setFDY();
-			//add to �UT missions
+            missionPtr->setMissionParameters(current_day);
+			//add to ÒUT missions
 			Out_Missions.enqueue(missionPtr, missionPtr->getEDY());
         }
     }
+    // end of assigning - Created By Kirolos Ashraf
 
 
     void ChecknewRequests()
