@@ -178,9 +178,26 @@ private:
         if (rand() % 100 < 20)
         {
             Rover* donerover = nullptr;
-			donerover = backmission->getassignedRover();
+            donerover = backmission->getassignedRover();
         }
 	}
+    void moveexecutedtoback()
+    {
+        Mission* executedmission1 = nullptr;
+		Mission* executedmission2 = nullptr;
+        int pri1;
+        int pri2;
+        if (!ExecMissions.isEmpty())
+        {
+            ExecMissions.dequeue(executedmission1, pri1);
+			BackMissions.enqueue(executedmission1, pri1);
+            if (!ExecMissions.isEmpty())
+            {
+				ExecMissions.dequeue(executedmission2, pri2);
+				BackMissions.enqueue(executedmission2, pri2);
+            }
+        }
+    }
     void moveNRfromcheckup()
     {
         Normal_Rovers* firstNrover = nullptr;
@@ -223,14 +240,31 @@ private:
             }
         }
 	}
+    void moveouttoexecuted()
+    {
+		Mission* outmission = nullptr;
+        int pri;
+        if (!Out_Missions.isEmpty())
+        {
+            Out_Missions.dequeue(outmission, pri);
+            ExecMissions.enqueue(outmission, pri);
+		}
+    }
     void incrementDay() {
         current_day++;
 	}
+    void printall()
+    {
+		cout << "Current Day: " << current_day << endl;
+		cout << "===============Requests Lists===============" << endl;
+    }
     void simulator()
     {
-                ChecknewRequests();
-                moveroversfromcheckuptoavailable();
-                incrementDay();
+        ChecknewRequests();
+        moveroversfromcheckuptoavailable();
+        moveexecutedtoback();
+        moveouttoexecuted();
+        incrementDay();
     }
     LinkedQueue<request*> getRequestsQueue() const {
         return requests;
