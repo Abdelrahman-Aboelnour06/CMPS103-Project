@@ -126,9 +126,7 @@ void DATA_STRUCT_TESTING() {
 	MISSION_QUEUE.isEmpty() ? cout << "The MISSION_QUEUE is Empty\n" : cout << "MISSION_QUEUE is not empty\n";
 	cout << "==Ending MISSION_QUEUE Testing==\n";
 
-	/*===================Destructor=========================*/
-	MISSION_QUEUE.~LinkedQueue();
-	/*===================Destructor=========================*/
+	
 
 	/*===================Stack=========================*/
 	
@@ -221,7 +219,7 @@ void SIMULATOR_FUN() {
 	
 }
 
-void FILE_LOADING(string fileName,Mars_Station*MSTATION) {
+void FILE_LOADING(string fileName,Mars_Station*&MSTATION) {
 	//read data from a file and store it into data structures
 	//open the file
 	MSTATION = new Mars_Station;
