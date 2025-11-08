@@ -227,9 +227,6 @@ void FILE_LOADING(string fileName,Mars_Station*&MSTATION) {
 	int roverSpeed[3] = { 0 ,0,0 };
 	int* checkupDurations = nullptr;
 	int checkupNum = 0;
-	LinkedQueue<Polar_Rovers*>Avail_PR;
-	LinkedQueue<Digging_Rovers*>Avail_DR;
-	LinkedQueue<Normal_Rovers*>Avail_NR;
 	ifstream file(fileName);
 	if (!file.is_open()) {
 		cout << "Error opening file!" << endl;
@@ -262,19 +259,19 @@ void FILE_LOADING(string fileName,Mars_Station*&MSTATION) {
 	Normal_Rovers* nNptr=nullptr;
 	for (int j = 0; j < roverCounts[0]; j++) {
 		nDptr = new Digging_Rovers(roverSpeed[0], checkupNum, checkupDurations[0]);
-		Avail_DR.enqueue(nDptr);
+		MSTATION->SET_AVAIL_DR(nDptr);
 	}
 	for (int j = 0; j < roverCounts[1]; j++) {
 		nPptr = new Polar_Rovers(roverSpeed[1], checkupNum, checkupDurations[1]);
-		Avail_PR.enqueue(nPptr);
+		MSTATION->SET_AVAIL_PR(nPptr);
 	}
 	for (int j = 0; j < roverCounts[2]; j++) {
 		nNptr = new Normal_Rovers(roverSpeed[2], checkupNum, checkupDurations[2]);
-		Avail_NR.enqueue(nNptr);
+		MSTATION->SET_AVAIL_NR(nNptr);
 	}
-	MSTATION->SET_AVAIL_DR(Avail_DR);
-	MSTATION->SET_AVAIL_PR(Avail_PR);
-	MSTATION->SET_AVAIL_NR(Avail_NR);
+	
+	
+	
 	int requestNum;
 	file >> requestNum;
 	char requestType;
@@ -305,7 +302,12 @@ void FILE_LOADING(string fileName,Mars_Station*&MSTATION) {
 	delete nPptr;
 	delete nNptr;
 	file.close();
-
+	cout << "\n=== Avail_PR IN MARS STATION === \n";
+	MSTATION->GET_AVAIL_PR().print();
+	cout << "\n=== Avail_NR IN MARS STATION === \n";
+	MSTATION->GET_AVAIL_NR().print();
+	cout << "\n=== Avail_DR IN MARS STATION === \n";
+	MSTATION->GET_AVAIL_DR().print();
 }
 
 
@@ -314,26 +316,10 @@ void FILE_LOADING(string fileName,Mars_Station*&MSTATION) {
 int main() {
 	/*-----------------------------Omar Syed-----------------------------*/
 
-	//Data Structures Testing at least 10 object
-
 	DATA_STRUCT_TESTING();
 	cout << "\n=== Testing File Loading ===" << endl;
 	Mars_Station* Mstation=nullptr;
 	FILE_LOADING("input.txt",Mstation);
-	Mstation->getReadyDiggingMissions().print();
-	Mstation->getReadyNormalMissions().print();
-	Mstation->getReadyPolarMissions().print();
-	/*while (!requestQueue.isEmpty()) {
-		request* temp = nullptr;
-		requestQueue.dequeue(temp);
-		if (New_Request* n = dynamic_cast<New_Request*>(temp))
-			cout << *n;
-		else if (Abort_Request* a = dynamic_cast<Abort_Request*>(temp))
-			cout << *a;
-
-		delete temp;
-	}*/
-
 	/*-----------------------------Omar Syed-----------------------------*/
 	return 0;
 }

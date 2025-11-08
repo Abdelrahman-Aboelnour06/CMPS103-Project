@@ -49,28 +49,30 @@ private:
         return Out_Missions;
     }
 
-    void SET_AVAIL_PR(LinkedQueue<Polar_Rovers*>&Avail_PR) {
-        Polar_Rovers* temp;
-        while (Avail_PR.dequeue(temp)) {
-            available_Polar_Rovers.enqueue(temp);
-        }
+    void SET_AVAIL_PR(Polar_Rovers*&Avail_PR) {
+        available_Polar_Rovers.enqueue(Avail_PR);
     }
 
-    void SET_AVAIL_DR(LinkedQueue<Digging_Rovers*>&Avail_DR) {
-        Digging_Rovers* temp;
-        while (Avail_DR.dequeue(temp)) {
-            available_Digging_Rovers.enqueue(temp);
-        }
+    void SET_AVAIL_DR(Digging_Rovers*&Avail_DR) {
+        available_Digging_Rovers.enqueue(Avail_DR);
     }
 
-    void SET_AVAIL_NR(LinkedQueue<Normal_Rovers*>&Avail_NR) {
-        Normal_Rovers* temp;
-        while (Avail_NR.dequeue(temp)) {
-            available_Normal_Rovers.enqueue(temp);
-        }
+    void SET_AVAIL_NR(Normal_Rovers*&Avail_NR) {
+        available_Normal_Rovers.enqueue(Avail_NR);
     }
+
+    
 
     void SET_REQUEST_QUEUE(request* requestptr) {
         requests.enqueue(requestptr);
+    }
+    LinkedQueue<Polar_Rovers*>GET_AVAIL_PR()const {
+        return available_Polar_Rovers;
+    }
+    LinkedQueue<Digging_Rovers*>GET_AVAIL_DR()const {
+        return available_Digging_Rovers;
+    }
+    LinkedQueue<Normal_Rovers*>GET_AVAIL_NR()const {
+        return available_Normal_Rovers;
     }
 }; 
