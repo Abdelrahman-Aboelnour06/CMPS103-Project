@@ -228,9 +228,9 @@ void FILE_LOADING(string fileName,Mars_Station*MSTATION) {
 	int roverSpeed[3] = { 0 ,0,0 };
 	int* checkupDurations = nullptr;
 	int checkupNum = 0;
-	LinkedQueue<Rover*>Avail_PR;
-	LinkedQueue<Rover*>Avail_DR;
-	LinkedQueue<Rover*>Avail_NR;
+	LinkedQueue<Polar_Rovers*>Avail_PR;
+	LinkedQueue<Digging_Rovers*>Avail_DR;
+	LinkedQueue<Normal_Rovers*>Avail_NR;
 	ifstream file(fileName);
 	if (!file.is_open()) {
 		cout << "Error opening file!" << endl;
@@ -258,18 +258,20 @@ void FILE_LOADING(string fileName,Mars_Station*MSTATION) {
 		i++;
 
 	}
-	Rover* nRptr;
+	Digging_Rovers* nDptr=nullptr;
+	Polar_Rovers* nPptr=nullptr;
+	Normal_Rovers* nNptr=nullptr;
 	for (int j = 0; j < roverCounts[0]; j++) {
-		nRptr = new Digging_Rovers(roverSpeed[0], checkupNum, checkupDurations[0]);
-		Avail_DR.enqueue(nRptr);
+		nDptr = new Digging_Rovers(roverSpeed[0], checkupNum, checkupDurations[0]);
+		Avail_DR.enqueue(nDptr);
 	}
 	for (int j = 0; j < roverCounts[1]; j++) {
-		nRptr = new Digging_Rovers(roverSpeed[1], checkupNum, checkupDurations[1]);
-		Avail_PR.enqueue(nRptr);
+		nPptr = new Polar_Rovers(roverSpeed[1], checkupNum, checkupDurations[1]);
+		Avail_PR.enqueue(nPptr);
 	}
 	for (int j = 0; j < roverCounts[2]; j++) {
-		nRptr = new Digging_Rovers(roverSpeed[2], checkupNum, checkupDurations[2]);
-		Avail_NR.enqueue(nRptr);
+		nNptr = new Normal_Rovers(roverSpeed[2], checkupNum, checkupDurations[2]);
+		Avail_NR.enqueue(nNptr);
 	}
 	int requestNum;
 	file >> requestNum;
