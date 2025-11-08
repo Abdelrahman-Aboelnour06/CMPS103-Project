@@ -66,8 +66,8 @@ public:
             cout << "PriQueue is Empty \n";
         priNode<T>* temp = head;
         while (temp) {
-            int c;
-            cout << *temp->getItem(c)<<"Pri is : "<<c;
+            int c=-1;
+            cout << " Pri is : " << c<<"    " << * temp->getItem(c);
             temp = temp->getNext();
         }
         cout << "\n";

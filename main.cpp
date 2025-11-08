@@ -195,12 +195,13 @@ void DATA_STRUCT_TESTING() {
 		}
 		cout << "Testing IS empty\n";
 		MISSION_PRQUEUE.isEmpty() ? cout << "==MISSION_PriQUEUE is empty==\n" : cout << "==MISSION_PriQUEUE is not empty==\n";
-
+		cout << "Printing PRIQUEUE elements\n";
+		MISSION_PRQUEUE.print();
 		cout << "==Testing Peek==\n";
 		int c=1;
 		MISSION_PRQUEUE.peek(temp, c);
 		temp_obj = *temp;
-		cout << temp_obj <<" Pri is : " << c<<endl;
+		cout <<" Pri is : " << c <<" " << temp_obj << endl;
 
 		cout << "== Testing Dequeue == \n ";
 		while (MISSION_PRQUEUE.dequeue(temp, c)) {
