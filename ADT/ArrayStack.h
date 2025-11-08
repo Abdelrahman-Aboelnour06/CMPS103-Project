@@ -9,6 +9,7 @@
 #define ARRAY_STACK_
 
 #include "StackADT.h"
+#include <iostream>
 
 //Unless spesificed by the stack user, the default size is 100
 template<typename T>
