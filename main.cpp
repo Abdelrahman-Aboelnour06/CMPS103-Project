@@ -323,7 +323,6 @@ int main() {
 	Mstation->getReadyDiggingMissions().print();
 	Mstation->getReadyNormalMissions().print();
 	Mstation->getReadyPolarMissions().print();
-	Mstation->GET_AVAIL_NR().print();
 	/*while (!requestQueue.isEmpty()) {
 		request* temp = nullptr;
 		requestQueue.dequeue(temp);

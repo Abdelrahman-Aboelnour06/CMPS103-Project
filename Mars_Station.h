@@ -73,6 +73,4 @@ private:
     void SET_REQUEST_QUEUE(request* requestptr) {
         requests.enqueue(requestptr);
     }
-
-    LinkedQueue<Normal_Rovers*> GET_AVAIL_NR() const { return available_Normal_Rovers; }
 }; 
