@@ -182,12 +182,11 @@ void DATA_STRUCT_TESTING() {
 
 }
 
+void SIMULATOR_FUN() {
+
+}
 
 /*-----------------------------Omar Syed-----------------------------*/
-
-
-
-//Test All Data Structures
 
 int main() {
 	/*-----------------------------Omar Syed-----------------------------*/
