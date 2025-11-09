@@ -37,6 +37,9 @@ public:
         ++missions_done;
     }
    
+    char getType() const override {
+        return 'N';
+    }
 };
 
 std::ostream& operator<<(std::ostream& os, const Normal_Rovers& rover) {

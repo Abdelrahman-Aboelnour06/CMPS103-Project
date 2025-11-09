@@ -1,4 +1,6 @@
 // Created by Kirolos Ashraf
+#ifndef OUT_MISSIONS_H
+#define OUT_MISSIONS_H
 #pragma once
 #include <iostream>
 #include "Mission/Mission.h"
@@ -63,3 +65,4 @@ public:
 		return nullptr; // Mission with the given ID not found
 	}
 };
+#endif
