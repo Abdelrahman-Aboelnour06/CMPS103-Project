@@ -1,4 +1,4 @@
-//**abdelrahman Tarek    ************************************** */
+//**************** Abdelrahman Tarek // Kirolos Ashraf // Omar Sayd // Marwan Nader ********************** */
 
 #pragma once
 #include "header.h"
@@ -52,10 +52,10 @@ public:
             assignPMs(); // start assigning PMs
         }
 
-        if (isRoversQueuesEmpty()) {
-            // if there are not available rovers, don't execute anything
-            return;
-        }
+        //if (isRoversQueuesEmpty()) {
+        //    // if there are not available rovers, don't execute anything
+        //    return;
+        //}
 
         if (!Ready_Digging_Missions.isEmpty() && !available_Digging_Rovers.isEmpty()) {
             assignDMs(); // start assigning DMs
@@ -71,21 +71,27 @@ public:
             Mission* missionPtr = nullptr;
             if (!available_Polar_Rovers.isEmpty()) {
                 Ready_Polar_Missions.dequeue(missionPtr);
-                Polar_Rovers* roverPtr;
-                available_Polar_Rovers.dequeue(roverPtr);
-                missionPtr->setRover(roverPtr);
+                if (!autoAbortPMs(missionPtr)) {
+                    Polar_Rovers* roverPtr;
+                    available_Polar_Rovers.dequeue(roverPtr);
+                    missionPtr->setRover(roverPtr);
+                }
             }
             else if (!available_Normal_Rovers.isEmpty()) {
                 Ready_Polar_Missions.dequeue(missionPtr);
-                Normal_Rovers* roverPtr;
-                available_Normal_Rovers.dequeue(roverPtr);
-                missionPtr->setRover(roverPtr);
+                if (!autoAbortPMs(missionPtr)) {
+                    Normal_Rovers* roverPtr;
+                    available_Normal_Rovers.dequeue(roverPtr);
+                    missionPtr->setRover(roverPtr);
+                }
             }
             else if (!available_Digging_Rovers.isEmpty()) {
                 Ready_Polar_Missions.dequeue(missionPtr);
-                Digging_Rovers* roverPtr;
-                available_Digging_Rovers.dequeue(roverPtr);
-                missionPtr->setRover(roverPtr);
+                if (!autoAbortPMs(missionPtr)) {
+                    Digging_Rovers* roverPtr;
+                    available_Digging_Rovers.dequeue(roverPtr);
+                    missionPtr->setRover(roverPtr);
+                }
             }
             else {
                 // No available rovers
@@ -141,8 +147,16 @@ public:
             Out_Missions.enqueue(missionPtr, missionPtr->getEDY());
         }
     }
-    // end of assigning - Created By Kirolos Ashraf
 
+    bool autoAbortPMs(Mission* m) {
+        // any pm waiting in the ready list for more than double its duration should be automatically aborted
+		if ((current_day - m->getRDY()) > (2 * m->getmissionDuration())) {
+			AbortedMissions.push(m);
+			return true;
+		}
+		return false;
+    }
+    // end of assigning - Created By Kirolos Ashraf
 
     void ChecknewRequests()
     {
