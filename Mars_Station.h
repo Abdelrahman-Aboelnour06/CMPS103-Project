@@ -1,4 +1,4 @@
-//********************************************abdelrahman Tarek    ************************************** */
+//**abdelrahman Tarek    ************************************** */
 
 #pragma once
 #include "header.h"
@@ -30,23 +30,23 @@ private:
     LinkedQueue<Normal_Rovers*> Checkup_Normal_Rovers;     //Will Be Loaded From Request List
     LinkedQueue<Polar_Rovers*> Checkup_Polar_Rovers;       //Will Be Loaded From Request List
     LinkedQueue<Digging_Rovers*> Checkup_Digging_Rovers;   //Will Be Loaded From Request List
-    public:
+public:
 
     Mars_Station() : current_day(1) {}
     ~Mars_Station() {}
 
     // Created By Kirolos Ashraf to assign missions to available rovers
-    
+
     bool isRoversQueuesEmpty() {
         // function to check if there are any available rovers at all
-		return available_Polar_Rovers.isEmpty() && available_Normal_Rovers.isEmpty() && available_Digging_Rovers.isEmpty();
+        return available_Polar_Rovers.isEmpty() && available_Normal_Rovers.isEmpty() && available_Digging_Rovers.isEmpty();
     }
 
     void assigningMissionsToRovers() {
-		if (isRoversQueuesEmpty()) {
+        if (isRoversQueuesEmpty()) {
             // if there are not available rovers, don't execute anything
             return;
-		}
+        }
 
         if (!Ready_Polar_Missions.isEmpty()) {
             assignPMs(); // start assigning PMs
@@ -57,13 +57,13 @@ private:
             return;
         }
 
-		if (!Ready_Digging_Missions.isEmpty() && !available_Digging_Rovers.isEmpty()) {
-			assignDMs(); // start assigning DMs
-		}
+        if (!Ready_Digging_Missions.isEmpty() && !available_Digging_Rovers.isEmpty()) {
+            assignDMs(); // start assigning DMs
+        }
 
-		if (!Ready_Normal_Missions.isEmpty() && (!available_Normal_Rovers.isEmpty() || !available_Polar_Rovers.isEmpty())) {
-			assignNMs(); // start assigning NMs
-		}
+        if (!Ready_Normal_Missions.isEmpty() && (!available_Normal_Rovers.isEmpty() || !available_Polar_Rovers.isEmpty())) {
+            assignNMs(); // start assigning NMs
+        }
     }
 
     void assignPMs() {
@@ -75,26 +75,26 @@ private:
                 available_Polar_Rovers.dequeue(roverPtr);
                 missionPtr->setRover(roverPtr);
             }
-			else if (!available_Normal_Rovers.isEmpty()) {
-				Ready_Polar_Missions.dequeue(missionPtr);
-				Normal_Rovers* roverPtr;
-				available_Normal_Rovers.dequeue(roverPtr);
-				missionPtr->setRover(roverPtr);
-			}
-			else if (!available_Digging_Rovers.isEmpty()) {
-				Ready_Polar_Missions.dequeue(missionPtr);
-				Digging_Rovers* roverPtr;
-				available_Digging_Rovers.dequeue(roverPtr);
-				missionPtr->setRover(roverPtr);
-			}
-			else {
-				// No available rovers
-				break;
-			}
-			//set other mission parameters
+            else if (!available_Normal_Rovers.isEmpty()) {
+                Ready_Polar_Missions.dequeue(missionPtr);
+                Normal_Rovers* roverPtr;
+                available_Normal_Rovers.dequeue(roverPtr);
+                missionPtr->setRover(roverPtr);
+            }
+            else if (!available_Digging_Rovers.isEmpty()) {
+                Ready_Polar_Missions.dequeue(missionPtr);
+                Digging_Rovers* roverPtr;
+                available_Digging_Rovers.dequeue(roverPtr);
+                missionPtr->setRover(roverPtr);
+            }
+            else {
+                // No available rovers
+                break;
+            }
+            //set other mission parameters
             missionPtr->setMissionParameters(current_day);
-			//add to ÒUT missions
-			Out_Missions.enqueue(missionPtr, missionPtr->getEDY());
+            //add to ÒUT missions
+            Out_Missions.enqueue(missionPtr, missionPtr->getEDY());
         }
     }
     void assignDMs() {
@@ -106,14 +106,14 @@ private:
                 available_Digging_Rovers.dequeue(roverPtr);
                 missionPtr->setRover(roverPtr);
             }
-			else {
-				// No available digging rovers
-				break;
-			}
-			//set other mission parameters
+            else {
+                // No available digging rovers
+                break;
+            }
+            //set other mission parameters
             missionPtr->setMissionParameters(current_day);
-			//add to ÒUT missions
-			Out_Missions.enqueue(missionPtr, missionPtr->getEDY());
+            //add to ÒUT missions
+            Out_Missions.enqueue(missionPtr, missionPtr->getEDY());
         }
     }
     void assignNMs() {
@@ -126,19 +126,19 @@ private:
                 missionPtr->setRover(roverPtr);
             }
             else if (!available_Polar_Rovers.isEmpty()) {
-				Ready_Normal_Missions.dequeue(missionPtr);
-				Polar_Rovers* roverPtr;
-				available_Polar_Rovers.dequeue(roverPtr);
-				missionPtr->setRover(roverPtr);
-			}
+                Ready_Normal_Missions.dequeue(missionPtr);
+                Polar_Rovers* roverPtr;
+                available_Polar_Rovers.dequeue(roverPtr);
+                missionPtr->setRover(roverPtr);
+            }
             else {
                 // No available rovers
                 break;
             }
-			//set other mission parameters
+            //set other mission parameters
             missionPtr->setMissionParameters(current_day);
-			//add to ÒUT missions
-			Out_Missions.enqueue(missionPtr, missionPtr->getEDY());
+            //add to ÒUT missions
+            Out_Missions.enqueue(missionPtr, missionPtr->getEDY());
         }
     }
     // end of assigning - Created By Kirolos Ashraf
@@ -147,11 +147,11 @@ private:
     void ChecknewRequests()
     {
         request* temp = nullptr;
-        while(!requests.isEmpty() && requests.peek(temp) && temp->getRequestDay() == current_day)
+        while (!requests.isEmpty() && requests.peek(temp) && temp->getRequestDay() == current_day)
         {
             requests.dequeue(temp);
-			temp->operate(*this);
-		}
+            temp->operate(*this);
+        }
     }
     void movebacktodone()
     {
@@ -191,24 +191,24 @@ private:
                 else if (donerover->getType() == 'D')
                 {
                     available_Digging_Rovers.enqueue(dynamic_cast<Digging_Rovers*>(donerover));
-				}
+                }
             }
         }
-	}
+    }
     void moveexecutedtoback()
     {
         Mission* executedmission1 = nullptr;
-		Mission* executedmission2 = nullptr;
+        Mission* executedmission2 = nullptr;
         int pri1;
         int pri2;
         if (!ExecMissions.isEmpty())
         {
             ExecMissions.dequeue(executedmission1, pri1);
-			BackMissions.enqueue(executedmission1, pri1);
+            BackMissions.enqueue(executedmission1, pri1);
             if (!ExecMissions.isEmpty())
             {
-				ExecMissions.dequeue(executedmission2, pri2);
-				BackMissions.enqueue(executedmission2, pri2);
+                ExecMissions.dequeue(executedmission2, pri2);
+                BackMissions.enqueue(executedmission2, pri2);
             }
         }
     }
@@ -248,31 +248,31 @@ private:
             {
                 movePRfromcheckup();
             }
-            else if(!Checkup_Digging_Rovers.isEmpty())
+            else if (!Checkup_Digging_Rovers.isEmpty())
             {
-            moveDRfromcheckup();
+                moveDRfromcheckup();
             }
         }
-	}
+    }
     void moveouttoexecuted()
     {
-		Mission* outmission = nullptr;
+        Mission* outmission = nullptr;
         int pri;
         if (!Out_Missions.isEmpty())
         {
             Out_Missions.dequeue(outmission, pri);
             ExecMissions.enqueue(outmission, pri);
-		}
+        }
     }
     void incrementDay() {
         current_day++;
-	}
+    }
     void assignMission()
     {
         while (!Ready_Polar_Missions.isEmpty())
         {
             Mission* missionPtr = nullptr;
-            int c = rand() % 3;
+            int c = rand() % 10922;
             switch (c)
             {
             case 0:
@@ -281,7 +281,7 @@ private:
                     Normal_Rovers* roverPtr = nullptr;
                     available_Normal_Rovers.dequeue(roverPtr);
                     missionPtr->setRover(roverPtr);
-					Out_Missions.enqueue(missionPtr, missionPtr->getEDY());
+                    Out_Missions.enqueue(missionPtr, missionPtr->getEDY());
                 }
                 break;
             case 1:
@@ -290,7 +290,7 @@ private:
                     Polar_Rovers* roverPtr = nullptr;
                     available_Polar_Rovers.dequeue(roverPtr);
                     missionPtr->setRover(roverPtr);
-					Out_Missions.enqueue(missionPtr, missionPtr->getEDY());
+                    Out_Missions.enqueue(missionPtr, missionPtr->getEDY());
                 }
                 break;
             case 2:
@@ -299,7 +299,77 @@ private:
                     Digging_Rovers* roverPtr = nullptr;
                     available_Digging_Rovers.dequeue(roverPtr);
                     missionPtr->setRover(roverPtr);
-					Out_Missions.enqueue(missionPtr, missionPtr->getEDY());
+                    Out_Missions.enqueue(missionPtr, missionPtr->getEDY());
+                }
+                break;
+            }
+        }
+        while (!Ready_Digging_Missions.isEmpty())
+        {
+            Mission* missionPtr = nullptr;
+            int c = rand() % 10922;
+            switch (c)
+            {
+            case 0:
+                if (!available_Normal_Rovers.isEmpty())
+                {
+                    Normal_Rovers* roverPtr = nullptr;
+                    available_Normal_Rovers.dequeue(roverPtr);
+                    missionPtr->setRover(roverPtr);
+                    Out_Missions.enqueue(missionPtr, missionPtr->getEDY());
+                }
+                break;
+            case 1:
+                if (!available_Polar_Rovers.isEmpty())
+                {
+                    Polar_Rovers* roverPtr = nullptr;
+                    available_Polar_Rovers.dequeue(roverPtr);
+                    missionPtr->setRover(roverPtr);
+                    Out_Missions.enqueue(missionPtr, missionPtr->getEDY());
+                }
+                break;
+            case 2:
+                if (!available_Digging_Rovers.isEmpty())
+                {
+                    Digging_Rovers* roverPtr = nullptr;
+                    available_Digging_Rovers.dequeue(roverPtr);
+                    missionPtr->setRover(roverPtr);
+                    Out_Missions.enqueue(missionPtr, missionPtr->getEDY());
+                }
+                break;
+            }
+        }
+        while (!Ready_Normal_Missions.isEmpty())
+        {
+            Mission* missionPtr = nullptr;
+            int c = rand() % 10922;
+            switch (c)
+            {
+            case 0:
+                if (!available_Normal_Rovers.isEmpty())
+                {
+                    Normal_Rovers* roverPtr = nullptr;
+                    available_Normal_Rovers.dequeue(roverPtr);
+                    missionPtr->setRover(roverPtr);
+                    Out_Missions.enqueue(missionPtr, missionPtr->getEDY());
+                }
+                break;
+            case 1:
+                if (!available_Polar_Rovers.isEmpty())
+                {
+                    Polar_Rovers* roverPtr = nullptr;
+                    available_Polar_Rovers.dequeue(roverPtr);
+                    missionPtr->setRover(roverPtr);
+                    Out_Missions.enqueue(missionPtr, missionPtr->getEDY());
+                }
+                break;
+            case 2:
+                if (!available_Digging_Rovers.isEmpty())
+                {
+                    Digging_Rovers* roverPtr = nullptr;
+                    available_Digging_Rovers.dequeue(roverPtr);
+                    missionPtr->setRover(roverPtr);
+                    Out_Missions.enqueue(missionPtr, missionPtr->getEDY());
                 }
                 break;
             }
@@ -309,30 +379,30 @@ private:
     {
         cout << "Current Day: " << current_day << endl;
         cout << "================= Requests List =================" << endl;
-        cout << requests.() << " requests remaining: ";
-        requests.print(); 
+        cout << requests.getCount() << " requests remaining: ";
+        requests.print();
         cout << endl;
         cout << "================= Ready List(s) =================" << endl;
         int totalReady = Ready_Normal_Missions.getCount() + Ready_Polar_Missions.getCount() + Ready_Digging_Missions.getCount();
         cout << totalReady << " Missions: ";
-        cout << "NMs"; Ready_Normal_Missions.print(); 
-        cout << " PMs"; Ready_Polar_Missions.print(); 
-        cout << " DMs"; Ready_Digging_Missions.print(); 
+        cout << "NMs"; Ready_Normal_Missions.print();
+        cout << " PMs"; Ready_Polar_Missions.print();
+        cout << " DMs"; Ready_Digging_Missions.print();
         cout << endl;
         cout << "================= Available Rovers List(s) =================" << endl;
         int totalRovers = available_Normal_Rovers.getCount() + available_Polar_Rovers.getCount() + available_Digging_Rovers.getCount();
         cout << totalRovers << " Available Rovers: ";
-        cout << "NR"; available_Normal_Rovers.print(); 
+        cout << "NR"; available_Normal_Rovers.print();
         cout << " PR"; available_Polar_Rovers.print();
-        cout << " DR"; available_Digging_Rovers.print(); 
+        cout << " DR"; available_Digging_Rovers.print();
         cout << endl;
         cout << "================= OUT List(s) =================" << endl;
         cout << Out_Missions.getCount() << " Missions/Rovers: ";
-        Out_Missions.print(); 
+        Out_Missions.print();
         cout << endl;
         cout << "================= EXEC List(s) =================" << endl;
         cout << ExecMissions.getCount() << " Missions/Rovers: ";
-        ExecMissions.print(); 
+        ExecMissions.print();
         cout << endl;
         cout << "================= BACK List(s) =================" << endl;
         cout << BackMissions.getCount() << " Missions/Rovers: ";
@@ -362,6 +432,7 @@ private:
         movebacktodone();
         moveexecutedtoback();
         moveouttoexecuted();
+        assignMission();
         printall();
         incrementDay();
     }
@@ -380,24 +451,24 @@ private:
     OUT_missions getOutMissions() const {
         return Out_Missions;
     }
-    /*======================================Omar Syed======================================*/
-    void SET_AVAIL_PR(Polar_Rovers*&Avail_PR) {
+    // ==================================== = Omar Syed======================================/
+    void SET_AVAIL_PR(Polar_Rovers*& Avail_PR) {
         available_Polar_Rovers.enqueue(Avail_PR);
         POLAR_ROVER_SPEED = Avail_PR->getSpeed();
     }
 
-    void SET_AVAIL_DR(Digging_Rovers*&Avail_DR) {
+    void SET_AVAIL_DR(Digging_Rovers*& Avail_DR) {
         available_Digging_Rovers.enqueue(Avail_DR);
         DIGGING_ROVER_SPEED = Avail_DR->getSpeed();
     }
 
-    void SET_AVAIL_NR(Normal_Rovers*&Avail_NR) {
+    void SET_AVAIL_NR(Normal_Rovers*& Avail_NR) {
         available_Normal_Rovers.enqueue(Avail_NR);
         NORMAL_ROVER_SPEED = Avail_NR->getSpeed();
     }
 
-    
-    
+
+
     void SET_REQUEST_QUEUE(request* requestptr) {
         requests.enqueue(requestptr);
     }
@@ -420,26 +491,26 @@ private:
         Ready_Digging_Missions.enqueue(NM);
     }*/
 
-    /*======================================Omar Syed======================================*/
-}; 
+    // ==================================== = Omar Syed======================================/
+};
 
 
 void New_Request::operate(Mars_Station& station)
-    {
-        Mission* newMission = new Mission(getRequestID(), location_distance, mission_duration, mission_type, getRequestDay());
-        char type = getMissionType();
-        if (type == 'N') {
-            station.getReadyNormalMissions().enqueue(newMission);
-        }
-        else if (type == 'P') {
-            station.getReadyPolarMissions().enqueue(newMission);
-        }
-        else if (type == 'D') {
-            station.getReadyDiggingMissions().enqueue(newMission);
-        }
-	}
+{
+    Mission* newMission = new Mission(getRequestID(), location_distance, mission_duration, mission_type, getRequestDay());
+    char type = getMissionType();
+    if (type == 'N') {
+        station.getReadyNormalMissions().enqueue(newMission);
+    }
+    else if (type == 'P') {
+        station.getReadyPolarMissions().enqueue(newMission);
+    }
+    else if (type == 'D') {
+        station.getReadyDiggingMissions().enqueue(newMission);
+    }
+}
 
 void Abort_Request::operate(Mars_Station& station)
-    {
-        // The operation for aborting a mission will be handled in Mars_Station
-    }
+{
+    // The operation for aborting a mission will be handled in Mars_Station
+}
