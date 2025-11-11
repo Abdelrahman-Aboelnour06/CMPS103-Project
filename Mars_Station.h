@@ -7,7 +7,8 @@
 #include <iostream>
 #include "RDY_NM.h"
 #include "OUT_missions.h"
-
+//omar syed 
+//this function is used to print request list
 void print_req(LinkedQueue<request*>req) {
     request* item = nullptr;
     New_Request* nrptr = nullptr;
@@ -24,7 +25,7 @@ void print_req(LinkedQueue<request*>req) {
         }
     }
 }
-
+//omar syed 
 class Mars_Station {
 private:
     int current_day;
