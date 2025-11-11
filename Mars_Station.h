@@ -25,6 +25,7 @@ void print_req(LinkedQueue<request*>req) {
     }
 }
 
+
 class Mars_Station {
 private:
     int current_day;
@@ -49,7 +50,75 @@ private:
 public:
 
     Mars_Station() : current_day(1) {}
-    ~Mars_Station() {}
+    ~Mars_Station() {
+        request* reqPtr = nullptr;
+        Mission* missionPtr = nullptr;
+        int x=0;
+        while (!requests.isEmpty()) {
+            requests.dequeue(reqPtr);
+            delete reqPtr;
+        }
+        while (!available_Normal_Rovers.isEmpty()) {
+            Normal_Rovers* roverPtr = nullptr;
+            available_Normal_Rovers.dequeue(roverPtr);
+            delete roverPtr;
+        }
+        while (!available_Polar_Rovers.isEmpty()) {
+            Polar_Rovers* roverPtr = nullptr;
+            available_Polar_Rovers.dequeue(roverPtr);
+            delete roverPtr;
+        }
+        while (!available_Digging_Rovers.isEmpty()) {
+            Digging_Rovers* roverPtr = nullptr;
+            available_Digging_Rovers.dequeue(roverPtr);
+            delete roverPtr;
+        }
+        while (!Checkup_Normal_Rovers.isEmpty()) {
+            Normal_Rovers* roverPtr = nullptr;
+            Checkup_Normal_Rovers.dequeue(roverPtr);
+            delete roverPtr;
+        }
+        while (!Checkup_Polar_Rovers.isEmpty()) {
+            Polar_Rovers* roverPtr = nullptr;
+            Checkup_Polar_Rovers.dequeue(roverPtr);
+            delete roverPtr;
+        }
+        while (!Checkup_Digging_Rovers.isEmpty()) {
+            Digging_Rovers* roverPtr = nullptr;
+            Checkup_Digging_Rovers.dequeue(roverPtr);
+            delete roverPtr;
+        }
+        while (!AbortedMissions.isEmpty()) {
+            Mission* missionPtr = nullptr;
+            AbortedMissions.pop(missionPtr);
+            delete missionPtr;
+        }
+        while (!CompletedMissions.isEmpty()) {
+            Mission* missionPtr = nullptr;
+            CompletedMissions.pop(missionPtr);
+            delete missionPtr;
+        }
+        while (Ready_Digging_Missions.dequeue(missionPtr)) {
+            delete missionPtr;
+        }
+        while (!Ready_Polar_Missions.dequeue(missionPtr)) {
+            delete missionPtr;
+        }
+        while (!Ready_Normal_Missions.dequeue(missionPtr)) {
+            delete missionPtr;
+        }
+        while (!Out_Missions.dequeue(missionPtr,x)) {
+            delete missionPtr;
+        }
+        while (!ExecMissions.dequeue(missionPtr,x)) {
+            delete missionPtr;
+        }
+        while (!BackMissions.dequeue(missionPtr,x)) {
+            delete missionPtr;
+        }
+
+
+    }
 
     //omar syed
     void FILE_LOADING(string fileName) {
@@ -270,7 +339,8 @@ public:
     void ChecknewRequests()
     {
         request* temp = nullptr;
-        while (!requests.isEmpty() && requests.peek(temp) && temp->getRequestDay() == current_day)
+        requests.peek(temp);
+        while (!requests.isEmpty() && temp->getRequestDay() == current_day)
         {
             requests.dequeue(temp);
             temp->operate(*this);
@@ -392,10 +462,24 @@ public:
     }
     void assignMission()
     {
-        while (!Ready_Polar_Missions.isEmpty())
+        Mission* missionPtr;
+        while (true)
         {
-            Mission* missionPtr = nullptr;
-            int c = rand() % 10922;
+            if (!Ready_Polar_Missions.isEmpty())
+            {
+                Ready_Polar_Missions.dequeue(missionPtr);
+            }
+            else if (!Ready_Digging_Missions.isEmpty()){
+                Ready_Digging_Missions.dequeue(missionPtr);
+            }
+            else if (!Ready_Normal_Missions.isEmpty()){
+                Ready_Normal_Missions.dequeue(missionPtr);
+            }
+            else {
+                break; // No missions to assign
+            }
+            
+            int c = rand() % 3;
             switch (c)
             {
             case 0:
@@ -426,76 +510,8 @@ public:
                 }
                 break;
             }
-        }
-        while (!Ready_Digging_Missions.isEmpty())
-        {
-            Mission* missionPtr = nullptr;
-            int c = rand() % 10922;
-            switch (c)
-            {
-            case 0:
-                if (!available_Normal_Rovers.isEmpty())
-                {
-                    Normal_Rovers* roverPtr = nullptr;
-                    available_Normal_Rovers.dequeue(roverPtr);
-                    missionPtr->setRover(roverPtr);
-                    Out_Missions.enqueue(missionPtr, missionPtr->getEDY());
-                }
-                break;
-            case 1:
-                if (!available_Polar_Rovers.isEmpty())
-                {
-                    Polar_Rovers* roverPtr = nullptr;
-                    available_Polar_Rovers.dequeue(roverPtr);
-                    missionPtr->setRover(roverPtr);
-                    Out_Missions.enqueue(missionPtr, missionPtr->getEDY());
-                }
-                break;
-            case 2:
-                if (!available_Digging_Rovers.isEmpty())
-                {
-                    Digging_Rovers* roverPtr = nullptr;
-                    available_Digging_Rovers.dequeue(roverPtr);
-                    missionPtr->setRover(roverPtr);
-                    Out_Missions.enqueue(missionPtr, missionPtr->getEDY());
-                }
-                break;
-            }
-        }
-        while (!Ready_Normal_Missions.isEmpty())
-        {
-            Mission* missionPtr = nullptr;
-            int c = rand() % 10922;
-            switch (c)
-            {
-            case 0:
-                if (!available_Normal_Rovers.isEmpty())
-                {
-                    Normal_Rovers* roverPtr = nullptr;
-                    available_Normal_Rovers.dequeue(roverPtr);
-                    missionPtr->setRover(roverPtr);
-                    Out_Missions.enqueue(missionPtr, missionPtr->getEDY());
-                }
-                break;
-            case 1:
-                if (!available_Polar_Rovers.isEmpty())
-                {
-                    Polar_Rovers* roverPtr = nullptr;
-                    available_Polar_Rovers.dequeue(roverPtr);
-                    missionPtr->setRover(roverPtr);
-                    Out_Missions.enqueue(missionPtr, missionPtr->getEDY());
-                }
-                break;
-            case 2:
-                if (!available_Digging_Rovers.isEmpty())
-                {
-                    Digging_Rovers* roverPtr = nullptr;
-                    available_Digging_Rovers.dequeue(roverPtr);
-                    missionPtr->setRover(roverPtr);
-                    Out_Missions.enqueue(missionPtr, missionPtr->getEDY());
-                }
-                break;
-            }
+        
+       
         }
     }
     void printall()
@@ -556,23 +572,23 @@ public:
         movebacktodone();
         moveexecutedtoback();
         moveouttoexecuted();
-        assignMission();
+        assigningMissionsToRovers();
         printall();
         incrementDay();
     }
-    LinkedQueue<request*> getRequestsQueue() const {
+    LinkedQueue<request*>& getRequestsQueue()  {
         return requests;
     }
-    LinkedQueue<Mission*> getReadyDiggingMissions() const {
+    LinkedQueue<Mission*>& getReadyDiggingMissions()  {
         return Ready_Digging_Missions;
     }
-    LinkedQueue<Mission*> getReadyPolarMissions() const {
+    LinkedQueue<Mission*>& getReadyPolarMissions()  {
         return Ready_Polar_Missions;
     }
-    RDY_NM getReadyNormalMissions() const {
+    RDY_NM& getReadyNormalMissions()  {
         return Ready_Normal_Missions;
     }
-    OUT_missions getOutMissions() const {
+    OUT_missions& getOutMissions() {
         return Out_Missions;
     }
     //// ==================================== = Omar Syed======================================/
@@ -619,8 +635,9 @@ public:
 };
 
 
-void New_Request::operate(Mars_Station& station)
+void New_Request::operate(Mars_Station& station) 
 {
+
     Mission* newMission = new Mission(getRequestID(), location_distance, mission_duration, mission_type, getRequestDay());
     char type = getMissionType();
     if (type == 'N') {
@@ -634,7 +651,7 @@ void New_Request::operate(Mars_Station& station)
     }
 }
 
-void Abort_Request::operate(Mars_Station& station)
+void Abort_Request::operate(Mars_Station& station) 
 {
     // The operation for aborting a mission will be handled in Mars_Station
 }
