@@ -8,6 +8,22 @@
 #include "RDY_NM.h"
 #include "OUT_missions.h"
 
+void print_req(LinkedQueue<request*>req) {
+    request* item = nullptr;
+    New_Request* nrptr = nullptr;
+    Abort_Request* arptr = nullptr;
+    while (!req.isEmpty()) {
+        req.dequeue(item);
+        nrptr = dynamic_cast<New_Request*>(item);
+        arptr = dynamic_cast<Abort_Request*>(item);
+        if (nrptr) {
+            cout << *nrptr;
+        }
+        else {
+            cout << *arptr;
+        }
+    }
+}
 
 class Mars_Station {
 private:
@@ -34,6 +50,99 @@ public:
 
     Mars_Station() : current_day(1) {}
     ~Mars_Station() {}
+
+    //omar syed
+    void FILE_LOADING(string fileName) {
+        //read data from a file and store it into data structures
+        //open the file
+        int roverCounts[3] = { 0,0,0 };
+        int roverSpeed[3] = { 0 ,0,0 };
+        int* checkupDurations = nullptr;
+        int checkupNum = 0;
+        ifstream file(fileName);
+        if (!file.is_open()) {
+            cout << "Error opening file!" << endl;
+            return;
+        }
+        //read data from the file
+        int i = 0;
+
+        while (i < 3) {
+            file >> roverCounts[i];
+            i++;
+        }
+        i = 0;
+
+        while (i < 3) {
+            file >> roverSpeed[i];
+            i++;
+        }
+        file >> checkupNum;
+        checkupDurations = new int[checkupNum];
+        i = 0;
+        while (i < checkupNum)
+        {
+            file >> checkupDurations[i];
+            i++;
+
+        }
+        Digging_Rovers* nDptr = nullptr;
+        Polar_Rovers* nPptr = nullptr;
+        Normal_Rovers* nNptr = nullptr;
+        for (int j = 0; j < roverCounts[0]; j++) {
+            nDptr = new Digging_Rovers(roverSpeed[0], checkupNum, checkupDurations[0]);
+            this->available_Digging_Rovers.enqueue(nDptr);
+            DIGGING_ROVER_SPEED = roverSpeed[0];
+        }
+        for (int j = 0; j < roverCounts[1]; j++) {
+            nPptr = new Polar_Rovers(roverSpeed[1], checkupNum, checkupDurations[1]);
+            this->available_Polar_Rovers.enqueue(nPptr);
+            POLAR_ROVER_SPEED = roverSpeed[1];
+        }
+        for (int j = 0; j < roverCounts[2]; j++) {
+            nNptr = new Normal_Rovers(roverSpeed[2], checkupNum, checkupDurations[2]);
+            this->available_Normal_Rovers.enqueue(nNptr);
+            NORMAL_ROVER_SPEED = roverSpeed[2];
+        }
+
+
+
+        int requestNum;
+        file >> requestNum;
+        char requestType;
+
+        while (requestNum--) {
+            file >> requestType;
+
+            request* requestptr = nullptr;
+
+            if (requestType == 'R') {
+                char type;
+                int RDAY, ID, TLOC, DUR;
+                file >> type >> RDAY >> ID >> TLOC >> DUR;
+                //cast the requestptr
+                requestptr = new New_Request(ID, RDAY, TLOC, DUR, type);
+            }
+            else if (requestType == 'X') {
+                int Xday;
+                int id;
+                file >> Xday >> id;
+                requestptr = new Abort_Request(Xday, id);
+            }
+            //store in the request queue in Mars Station
+            if (requestptr)
+                this->requests.enqueue(requestptr);
+        }
+        file.close();
+     /*   cout << "\n=== Avail_PR IN MARS STATION === \n";
+        this->GET_AVAIL_PR().print();
+        cout << "\n=== Avail_NR IN MARS STATION === \n";
+        this->GET_AVAIL_NR().print();
+        cout << "\n=== Avail_DR IN MARS STATION === \n";
+        this->GET_AVAIL_DR().print();*/
+    }
+    //omar syed
+
 
     // Created By Kirolos Ashraf to assign missions to available rovers
 
@@ -394,7 +503,8 @@ public:
         cout << "Current Day: " << current_day << endl;
         cout << "================= Requests List =================" << endl;
         cout << requests.getCount() << " requests remaining: ";
-        requests.print();
+       // requests.print();
+        print_req(requests);
         cout << endl;
         cout << "================= Ready List(s) =================" << endl;
         int totalReady = Ready_Normal_Missions.getCount() + Ready_Polar_Missions.getCount() + Ready_Digging_Missions.getCount();
@@ -465,25 +575,25 @@ public:
     OUT_missions getOutMissions() const {
         return Out_Missions;
     }
-    // ==================================== = Omar Syed======================================/
-    void SET_AVAIL_PR(Polar_Rovers*& Avail_PR) {
-        available_Polar_Rovers.enqueue(Avail_PR);
-        POLAR_ROVER_SPEED = Avail_PR->getSpeed();
-    }
+    //// ==================================== = Omar Syed======================================/
+    //void SET_AVAIL_PR(Polar_Rovers*& Avail_PR) {
+    //    available_Polar_Rovers.enqueue(Avail_PR);
+    //    POLAR_ROVER_SPEED = Avail_PR->getSpeed();
+    //}
 
-    void SET_AVAIL_DR(Digging_Rovers*& Avail_DR) {
-        available_Digging_Rovers.enqueue(Avail_DR);
-        DIGGING_ROVER_SPEED = Avail_DR->getSpeed();
-    }
+    //void SET_AVAIL_DR(Digging_Rovers*& Avail_DR) {
+    //    available_Digging_Rovers.enqueue(Avail_DR);
+    //    DIGGING_ROVER_SPEED = Avail_DR->getSpeed();
+    //}
 
-    void SET_AVAIL_NR(Normal_Rovers*& Avail_NR) {
-        available_Normal_Rovers.enqueue(Avail_NR);
-        NORMAL_ROVER_SPEED = Avail_NR->getSpeed();
-    }
+    //void SET_AVAIL_NR(Normal_Rovers*& Avail_NR) {
+    //    available_Normal_Rovers.enqueue(Avail_NR);
+    //    NORMAL_ROVER_SPEED = Avail_NR->getSpeed();
+    //}
 
 
 
-    void SET_REQUEST_QUEUE(request* requestptr) {
+  /*  void SET_REQUEST_QUEUE(request* requestptr) {
         requests.enqueue(requestptr);
     }
     LinkedQueue<Polar_Rovers*>GET_AVAIL_PR()const {
@@ -494,7 +604,7 @@ public:
     }
     LinkedQueue<Normal_Rovers*>GET_AVAIL_NR()const {
         return available_Normal_Rovers;
-    }
+    }*/
     /*void SET_RDM(Mission*DM) {
         Ready_Digging_Missions.enqueue(DM);
     }
