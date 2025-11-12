@@ -170,6 +170,8 @@ bool LinkedQueue<T>:: peek(T& frntEntry) const
 	return true;
 
 }
+
+//print for a queue of pointers only and must have operator overloading note it can not be used to request list
 template<typename T>
 inline void LinkedQueue<T>::print() const
 {
