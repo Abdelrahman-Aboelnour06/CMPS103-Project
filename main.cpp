@@ -107,20 +107,20 @@ void DATA_STRUCT_TESTING() {
 	MISSION_QUEUE.peek(temp);
 	Mission temp_obj = *temp;
 	cout << "The Front Element in queue is :\n ";
-	cout << temp_obj;
+	cout << temp_obj<<endl;
 	/*===================Peek=========================*/
 
 	/*===================Print=========================*/
 	cout << "==Testing print()==\n";
 	MISSION_QUEUE.print();
 	/*===================Print=========================*/
-
+	cout << endl;
 	/*===================Dequeue=========================*/
 	cout << "--Testing Dequeue--\n";
 	while (MISSION_QUEUE.dequeue(temp)) {
 		temp_obj = *temp;
 		cout << "Dequeued Element is  : ";
-		cout << temp_obj;
+		cout << temp_obj<<endl;
 	}
 	/*===================Dequeue=========================*/
 
@@ -162,14 +162,14 @@ void DATA_STRUCT_TESTING() {
 		cout << "==Testing Peek()==\n";
 		DONE_MISSION_STACK.peek(Mptr);
 		temp_obj = *Mptr;
-		cout << temp_obj;
+		cout << temp_obj<<endl;
 		/*===================Peek=========================*/
 
 		cout << "==Popping All Elements==\n";
 		while (DONE_MISSION_STACK.pop(Mptr)) {
 			cout << "==The Popped Element is : \n";
 			temp_obj = *Mptr;
-			cout << temp_obj;
+			cout << temp_obj<<endl;
 		}
 
 		cout << "== Ending Stack Testing ==\n";

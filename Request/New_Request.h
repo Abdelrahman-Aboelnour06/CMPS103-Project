@@ -40,11 +40,7 @@ public:
 };
 
 std::ostream& operator<<(std::ostream& os, const New_Request& req) {
-    os << "New Request ID: " << req.getRequestID() << "\n"
-        << "Request Day: " << req.getRequestDay() << "\n"
-        << "Location Distance: " << req.getLocation() << "\n"
-        << "New_Request Duration: " << req.getMissionDuration() << "\n"
-        << "New_Request Type: " << req.getMissionType() << "\n" << std::endl;
+    os << "New Request ID: " << req.getRequestID() << ", Request Day: " << req.getRequestDay() << ", Location Distance: " << req.getLocation() << ", New_Request Duration: " << req.getMissionDuration() << ", New_Request Type: " << req.getMissionType();
 
     return os;
 }

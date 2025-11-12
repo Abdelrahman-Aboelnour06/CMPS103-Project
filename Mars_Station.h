@@ -569,9 +569,9 @@ public:
     {
         ChecknewRequests();
         moveroversfromcheckuptoavailable();
-        movebacktodone();
-        moveexecutedtoback();
         moveouttoexecuted();
+        moveexecutedtoback();
+        movebacktodone();
         assigningMissionsToRovers();
         printall();
         incrementDay();

@@ -177,7 +177,7 @@ inline void LinkedQueue<T>::print() const
 	if (isEmpty())
 		cout << "Queue is Empty \n";
 	while (temp && temp != backPtr) {
-		cout << *temp->getItem();
+		cout << *temp->getItem()<<endl;
 		temp = temp->getNext();
 	}
 	cout << "\n";

@@ -72,6 +72,7 @@ public:
             int c=-1;
             cout << " Pri is : " << c<<"    " << * temp->getItem(c);
             temp = temp->getNext();
+            cout<<endl;
         }
         cout << "\n";
     }
