@@ -319,6 +319,7 @@ public:
             else {
                 // No available rovers
                 break;
+                
             }
             //set other mission parameters
             missionPtr->setMissionParameters(current_day);
@@ -570,10 +571,10 @@ public:
     {
         ChecknewRequests();
         moveroversfromcheckuptoavailable();
+        assigningMissionsToRovers();
         moveouttoexecuted();
         moveexecutedtoback();
         movebacktodone();
-        assigningMissionsToRovers();
         printall();
         incrementDay();
     }
