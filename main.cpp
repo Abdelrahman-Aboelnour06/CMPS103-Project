@@ -310,7 +310,8 @@ void DATA_STRUCT_TESTING() {
 
 /*-----------------------------Omar Syed-----------------------------*/
 
-int main() {
+int main() 
+{
 	/*-----------------------------Omar Syed-----------------------------*/
 
 	DATA_STRUCT_TESTING();
@@ -320,6 +321,16 @@ int main() {
 	Mars_Station* Mstation = new Mars_Station;
 	Mstation->FILE_LOADING("input.txt");
 	/*-----------------------------Omar Syed-----------------------------*/
-	Mstation->simulator();
+	while (true) 
+	{
+		Mstation->simulator();
+		if (Mstation->getRequestsQueue().isEmpty() &&
+			Mstation->getReadyNormalMissions().isEmpty() &&
+			Mstation->getReadyDiggingMissions().isEmpty() &&
+			Mstation->getReadyPolarMissions().isEmpty())
+		{
+			break;
+		}
+	}
 	return 0;
 }
