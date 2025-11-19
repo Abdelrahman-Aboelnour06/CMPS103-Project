@@ -50,5 +50,7 @@
         "xutility": "cpp",
         "fstream": "cpp"
     },
-    "makefile.configureOnOpen": false
+    "makefile.configureOnOpen": false,
+    "C_Cpp.errorSquiggles": "enabled",
+    "C_Cpp.default.compilerPath": "C:/me/MSYS2/mingw64/bin/g++.exe"
 }
