@@ -102,19 +102,19 @@ public:
         while (Ready_Digging_Missions.dequeue(missionPtr)) {
             delete missionPtr;
         }
-        while (!Ready_Polar_Missions.dequeue(missionPtr)) {
+        while (Ready_Polar_Missions.dequeue(missionPtr)) {
             delete missionPtr;
         }
-        while (!Ready_Normal_Missions.dequeue(missionPtr)) {
+        while (Ready_Normal_Missions.dequeue(missionPtr)) {
             delete missionPtr;
         }
-        while (!Out_Missions.dequeue(missionPtr,x)) {
+        while (Out_Missions.dequeue(missionPtr,x)) {
             delete missionPtr;
         }
-        while (!ExecMissions.dequeue(missionPtr,x)) {
+        while (ExecMissions.dequeue(missionPtr,x)) {
             delete missionPtr;
         }
-        while (!BackMissions.dequeue(missionPtr,x)) {
+        while (BackMissions.dequeue(missionPtr,x)) {
             delete missionPtr;
         }
 
@@ -223,66 +223,69 @@ public:
 
     void assigningMissionsToRovers() {
         if (isRoversQueuesEmpty()) {
-            // if there are not available rovers, don't execute anything
             return;
         }
 
         if (!Ready_Polar_Missions.isEmpty()) {
-            assignPMs(); // start assigning PMs
+            assignPMs(); 
         }
 
-        //if (isRoversQueuesEmpty()) {
-        //    // if there are not available rovers, don't execute anything
-        //    return;
-        //}
-
         if (!Ready_Digging_Missions.isEmpty() && !available_Digging_Rovers.isEmpty()) {
-            assignDMs(); // start assigning DMs
+            assignDMs(); 
         }
 
         if (!Ready_Normal_Missions.isEmpty() && (!available_Normal_Rovers.isEmpty() || !available_Polar_Rovers.isEmpty())) {
-            assignNMs(); // start assigning NMs
+            assignNMs(); 
         }
     }
 
     void assignPMs() {
         while (!Ready_Polar_Missions.isEmpty()) {
             Mission* missionPtr = nullptr;
+            bool assigned = false;
+
             if (!available_Polar_Rovers.isEmpty()) {
                 Ready_Polar_Missions.dequeue(missionPtr);
-                if (!autoAbortPMs(missionPtr)) {
-                    Polar_Rovers* roverPtr;
-                    available_Polar_Rovers.dequeue(roverPtr);
-                    missionPtr->setRover(roverPtr);
+                if (autoAbortPMs(missionPtr)) {
+                    continue; // skip aborted mission
                 }
-            }
-            else if (!available_Normal_Rovers.isEmpty()) {
-                Ready_Polar_Missions.dequeue(missionPtr);
-                if (!autoAbortPMs(missionPtr)) {
-                    Normal_Rovers* roverPtr;
-                    available_Normal_Rovers.dequeue(roverPtr);
-                    missionPtr->setRover(roverPtr);
-                }
+                Polar_Rovers* roverPtr;
+                available_Polar_Rovers.dequeue(roverPtr);
+                missionPtr->setRover(roverPtr);
+                assigned = true;
             }
             else if (!available_Digging_Rovers.isEmpty()) {
                 Ready_Polar_Missions.dequeue(missionPtr);
-                if (!autoAbortPMs(missionPtr)) {
-                    Digging_Rovers* roverPtr;
-                    available_Digging_Rovers.dequeue(roverPtr);
-                    missionPtr->setRover(roverPtr);
+                if (autoAbortPMs(missionPtr)) {
+                    continue;
                 }
+                Digging_Rovers* roverPtr;
+                available_Digging_Rovers.dequeue(roverPtr);
+                missionPtr->setRover(roverPtr);
+                assigned = true;
+            }
+            else if (!available_Normal_Rovers.isEmpty()) {
+                Ready_Polar_Missions.dequeue(missionPtr);
+                if (autoAbortPMs(missionPtr)) {
+                    continue;
+                }
+                Normal_Rovers* roverPtr;
+                available_Normal_Rovers.dequeue(roverPtr);
+                missionPtr->setRover(roverPtr);
+                assigned = true;
             }
             else {
-                // No available rovers
+                // No available rovers, keep mission in queue
                 break;
             }
-            //set other mission parameters
-            missionPtr->setMissionParameters(current_day);
-            //add to ÒUT missions
-            Out_Missions.enqueue(missionPtr, missionPtr->getEDY());
+
+            if (assigned) {
+                missionPtr->setMissionParameters(current_day);
+                Out_Missions.enqueue(missionPtr, missionPtr->getEDY());
+            }
         }
     }
-    
+
     void assignDMs() {
         while (!Ready_Digging_Missions.isEmpty()) {
             Mission* missionPtr = nullptr;
@@ -296,9 +299,7 @@ public:
                 // No available digging rovers
                 break;
             }
-            //set other mission parameters
             missionPtr->setMissionParameters(current_day);
-            //add to ÒUT missions
             Out_Missions.enqueue(missionPtr, missionPtr->getEDY());
         }
     }
@@ -321,11 +322,8 @@ public:
             else {
                 // No available rovers
                 break;
-                
             }
-            //set other mission parameters
             missionPtr->setMissionParameters(current_day);
-            //add to ÒUT missions
             Out_Missions.enqueue(missionPtr, missionPtr->getEDY());
         }
     }
@@ -352,6 +350,7 @@ public:
         {
             requests.dequeue(temp);
             temp->operate(*this);
+            requests.peek(temp);
         }
     }
     void movebacktodone()
