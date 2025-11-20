@@ -136,19 +136,11 @@ public:
         }
         //read data from the file
         int i = 0;
+            file >> roverCounts[0]>>roverCounts[1]>>roverCounts[2];
+            file >> roverSpeed[0] >> roverSpeed[1] >> roverSpeed[2];
+            file >> checkupNum;
+            checkupDurations = new int[checkupNum];
 
-        while (i < 3) {
-            file >> roverCounts[i];
-            i++;
-        }
-        i = 0;
-
-        while (i < 3) {
-            file >> roverSpeed[i];
-            i++;
-        }
-        file >> checkupNum;
-        checkupDurations = new int[checkupNum];
         i = 0;
         while (i < checkupNum)
         {
@@ -162,13 +154,13 @@ public:
         for (int j = 0; j < roverCounts[0]; j++) {
             nDptr = new Digging_Rovers(roverSpeed[0], checkupNum, checkupDurations[0]);
             this->available_Digging_Rovers.enqueue(nDptr);
-            DIGGING_ROVER_SPEED = roverSpeed[0];
         }
+            DIGGING_ROVER_SPEED = roverSpeed[0];
         for (int j = 0; j < roverCounts[1]; j++) {
             nPptr = new Polar_Rovers(roverSpeed[1], checkupNum, checkupDurations[1]);
             this->available_Polar_Rovers.enqueue(nPptr);
-            POLAR_ROVER_SPEED = roverSpeed[1];
         }
+            POLAR_ROVER_SPEED = roverSpeed[1];
         for (int j = 0; j < roverCounts[2]; j++) {
             nNptr = new Normal_Rovers(roverSpeed[2], checkupNum, checkupDurations[2]);
             this->available_Normal_Rovers.enqueue(nNptr);
