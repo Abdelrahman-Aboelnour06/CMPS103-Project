@@ -324,10 +324,10 @@ int main()
 	while (true) 
 	{
 		Mstation->simulator();
-		if (Mstation->getRequestsQueue().isEmpty() &&
-			Mstation->getReadyNormalMissions().isEmpty() &&
-			Mstation->getReadyDiggingMissions().isEmpty() &&
-			Mstation->getReadyPolarMissions().isEmpty())
+		if (Mstation->getRequestsQueue()->isEmpty() &&
+			Mstation->getReadyNormalMissions()->isEmpty() &&
+			Mstation->getReadyDiggingMissions()->isEmpty() &&
+			Mstation->getReadyPolarMissions()->isEmpty())
 		{
 			break;
 		}
