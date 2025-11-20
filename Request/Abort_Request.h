@@ -28,9 +28,7 @@ public:
 };
 
 std::ostream& operator<<(std::ostream& os, const Abort_Request& req) {
-    os << "Abort Request ID: " << req.getRequestID() << "\n"
-       << "Request Day: " << req.getRequestDay() << "\n"
-       << "Aborted Mission ID: " << req.getAbortedRequestID() << "\n" << std::endl;
+    os << "Abort Request ID: " << req.getRequestID() << ", Request Day: " << req.getRequestDay() << ", Aborted Mission ID: " << req.getAbortedRequestID();
 
     return os;
 }
