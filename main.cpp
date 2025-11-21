@@ -14,66 +14,7 @@ using namespace std;
 
 
 
-/*-----------------------------Omar Syed-----------------------------*/
 
-//void FILE_LOADING(string fileName, int* roverCounts, int* roverSpeed, int*& checkupDurations, int& checkupNum, LinkedQueue<request*>& requestQueue) {
-//	//read data from a file and store it into data structures
-//	//open the file
-//	ifstream file(fileName);
-//	if (!file.is_open()) {
-//		cout << "Error opening file!" << endl;
-//		return;
-//	}
-//	//read data from the file
-//	int i = 0;
-//
-//	while (i < 3) {
-//		file >> roverCounts[i];
-//		i++;
-//	}
-//	i = 0;
-//	while (i < 3) {
-//		file >> roverSpeed[i];
-//		i++;
-//	}
-//	file >> checkupNum;
-//	checkupDurations = new int[checkupNum];
-//	i = 0;
-//	while (i < checkupNum)
-//	{
-//		file >> checkupDurations[i];
-//		i++;
-//
-//	}
-//	int requestNum;
-//	file >> requestNum;
-//	char requestType;
-//
-//	while (requestNum--) {
-//		file >> requestType;
-//
-//		request* requestptr = nullptr;
-//
-//		if (requestType == 'R') {
-//			char type;
-//			int RDAY, ID, TLOC, DUR;
-//			file >> type >> RDAY >> ID >> TLOC >> DUR;
-//			//cast the requestptr
-//			requestptr = new New_Request(ID, RDAY, TLOC, DUR, type);
-//		}
-//		else if (requestType == 'X') {
-//			int Xday;
-//			int id;
-//			file >> Xday >> id;
-//			requestptr = new Abort_Request(Xday, id);
-//		}
-//		//store in the request queue
-//		if (requestptr)
-//			requestQueue.enqueue(requestptr);
-//	}
-//	file.close();
-//
-//}
 
 void DATA_STRUCT_TESTING() {
 	cout << "--Testing Queue--\n";
@@ -219,6 +160,103 @@ void DATA_STRUCT_TESTING() {
 
 
 
+
+
+/*-----------------------------Omar Syed-----------------------------*/
+
+int main() 
+{
+	/*-----------------------------Omar Syed-----------------------------*/
+	//testing data structures
+	DATA_STRUCT_TESTING();
+	cout << "\n=== Testing File Loading ===" << endl;
+	Mars_Station* Mstation = new Mars_Station;
+	Mstation->FILE_LOADING("input.txt");
+	/*-----------------------------Omar Syed-----------------------------*/
+	while (true) 
+	{
+		Mstation->simulator();
+		if (Mstation->getRequestsQueue()->isEmpty() &&
+			Mstation->getReadyNormalMissions()->isEmpty() &&
+			Mstation->getReadyDiggingMissions()->isEmpty() &&
+			Mstation->getReadyPolarMissions()->isEmpty()   &&
+			Mstation->getExecMissions()->isEmpty() &&
+			Mstation->getBackMissions()->isEmpty() &&
+			Mstation->getOutMissions()->isEmpty()
+			)
+		{
+			cout << "\n=== Simulation Ended ===\n";
+			break;
+		}
+	}
+	for (int i = 0; i < 10; i++) {
+		Mstation->simulator(); // to print the last day
+	}
+	delete Mstation;
+	return 0;
+}
+
+/*-----------------------------Omar Syed-----------------------------*/
+
+//void FILE_LOADING(string fileName, int* roverCounts, int* roverSpeed, int*& checkupDurations, int& checkupNum, LinkedQueue<request*>& requestQueue) {
+//	//read data from a file and store it into data structures
+//	//open the file
+//	ifstream file(fileName);
+//	if (!file.is_open()) {
+//		cout << "Error opening file!" << endl;
+//		return;
+//	}
+//	//read data from the file
+//	int i = 0;
+//
+//	while (i < 3) {
+//		file >> roverCounts[i];
+//		i++;
+//	}
+//	i = 0;
+//	while (i < 3) {
+//		file >> roverSpeed[i];
+//		i++;
+//	}
+//	file >> checkupNum;
+//	checkupDurations = new int[checkupNum];
+//	i = 0;
+//	while (i < checkupNum)
+//	{
+//		file >> checkupDurations[i];
+//		i++;
+//
+//	}
+//	int requestNum;
+//	file >> requestNum;
+//	char requestType;
+//
+//	while (requestNum--) {
+//		file >> requestType;
+//
+//		request* requestptr = nullptr;
+//
+//		if (requestType == 'R') {
+//			char type;
+//			int RDAY, ID, TLOC, DUR;
+//			file >> type >> RDAY >> ID >> TLOC >> DUR;
+//			//cast the requestptr
+//			requestptr = new New_Request(ID, RDAY, TLOC, DUR, type);
+//		}
+//		else if (requestType == 'X') {
+//			int Xday;
+//			int id;
+//			file >> Xday >> id;
+//			requestptr = new Abort_Request(Xday, id);
+//		}
+//		//store in the request queue
+//		if (requestptr)
+//			requestQueue.enqueue(requestptr);
+//	}
+//	file.close();
+//
+//}
+
 //void FILE_LOADING(string fileName,Mars_Station*&MSTATION) {
 //	//read data from a file and store it into data structures
 //	//open the file
@@ -306,37 +344,3 @@ void DATA_STRUCT_TESTING() {
 //	cout << "\n=== Avail_DR IN MARS STATION === \n";
 //	MSTATION->GET_AVAIL_DR().print();
 //}
-
-
-/*-----------------------------Omar Syed-----------------------------*/
-
-int main() 
-{
-	/*-----------------------------Omar Syed-----------------------------*/
-
-	DATA_STRUCT_TESTING();
-	cout << "\n=== Testing File Loading ===" << endl;
-	//Mars_Station* Mstation=nullptr;
-	//FILE_LOADING("input.txt", Mstation);
-	Mars_Station* Mstation = new Mars_Station;
-	Mstation->FILE_LOADING("input.txt");
-	/*-----------------------------Omar Syed-----------------------------*/
-	while (true) 
-	{
-		Mstation->simulator();
-		if (Mstation->getRequestsQueue()->isEmpty() &&
-			Mstation->getReadyNormalMissions()->isEmpty() &&
-			Mstation->getReadyDiggingMissions()->isEmpty() &&
-			Mstation->getReadyPolarMissions()->isEmpty()   &&
-			Mstation->getExecMissions()->isEmpty() &&
-			Mstation->getBackMissions()->isEmpty() &&
-			Mstation->getOutMissions()->isEmpty()
-			)
-		{
-			cout << "\n=== Simulation Ended ===\n";
-			break;
-		}
-	}
-	Mstation->simulator(); // to print the last day
-	return 0;
-}
