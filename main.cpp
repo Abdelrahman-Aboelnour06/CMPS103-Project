@@ -333,6 +333,7 @@ int main()
 			Mstation->getOutMissions()->isEmpty()
 			)
 		{
+			cout << "\n=== Simulation Ended ===\n";
 			break;
 		}
 	}
