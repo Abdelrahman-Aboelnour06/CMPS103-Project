@@ -36,6 +36,6 @@ class Polar_Rovers : public Rover
 };
 
 std::ostream& operator<<(std::ostream& os, const Polar_Rovers& rover) {
-        os << "Polar Rover ID: " << rover.getRoverID() << ", Speed: " << rover.getSpeed() << ", Days Before Checkup: " << rover.getDaysBeforeCheckup() << ", Checkup Duration: " << rover.getCheckupDuration() << ", Missions Done: " << rover.getMissionsDone() << std::endl;
+        os << "Polar Rover ID: " << rover.getRoverID() << ", Speed: " << rover.getSpeed() << ", Days Before Checkup: " << rover.getDaysBeforeCheckup() << ", Checkup Duration: " << rover.getCheckupDuration() << ", Missions Done: " << rover.getMissionsDone();
            return os;
     }

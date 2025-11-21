@@ -33,20 +33,20 @@ private:
     int POLAR_ROVER_SPEED;
     int DIGGING_ROVER_SPEED;
     LinkedQueue<request*> requests;
-    LinkedQueue<Mission*> Ready_Digging_Missions;//Will Be Loaded From Request List
-    LinkedQueue<Mission*> Ready_Polar_Missions;  //Will Be Loaded From Request List
-    RDY_NM Ready_Normal_Missions;                //Will Be Loaded From Request List
+    LinkedQueue<Mission*> Ready_Digging_Missions;
+    LinkedQueue<Mission*> Ready_Polar_Missions;  
+    RDY_NM Ready_Normal_Missions;                
     OUT_missions Out_Missions;
     priQueue<Mission*> ExecMissions;
     priQueue<Mission*> BackMissions;
     ArrayStack<Mission*> CompletedMissions;
     ArrayStack<Mission*> AbortedMissions;
-    LinkedQueue<Normal_Rovers*> available_Normal_Rovers;   //Will Be Loaded From Request List
-    LinkedQueue<Polar_Rovers*> available_Polar_Rovers;     //Will Be Loaded From Request List
-    LinkedQueue<Digging_Rovers*> available_Digging_Rovers; //Will Be Loaded From Request List
-    LinkedQueue<Normal_Rovers*> Checkup_Normal_Rovers;     //Will Be Loaded From Request List
-    LinkedQueue<Polar_Rovers*> Checkup_Polar_Rovers;       //Will Be Loaded From Request List
-    LinkedQueue<Digging_Rovers*> Checkup_Digging_Rovers;   //Will Be Loaded From Request List
+    LinkedQueue<Normal_Rovers*> available_Normal_Rovers;   
+    LinkedQueue<Polar_Rovers*> available_Polar_Rovers;     
+    LinkedQueue<Digging_Rovers*> available_Digging_Rovers; 
+    LinkedQueue<Normal_Rovers*> Checkup_Normal_Rovers;     
+    LinkedQueue<Polar_Rovers*> Checkup_Polar_Rovers;       
+    LinkedQueue<Digging_Rovers*> Checkup_Digging_Rovers;   
 public:
 
     Mars_Station() : current_day(1) {}
@@ -518,14 +518,19 @@ public:
        
         }
     }
-    void printall()
+    void printday()
     {
         cout << "Current Day: " << current_day << endl;
+    }
+    void printreqs()
+    {
         cout << "================= Requests List =================" << endl;
-        cout << requests.getCount() << " requests remaining: ";
+        cout << requests.getCount() << " requests remaining: "<<endl;
        // requests.print();
         print_req(requests);
         cout << endl;
+    }
+    void printreadylist(){
         cout << "================= Ready List(s) =================" << endl;
         int totalReady = Ready_Normal_Missions.getCount() + Ready_Polar_Missions.getCount() + Ready_Digging_Missions.getCount();
         cout << totalReady << " Missions: ";
@@ -533,29 +538,40 @@ public:
         cout << " PMs"; Ready_Polar_Missions.print();
         cout << " DMs"; Ready_Digging_Missions.print();
         cout << endl;
-        cout << "================= Available Rovers List(s) =================" << endl;
+    }
+    void printavailableRoverlist(){
         int totalRovers = available_Normal_Rovers.getCount() + available_Polar_Rovers.getCount() + available_Digging_Rovers.getCount();
         cout << totalRovers << " Available Rovers: ";
-        cout << "NR"; available_Normal_Rovers.print();
-        cout << " PR"; available_Polar_Rovers.print();
-        cout << " DR"; available_Digging_Rovers.print();
-        cout << endl;
-        cout << "================= OUT List(s) =================" << endl;
+        cout << "NR "; available_Normal_Rovers.print();
+        cout << " PR "; available_Polar_Rovers.print();
+        cout << " DR "; available_Digging_Rovers.print();
+    cout << endl;
+}
+void printOutlist(){
+    cout << "================= OUT List(s) =================" << endl;
         cout << Out_Missions.getCount() << " Missions/Rovers: ";
         Out_Missions.print();
         cout << endl;
+    }
+    void printExecList(){
         cout << "================= EXEC List(s) =================" << endl;
         cout << ExecMissions.getCount() << " Missions/Rovers: ";
         ExecMissions.print();
         cout << endl;
+    }
+    void printBackList(){
         cout << "================= BACK List(s) =================" << endl;
         cout << BackMissions.getCount() << " Missions/Rovers: ";
         BackMissions.print();
         cout << endl;
+    }
+    void printAbortedList(){
         cout << "================= Aborted List(s) =================" << endl;
         cout << AbortedMissions.getCount() << " Missions: ";
         AbortedMissions.print();
         cout << endl;
+    }
+    void printCheckupList(){
         cout << "================= Checkup List(s) =================" << endl;
         int totalCheckup = Checkup_Normal_Rovers.getCount() + Checkup_Polar_Rovers.getCount() + Checkup_Digging_Rovers.getCount();
         cout << totalCheckup << " Rovers: ";
@@ -563,22 +579,51 @@ public:
         Checkup_Polar_Rovers.print();
         Checkup_Digging_Rovers.print();
         cout << endl;
+    }
+    void printDoneList(){
         cout << "================= DONE List(s) =================" << endl;
         cout << CompletedMissions.getCount() << " Missions: ";
         CompletedMissions.print();
         cout << endl;
+    }
+    void printline(){
         cout << "===============================================" << endl;
+    }
+    void printall()
+    {
+       // cout << "Current Day: " << current_day << endl;
+       printday();
+       printreqs();
+       printreadylist();
+       printavailableRoverlist();
+       printOutlist();
+       printExecList();
+       printBackList();
+       printAbortedList();
+       printCheckupList();
+       printDoneList();
+       printline();
+    
     }
     void simulator()
     {
+        printday();
+        printreqs();
         ChecknewRequests();
+        printreadylist();
         moveroversfromcheckuptoavailable();
+        printavailableRoverlist();
         assigningMissionsToRovers();
         moveouttoexecuted();
         moveexecutedtoback();
         movebacktodone();
-        printall();
+        printOutlist();
+        printExecList();
+        printBackList();
+        printDoneList();
+        printline();
         incrementDay();
+
     }
     LinkedQueue<request*>* getRequestsQueue()  {
         return &requests;
@@ -594,6 +639,12 @@ public:
     }
     OUT_missions* getOutMissions() {
         return &Out_Missions;
+    }
+    priQueue<Mission*>* getExecMissions() {
+        return &ExecMissions;
+    }
+    priQueue<Mission*>* getBackMissions() {
+        return &BackMissions;
     }
     //// ==================================== = Omar Syed======================================/
     //void SET_AVAIL_PR(Polar_Rovers*& Avail_PR) {
@@ -657,5 +708,5 @@ void New_Request::operate(Mars_Station& station)
 
 void Abort_Request::operate(Mars_Station& station) 
 {
-    // The operation for aborting a mission will be handled in Mars_Station
+// phase 2
 }
