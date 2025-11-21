@@ -41,12 +41,12 @@ private:
     priQueue<Mission*> BackMissions;
     ArrayStack<Mission*> CompletedMissions;
     ArrayStack<Mission*> AbortedMissions;
-    LinkedQueue<Normal_Rovers*> available_Normal_Rovers;   //Will Be Loaded From Request List
-    LinkedQueue<Polar_Rovers*> available_Polar_Rovers;     //Will Be Loaded From Request List
-    LinkedQueue<Digging_Rovers*> available_Digging_Rovers; //Will Be Loaded From Request List
-    LinkedQueue<Normal_Rovers*> Checkup_Normal_Rovers;     //Will Be Loaded From Request List
-    LinkedQueue<Polar_Rovers*> Checkup_Polar_Rovers;       //Will Be Loaded From Request List
-    LinkedQueue<Digging_Rovers*> Checkup_Digging_Rovers;   //Will Be Loaded From Request List
+    LinkedQueue<Normal_Rovers*> available_Normal_Rovers;   
+    LinkedQueue<Polar_Rovers*> available_Polar_Rovers;     
+    LinkedQueue<Digging_Rovers*> available_Digging_Rovers; 
+    LinkedQueue<Normal_Rovers*> Checkup_Normal_Rovers;     
+    LinkedQueue<Polar_Rovers*> Checkup_Polar_Rovers;       
+    LinkedQueue<Digging_Rovers*> Checkup_Digging_Rovers;   
 public:
 
     Mars_Station() : current_day(1) {}
