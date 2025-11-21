@@ -327,10 +327,15 @@ int main()
 		if (Mstation->getRequestsQueue()->isEmpty() &&
 			Mstation->getReadyNormalMissions()->isEmpty() &&
 			Mstation->getReadyDiggingMissions()->isEmpty() &&
-			Mstation->getReadyPolarMissions()->isEmpty())
+			Mstation->getReadyPolarMissions()->isEmpty()   &&
+			Mstation->getExecMissions()->isEmpty() &&
+			Mstation->getBackMissions()->isEmpty() &&
+			Mstation->getOutMissions()->isEmpty()
+			)
 		{
 			break;
 		}
 	}
+	Mstation->simulator(); // to print the last day
 	return 0;
 }
