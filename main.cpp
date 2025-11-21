@@ -189,9 +189,7 @@ int main()
 			break;
 		}
 	}
-	for (int i = 0; i < 10; i++) {
-		Mstation->simulator(); // to print the last day
-	}
+	
 	delete Mstation;
 	return 0;
 }

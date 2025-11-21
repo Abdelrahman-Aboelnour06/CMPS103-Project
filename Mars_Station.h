@@ -33,9 +33,9 @@ private:
     int POLAR_ROVER_SPEED;
     int DIGGING_ROVER_SPEED;
     LinkedQueue<request*> requests;
-    LinkedQueue<Mission*> Ready_Digging_Missions;//Will Be Loaded From Request List
-    LinkedQueue<Mission*> Ready_Polar_Missions;  //Will Be Loaded From Request List
-    RDY_NM Ready_Normal_Missions;                //Will Be Loaded From Request List
+    LinkedQueue<Mission*> Ready_Digging_Missions;
+    LinkedQueue<Mission*> Ready_Polar_Missions;  
+    RDY_NM Ready_Normal_Missions;                
     OUT_missions Out_Missions;
     priQueue<Mission*> ExecMissions;
     priQueue<Mission*> BackMissions;
@@ -614,12 +614,12 @@ void printOutlist(){
         moveroversfromcheckuptoavailable();
         printavailableRoverlist();
         assigningMissionsToRovers();
-        printOutlist();
         moveouttoexecuted();
-        printExecList();
         moveexecutedtoback();
-        printBackList();
         movebacktodone();
+        printOutlist();
+        printExecList();
+        printBackList();
         printDoneList();
         printline();
         incrementDay();
@@ -708,5 +708,5 @@ void New_Request::operate(Mars_Station& station)
 
 void Abort_Request::operate(Mars_Station& station) 
 {
-    // The operation for aborting a mission will be handled in Mars_Station
+// phase 2
 }
