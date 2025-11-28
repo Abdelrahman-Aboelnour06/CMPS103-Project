@@ -5,16 +5,25 @@
 #include "../Rovers/Rover.h"
 
 using namespace std;
-
+enum class STATE{
+    READY,
+    OUT, 
+    EXECUTING,
+    BACK, 
+    DONE,
+    ABORTED, 
+    FAILED
+};
 
 class Mission {
 protected:
+    STATE mission_state;
     int mission_id;
     int location_distance;
     int mission_duration; // number of days the mission would take once the rover gets to its distenation
     Rover* assignedRover;
     char mission_type;
-    // 'P' for Polar, 'N' for Normal, 'D' for Digging
+    // 'P' for Polar, 'N' for Normal, 'D' for Digging 'C' for Complex
     int RDY; // the day the mission was ready
     int LDY; // the day the mission was assigned to a rover
     int WDYs; // Waiting days
@@ -32,6 +41,7 @@ public:
         EDY = -1;
         TDYs = 0;
         FDY = -1;
+        mission_state = STATE::READY;
     }
     void setRover(Rover* R) {
         assignedRover = R;
@@ -67,7 +77,7 @@ public:
     int getID() const { return mission_id; }
     int getLocation() const { return location_distance; }
     int getmissionDuration() const { return mission_duration; }
-    char getMissionType() const { return mission_type; }
+    virtual char getMissionType() const { return mission_type; }
     int getRDY() const { return RDY; }
     int getLDY() const { return LDY; }
     int getWDYs() const { return WDYs; }

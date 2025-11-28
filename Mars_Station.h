@@ -7,6 +7,7 @@
 #include <iostream>
 #include "RDY_NM.h"
 #include "OUT_missions.h"
+
 //omar syed 
 //this function is used to print request list
 void print_req(LinkedQueue<request*>& req) {
@@ -35,6 +36,7 @@ private:
     LinkedQueue<request*> requests;
     LinkedQueue<Mission*> Ready_Digging_Missions;
     LinkedQueue<Mission*> Ready_Polar_Missions;  
+    LinkedQueue<Complex_Mission*> Ready_Complex_Missions;
     RDY_NM Ready_Normal_Missions;                
     OUT_missions Out_Missions;
     priQueue<Mission*> ExecMissions;
@@ -646,6 +648,9 @@ void printOutlist(){
     priQueue<Mission*>* getBackMissions() {
         return &BackMissions;
     }
+    LinkedQueue<Complex_Mission*>* getReadyComplexMissions()  {
+        return &Ready_Complex_Missions;
+    }
     //// ==================================== = Omar Syed======================================/
     //void SET_AVAIL_PR(Polar_Rovers*& Avail_PR) {
     //    available_Polar_Rovers.enqueue(Avail_PR);
@@ -693,16 +698,23 @@ void printOutlist(){
 void New_Request::operate(Mars_Station& station) 
 {
 
-    Mission* newMission = new Mission(getRequestID(), location_distance, mission_duration, mission_type, getRequestDay());
     char type = getMissionType();
     if (type == 'N') {
+        Mission* newMission = new Mission(getRequestID(), location_distance, mission_duration, mission_type, getRequestDay());
         station.getReadyNormalMissions()->enqueue(newMission);
     }
     else if (type == 'P') {
+        Mission* newMission = new Mission(getRequestID(), location_distance, mission_duration, mission_type, getRequestDay());
         station.getReadyPolarMissions()->enqueue(newMission);
     }
     else if (type == 'D') {
+        Mission* newMission = new Mission(getRequestID(), location_distance, mission_duration, mission_type, getRequestDay());
         station.getReadyDiggingMissions()->enqueue(newMission);
+    }
+    else if (type == 'C') {
+        
+        Complex_Mission* complexMission = new Complex_Mission(getRequestID(), location_distance, mission_duration, getRequestDay());
+        station.getReadyComplexMissions()->enqueue(complexMission); // or another appropriate list
     }
 }
 

@@ -9,6 +9,7 @@
 #include "Request/New_Request.h"
 #include "Request/Abort_Request.h"
 #include "Mission/Mission.h"
+#include "Mission/Complex_Mission.h"
 #include "ADT/LinkedQueue.h"
 #include "ADT/priQueue.h"
 #include "ADT/ArrayStack.h"
