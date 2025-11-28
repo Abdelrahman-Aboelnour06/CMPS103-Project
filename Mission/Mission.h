@@ -23,7 +23,7 @@ protected:
     int mission_duration; // number of days the mission would take once the rover gets to its distenation
     Rover* assignedRover;
     char mission_type;
-    // 'P' for Polar, 'N' for Normal, 'D' for Digging 'C' for Complex
+    // 'P' for Polar, 'N' for Normal, 'D' for Digging 'C' for Complex and 'R' for Rescue
     int RDY; // the day the mission was ready
     int LDY; // the day the mission was assigned to a rover
     int WDYs; // Waiting days

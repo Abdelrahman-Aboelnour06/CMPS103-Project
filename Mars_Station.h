@@ -46,9 +46,11 @@ private:
     LinkedQueue<Normal_Rovers*> available_Normal_Rovers;   
     LinkedQueue<Polar_Rovers*> available_Polar_Rovers;     
     LinkedQueue<Digging_Rovers*> available_Digging_Rovers; 
+    LinkedQueue<Rescue_Rovers*> available_Rescue_Rovers;
     LinkedQueue<Normal_Rovers*> Checkup_Normal_Rovers;     
     LinkedQueue<Polar_Rovers*> Checkup_Polar_Rovers;       
     LinkedQueue<Digging_Rovers*> Checkup_Digging_Rovers;   
+    LinkedQueue<Rescue_Rovers*> Checkup_Rescue_Rovers;
 public:
 
     Mars_Station() : current_day(1) {}
