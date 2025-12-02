@@ -11,7 +11,7 @@ class New_Request : public request
 {
     int location_distance;
     int mission_duration;
-    char mission_type; // 'P' for Polar, 'N' for Normal, 'D' for Digging
+    char mission_type; // 'P' for Polar, 'N' for Normal, 'D' for Digging 'C' for complex
 public:
     New_Request(int id, int day, int loc, int duration, char type)
         : request(id, day), location_distance(loc), mission_duration(duration), mission_type(type) 
