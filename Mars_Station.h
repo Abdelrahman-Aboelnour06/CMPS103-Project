@@ -127,6 +127,9 @@ public:
 
 
     //omar syed
+
+    int get_current_day() const { return current_day; }
+
     void FILE_LOADING(string fileName) {
         //read data from a file and store it into data structures
         //open the file
@@ -653,47 +656,21 @@ void printOutlist(){
     LinkedQueue<Complex_Mission*>* getReadyComplexMissions()  {
         return &Ready_Complex_Missions;
     }
-    //// ==================================== = Omar Syed======================================/
-    //void SET_AVAIL_PR(Polar_Rovers*& Avail_PR) {
-    //    available_Polar_Rovers.enqueue(Avail_PR);
-    //    POLAR_ROVER_SPEED = Avail_PR->getSpeed();
-    //}
-
-    //void SET_AVAIL_DR(Digging_Rovers*& Avail_DR) {
-    //    available_Digging_Rovers.enqueue(Avail_DR);
-    //    DIGGING_ROVER_SPEED = Avail_DR->getSpeed();
-    //}
-
-    //void SET_AVAIL_NR(Normal_Rovers*& Avail_NR) {
-    //    available_Normal_Rovers.enqueue(Avail_NR);
-    //    NORMAL_ROVER_SPEED = Avail_NR->getSpeed();
-    //}
-
-
-
-  /*  void SET_REQUEST_QUEUE(request* requestptr) {
-        requests.enqueue(requestptr);
+    
+    ArrayStack<Mission*>* getAbortedMissions() { return &AbortedMissions; }
+    ArrayStack<Mission*>* getDoneMissions() { return &CompletedMissions; }
+    
+    /*LinkedQueue<Rover*>* getCheckupRovers() {
     }
-    LinkedQueue<Polar_Rovers*>GET_AVAIL_PR()const {
-        return available_Polar_Rovers;
-    }
-    LinkedQueue<Digging_Rovers*>GET_AVAIL_DR()const {
-        return available_Digging_Rovers;
-    }
-    LinkedQueue<Normal_Rovers*>GET_AVAIL_NR()const {
-        return available_Normal_Rovers;
-    }*/
-    /*void SET_RDM(Mission*DM) {
-        Ready_Digging_Missions.enqueue(DM);
-    }
-    void SET_RPM(Mission*PM) {
-        Ready_Digging_Missions.enqueue(PM);
-    }
-    void SET_RNM(Mission*NM) {
-        Ready_Digging_Missions.enqueue(NM);
+    
+    bool isSimulationComplete() {
+   
     }*/
 
-    // ==================================== = Omar Syed======================================/
+    void Mars_Station::generateOutputFile(const string& filename) {
+        // Sort missions by Fday in descending order
+        // Write to file as per requirements
+    }
 };
 
 
