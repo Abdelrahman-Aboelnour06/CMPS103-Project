@@ -35,6 +35,11 @@ public:
     char getMissionType() const {
         return mission_type;
     }
+
+    void print(ostream& output) {
+        output << "[R," << this->getMissionType() << " ," << this->getRequestDay() <<" ,"<<this->getRequestID()<< "]";
+    }
+
     void operate(Mars_Station& station) override;
 
 };

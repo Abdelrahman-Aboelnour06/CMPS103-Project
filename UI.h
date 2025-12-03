@@ -68,7 +68,7 @@ public:
         if (mode != 1) {
             return;
         }
-        cout << "           Current Day: " << currentDay << "\n";
+        cout << "Current Day: " << currentDay << "\n";
         cout << "==============================================\n";
 
         cout << "\nPress ENTER to display this day's information...";
@@ -98,12 +98,10 @@ public:
         cout << reqCount << " requests remaining: ";
 
         if (reqCount == 0) {
-            cout << "(No pending requests)\n";
             return;
         }
 
-        
-        LinkedQueue<request*> tempQueue;
+      /*  LinkedQueue<request*> tempQueue;
         request* reqPtr = nullptr;
         int printed = 0;
 
@@ -134,7 +132,8 @@ public:
         if (reqCount > 10) {
             cout << "... and " << (reqCount - 10) << " more";
         }
-        cout << "\n";
+        cout << "\n";*/
+        requestsList->print();
     }
 
    
