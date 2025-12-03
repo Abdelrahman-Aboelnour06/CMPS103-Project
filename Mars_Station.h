@@ -124,12 +124,6 @@ public:
 
     }
 
-
-
-    //omar syed
-
-    int get_current_day() const { return current_day; }
-
     void FILE_LOADING(string fileName) {
         //read data from a file and store it into data structures
         //open the file
@@ -695,6 +689,8 @@ void printOutlist(){
     LinkedQueue<Rescue_Rovers*>* getCheckupRescueRovers() {
         return &Checkup_Rescue_Rovers;
     }
+
+    int get_current_day() const { return current_day; }
 };
 
 
