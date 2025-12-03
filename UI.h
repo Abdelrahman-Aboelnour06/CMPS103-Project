@@ -37,6 +37,15 @@ public:
         }
     }
 
+    void silent_message() {
+        if (mode == 1) {
+            cout << "Silent Mode\n";
+            cout << "Simulation Starts...\n";
+            return;
+        }
+        return;
+    }
+
     
     void displayDay(int currentDay,
         LinkedQueue<request*>* requestsList,
@@ -83,7 +92,6 @@ public:
            cout << "Simulation ends, Output file created\n";
        }
 
-private:
     void printRequestList(LinkedQueue<request*>* requestsList) {
         cout << "\n=============== Requests List ===============\n";
         int reqCount = requestsList->getCount();

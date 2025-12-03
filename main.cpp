@@ -170,6 +170,7 @@ int main()
 	cout << "Starting simulation...\n";
 	cout << "==============================================\n\n";
 
+	ui.silent_message();
 	while (true)
 	{
 		
