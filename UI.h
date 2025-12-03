@@ -39,26 +39,13 @@ public:
         }
     }
 
-    void Simulation(const string& filename) {
+    void Simulation() {
         station = new Mars_Station();
-        station->FILE_LOADING(filename);
+        station->FILE_LOADING("input.txt");
     }
 
 
-    void run() {
-        if (mode == 1) {
-            //Interactive
-            cout << "Current Day:" << station->get_current_day()<<endl;
-            cin.get();
-
-
-     }
-        else if (mode == 2) {
-            //Silent
-            cout << "Silent Mode\n";
-            cout << "Simulation Starts...\n";
-        }
-    }
+  
 
 
     void displayDay(int currentDay,
@@ -78,7 +65,8 @@ public:
         ArrayStack<Mission*>* doneMissions) {
 
         cout << "Current Day: " << currentDay << endl;
-  
+        cout << "Press Any Key to print next day info\n";
+        cin.get();
         //Print Request List
         cout << "=============== Request List =============== \n";
         cout << requestsList->getCount() << " requests remaining: ";
@@ -159,6 +147,17 @@ public:
         cout << "\n\n";
 
 
+    }
+
+    void end_message() {
+        if (mode == 1) {
+            //Interactive
+            cout << "Simulation ends, Output file created\n";
+        }
+        if (mode == 2) {
+            //silent
+            cout << "Simulation ends, Output file created\n";
+        }
     }
 private:
     bool isSimulationComplete() {

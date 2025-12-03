@@ -614,21 +614,21 @@ void printOutlist(){
     }
     void simulator()
     {
-        printday();
-        printreqs();
+       // printday();
+       // printreqs();
         ChecknewRequests();
-        printreadylist();
+        //printreadylist();
         moveroversfromcheckuptoavailable();
-        printavailableRoverlist();
+        //printavailableRoverlist();
         assigningMissionsToRovers();
         moveouttoexecuted();
         moveexecutedtoback();
         movebacktodone();
-        printOutlist();
-        printExecList();
-        printBackList();
-        printDoneList();
-        printline();
+        //printOutlist();
+        //printExecList();
+        //printBackList();
+        //printDoneList();
+        //printline();
         incrementDay();
 
     }
@@ -667,7 +667,7 @@ void printOutlist(){
    
     }*/
 
-    void Mars_Station::generateOutputFile(const string& filename) {
+    void generateOutputFile(const string& filename) {
         // Sort missions by Fday in descending order
         // Write to file as per requirements
     }

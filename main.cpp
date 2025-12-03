@@ -10,6 +10,7 @@
 #include "Rovers/polar_Rovers.h"
 #include "Rovers/Rover.h"
 #include <fstream>
+#include "UI.h"
 using namespace std;
 
 
@@ -164,16 +165,17 @@ void DATA_STRUCT_TESTING() {
 
 int main() 
 {
-	/*-----------------------------Omar Syed-----------------------------*/
-	//testing data structures
-	DATA_STRUCT_TESTING();
-	cout << "\n=== Testing File Loading ===" << endl;
 	Mars_Station* Mstation = new Mars_Station;
 	Mstation->FILE_LOADING("input.txt");
+	UI ui;
+	ui.selectMode();
 	/*-----------------------------Omar Syed-----------------------------*/
 	while (true) 
 	{
 		Mstation->simulator();
+		//
+		ui.displayDay(Mstation->get_current_day(), Mstation->getRequestsQueue(), Mstation->getReadyDiggingMissions(), Mstation->getReadyDiggingMissions(),
+			Mstation->getReadyNormalMissions());
 		if (Mstation->getRequestsQueue()->isEmpty() &&
 			Mstation->getReadyNormalMissions()->isEmpty() &&
 			Mstation->getReadyDiggingMissions()->isEmpty() &&
@@ -183,7 +185,9 @@ int main()
 			Mstation->getOutMissions()->isEmpty()
 			)
 		{
-			cout << "\n=== Simulation Ended ===\n";
+			//End
+			Mstation->generateOutputFile("output.txt");
+			ui.end_message();
 			break;
 		}
 	}
@@ -194,149 +198,3 @@ int main()
 
 /*-----------------------------Omar Syed-----------------------------*/
 
-//void FILE_LOADING(string fileName, int* roverCounts, int* roverSpeed, int*& checkupDurations, int& checkupNum, LinkedQueue<request*>& requestQueue) {
-//	//read data from a file and store it into data structures
-//	//open the file
-//	ifstream file(fileName);
-//	if (!file.is_open()) {
-//		cout << "Error opening file!" << endl;
-//		return;
-//	}
-//	//read data from the file
-//	int i = 0;
-//
-//	while (i < 3) {
-//		file >> roverCounts[i];
-//		i++;
-//	}
-//	i = 0;
-//	while (i < 3) {
-//		file >> roverSpeed[i];
-//		i++;
-//	}
-//	file >> checkupNum;
-//	checkupDurations = new int[checkupNum];
-//	i = 0;
-//	while (i < checkupNum)
-//	{
-//		file >> checkupDurations[i];
-//		i++;
-//
-//	}
-//	int requestNum;
-//	file >> requestNum;
-//	char requestType;
-//
-//	while (requestNum--) {
-//		file >> requestType;
-//
-//		request* requestptr = nullptr;
-//
-//		if (requestType == 'R') {
-//			char type;
-//			int RDAY, ID, TLOC, DUR;
-//			file >> type >> RDAY >> ID >> TLOC >> DUR;
-//			//cast the requestptr
-//			requestptr = new New_Request(ID, RDAY, TLOC, DUR, type);
-//		}
-//		else if (requestType == 'X') {
-//			int Xday;
-//			int id;
-//			file >> Xday >> id;
-//			requestptr = new Abort_Request(Xday, id);
-//		}
-//		//store in the request queue
-//		if (requestptr)
-//			requestQueue.enqueue(requestptr);
-//	}
-//	file.close();
-//
-//}
-
-//void FILE_LOADING(string fileName,Mars_Station*&MSTATION) {
-//	//read data from a file and store it into data structures
-//	//open the file
-//	MSTATION = new Mars_Station;
-//	int roverCounts[3] = { 0,0,0 };
-//	int roverSpeed[3] = { 0 ,0,0 };
-//	int* checkupDurations = nullptr;
-//	int checkupNum = 0;
-//	ifstream file(fileName);
-//	if (!file.is_open()) {
-//		cout << "Error opening file!" << endl;
-//		return;
-//	}
-//	//read data from the file
-//	int i = 0;
-//
-//	while (i < 3) {
-//		file >> roverCounts[i];
-//		i++;
-//	}
-//	i = 0;
-//	
-//	while (i < 3) {
-//		file >> roverSpeed[i];
-//		i++;
-//	}
-//	file >> checkupNum;
-//	checkupDurations = new int[checkupNum];
-//	i = 0;
-//	while (i < checkupNum)
-//	{
-//		file >> checkupDurations[i];
-//		i++;
-//
-//	}
-//	Digging_Rovers* nDptr=nullptr;
-//	Polar_Rovers* nPptr=nullptr;
-//	Normal_Rovers* nNptr=nullptr;
-//	for (int j = 0; j < roverCounts[0]; j++) {
-//		nDptr = new Digging_Rovers(roverSpeed[0], checkupNum, checkupDurations[0]);
-//		MSTATION->SET_AVAIL_DR(nDptr);
-//	}
-//	for (int j = 0; j < roverCounts[1]; j++) {
-//		nPptr = new Polar_Rovers(roverSpeed[1], checkupNum, checkupDurations[1]);
-//		MSTATION->SET_AVAIL_PR(nPptr);
-//	}
-//	for (int j = 0; j < roverCounts[2]; j++) {
-//		nNptr = new Normal_Rovers(roverSpeed[2], checkupNum, checkupDurations[2]);
-//		MSTATION->SET_AVAIL_NR(nNptr);
-//	}
-//	
-//	
-//	
-//	int requestNum;
-//	file >> requestNum;
-//	char requestType;
-//
-//	while (requestNum--) {
-//		file >> requestType;
-//
-//		request* requestptr = nullptr;
-//
-//		if (requestType == 'R') {
-//			char type;
-//			int RDAY, ID, TLOC, DUR;
-//			file >> type >> RDAY >> ID >> TLOC >> DUR;
-//			//cast the requestptr
-//			requestptr = new New_Request(ID, RDAY, TLOC, DUR, type);
-//		}
-//		else if (requestType == 'X') {
-//			int Xday;
-//			int id;
-//			file >> Xday >> id;
-//			requestptr = new Abort_Request(Xday, id);
-//		}
-//		//store in the request queue in Mars Station
-//		if (requestptr)
-//			MSTATION->SET_REQUEST_QUEUE(requestptr);
-//	}
-//	file.close();
-//	cout << "\n=== Avail_PR IN MARS STATION === \n";
-//	MSTATION->GET_AVAIL_PR().print();
-//	cout << "\n=== Avail_NR IN MARS STATION === \n";
-//	MSTATION->GET_AVAIL_NR().print();
-//	cout << "\n=== Avail_DR IN MARS STATION === \n";
-//	MSTATION->GET_AVAIL_DR().print();
-//}
