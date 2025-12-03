@@ -13,8 +13,7 @@
 #include "UI.h"
 using namespace std;
 
-
-
+/*-----------------------------Omar Syed-----------------------------*/
 void DATA_STRUCT_TESTING() {
 	cout << "--Testing Queue--\n";
 	cout << "--Creating a Queue to missions--\n";
@@ -157,44 +156,73 @@ void DATA_STRUCT_TESTING() {
 
 }
 
-
-
-
-
-/*-----------------------------Omar Syed-----------------------------*/
-
 int main() 
 {
+
 	Mars_Station* Mstation = new Mars_Station;
-	Mstation->FILE_LOADING("input.txt");
+
+	
 	UI ui;
+	Mstation->FILE_LOADING("input.txt");
+
 	ui.selectMode();
-	/*-----------------------------Omar Syed-----------------------------*/
-	while (true) 
+
+	cout << "Starting simulation...\n";
+	cout << "==============================================\n\n";
+
+	while (true)
 	{
+		
 		Mstation->simulator();
-		//
-		ui.displayDay(Mstation->get_current_day(), Mstation->getRequestsQueue(), Mstation->getReadyDiggingMissions(), Mstation->getReadyDiggingMissions(),
-			Mstation->getReadyNormalMissions());
+
+		
+		ui.displayDay(
+			Mstation->get_current_day() - 1,  
+			Mstation->getRequestsQueue(),
+			Mstation->getReadyDiggingMissions(),
+			Mstation->getReadyPolarMissions(),  
+			Mstation->getReadyNormalMissions(),
+			Mstation->getAvailableNormalRovers(),
+			Mstation->getAvailablePolarRovers(),
+			Mstation->getAvailableDiggingRovers(),
+			Mstation->getAvailableRescueRovers(),
+			Mstation->getOutMissions(),
+			Mstation->getExecMissions(),
+			Mstation->getBackMissions(),
+			Mstation->getAbortedMissions(),
+			Mstation->getCheckupNormalRovers(),
+			Mstation->getCheckupPolarRovers(),
+			Mstation->getCheckupDiggingRovers(),
+			Mstation->getCheckupRescueRovers(),
+			Mstation->getDoneMissions()
+		);
+
 		if (Mstation->getRequestsQueue()->isEmpty() &&
 			Mstation->getReadyNormalMissions()->isEmpty() &&
 			Mstation->getReadyDiggingMissions()->isEmpty() &&
-			Mstation->getReadyPolarMissions()->isEmpty()   &&
+			Mstation->getReadyPolarMissions()->isEmpty() &&
 			Mstation->getExecMissions()->isEmpty() &&
 			Mstation->getBackMissions()->isEmpty() &&
-			Mstation->getOutMissions()->isEmpty()
-			)
+			Mstation->getOutMissions()->isEmpty())
 		{
-			//End
+			
 			Mstation->generateOutputFile("output.txt");
 			ui.end_message();
 			break;
 		}
 	}
-	
+
 	delete Mstation;
+
 	return 0;
 }
 
 /*-----------------------------Omar Syed-----------------------------*/
+
+
+
+
+
+
+
 

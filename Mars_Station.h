@@ -659,17 +659,41 @@ void printOutlist(){
     
     ArrayStack<Mission*>* getAbortedMissions() { return &AbortedMissions; }
     ArrayStack<Mission*>* getDoneMissions() { return &CompletedMissions; }
-    
-    /*LinkedQueue<Rover*>* getCheckupRovers() {
-    }
-    
-    bool isSimulationComplete() {
-   
-    }*/
-
+  
     void generateOutputFile(const string& filename) {
-        // Sort missions by Fday in descending order
-        // Write to file as per requirements
+        // 
+    }
+
+    LinkedQueue<Normal_Rovers*>* getAvailableNormalRovers() {
+        return &available_Normal_Rovers;
+    }
+
+    LinkedQueue<Polar_Rovers*>* getAvailablePolarRovers() {
+        return &available_Polar_Rovers;
+    }
+
+    LinkedQueue<Digging_Rovers*>* getAvailableDiggingRovers() {
+        return &available_Digging_Rovers;
+    }
+
+    LinkedQueue<Rescue_Rovers*>* getAvailableRescueRovers() {
+        return &available_Rescue_Rovers;
+    }
+
+    LinkedQueue<Normal_Rovers*>* getCheckupNormalRovers() {
+        return &Checkup_Normal_Rovers;
+    }
+
+    LinkedQueue<Polar_Rovers*>* getCheckupPolarRovers() {
+        return &Checkup_Polar_Rovers;
+    }
+
+    LinkedQueue<Digging_Rovers*>* getCheckupDiggingRovers() {
+        return &Checkup_Digging_Rovers;
+    }
+
+    LinkedQueue<Rescue_Rovers*>* getCheckupRescueRovers() {
+        return &Checkup_Rescue_Rovers;
     }
 };
 
