@@ -64,7 +64,7 @@ public:
 	//Omar Syed
 	void print() const {
 		for (int i = top; i >= 0; i--) {
-			cout << *items[i]<<endl;
+			cout << items[i]<<endl;
 		}
 	}
 	//Omar Syed
