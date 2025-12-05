@@ -862,6 +862,12 @@ public:
     }
 
     int get_current_day() const { return current_day; }
+
+    void generateOutputFile(string outputfile){}
+
+    ArrayStack<Mission*>* getDoneMissions() { return &CompletedMissions; }
+
+    ArrayStack<Mission*>* getAbortedMissions() { return &AbortedMissions; }
 };
 
 void New_Request::operate(Mars_Station &station)
