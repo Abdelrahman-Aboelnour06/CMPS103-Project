@@ -9,11 +9,12 @@ protected:
     static int id_counter;
     const int rover_id;
     int missions_done;
+    int checkup_end_day;
 
 public:
     Rover(int dbc, int cd)
         : NUM_OF_MISSION_BEFORE_CHECKUP(dbc), checkup_duration(cd),
-          rover_id(++id_counter), missions_done(0) {}
+          rover_id(++id_counter), missions_done(0), checkup_end_day(-1) {}
      ~Rover(){};
     virtual int  getSpeed() const = 0;
     virtual int  getDaysBeforeCheckup() const = 0;
@@ -22,6 +23,9 @@ public:
     virtual int  getMissionsDone() const = 0;
     virtual void incrementMissionsDone() = 0;
     virtual char getType() const = 0;
+    void setCheckupEndDay(int day) { checkup_end_day = day;}
+    int getCheckupEndDay() const { return checkup_end_day;}
+    void resetMissionsDone() { missions_done = 0; }
 };
 
 

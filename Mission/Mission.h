@@ -6,6 +6,7 @@
 
 using namespace std;
 enum class STATE{
+    NOTREADY,
     READY,
     OUT, 
     EXECUTING,
@@ -41,7 +42,7 @@ public:
         EDY = -1;
         TDYs = 0;
         FDY = -1;
-        mission_state = STATE::READY;
+        mission_state = STATE::NOTREADY;
     }
     void setRover(Rover* R) {
         assignedRover = R;
@@ -78,6 +79,8 @@ public:
     int getLocation() const { return location_distance; }
     int getmissionDuration() const { return mission_duration; }
     virtual char getMissionType() const { return mission_type; }
+    virtual void setmissionstate(STATE s) { mission_state = s; }
+    virtual STATE getmissionstate() const { return mission_state; }
     int getRDY() const { return RDY; }
     int getLDY() const { return LDY; }
     int getWDYs() const { return WDYs; }
