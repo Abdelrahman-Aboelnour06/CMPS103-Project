@@ -404,7 +404,7 @@ public:
                 BackMissions.enqueue(executedmission2, pri2);
             }
         }
-        BackMissions.print();
+        BackMissions.print(BackMissions.getCount());
     }
     
     void moveNRfromcheckup()
@@ -460,7 +460,7 @@ public:
             Out_Missions.dequeue(outmission, pri);
             ExecMissions.enqueue(outmission, pri);
         }
-        ExecMissions.print();
+        ExecMissions.print(ExecMissions.getCount());
     }
     void incrementDay() {
         current_day++;
@@ -535,56 +535,56 @@ public:
         cout << "================= Ready List(s) =================" << endl;
         int totalReady = Ready_Normal_Missions.getCount() + Ready_Polar_Missions.getCount() + Ready_Digging_Missions.getCount();
         cout << totalReady << " Missions: ";
-        cout << "NMs"; Ready_Normal_Missions.print();
-        cout << " PMs"; Ready_Polar_Missions.print();
-        cout << " DMs"; Ready_Digging_Missions.print();
+        cout << "NMs"; Ready_Normal_Missions.print(Ready_Normal_Missions.getCount());
+        cout << " PMs"; Ready_Polar_Missions.print(Ready_Polar_Missions.getCount());
+        cout << " DMs"; Ready_Digging_Missions.print(Ready_Digging_Missions.getCount());
         cout << endl;
     }
     void printavailableRoverlist(){
         int totalRovers = available_Normal_Rovers.getCount() + available_Polar_Rovers.getCount() + available_Digging_Rovers.getCount();
         cout << totalRovers << " Available Rovers: ";
-        cout << "NR "; available_Normal_Rovers.print();
-        cout << " PR "; available_Polar_Rovers.print();
-        cout << " DR "; available_Digging_Rovers.print();
+        cout << "NR "; available_Normal_Rovers.print(available_Normal_Rovers.getCount());
+        cout << " PR "; available_Polar_Rovers.print(available_Polar_Rovers.getCount());
+        cout << " DR "; available_Digging_Rovers.print(available_Digging_Rovers.getCount());
     cout << endl;
 }
 void printOutlist(){
     cout << "================= OUT List(s) =================" << endl;
         cout << Out_Missions.getCount() << " Missions/Rovers: ";
-        Out_Missions.print();
+        Out_Missions.print(Out_Missions.getCount());
         cout << endl;
     }
     void printExecList(){
         cout << "================= EXEC List(s) =================" << endl;
         cout << ExecMissions.getCount() << " Missions/Rovers: ";
-        ExecMissions.print();
+        ExecMissions.print(ExecMissions.getCount());
         cout << endl;
     }
     void printBackList(){
         cout << "================= BACK List(s) =================" << endl;
         cout << BackMissions.getCount() << " Missions/Rovers: ";
-        BackMissions.print();
+        BackMissions.print(BackMissions.getCount());
         cout << endl;
     }
     void printAbortedList(){
         cout << "================= Aborted List(s) =================" << endl;
         cout << AbortedMissions.getCount() << " Missions: ";
-        AbortedMissions.print();
+        AbortedMissions.print(AbortedMissions.getCount());
         cout << endl;
     }
     void printCheckupList(){
         cout << "================= Checkup List(s) =================" << endl;
         int totalCheckup = Checkup_Normal_Rovers.getCount() + Checkup_Polar_Rovers.getCount() + Checkup_Digging_Rovers.getCount();
         cout << totalCheckup << " Rovers: ";
-        Checkup_Normal_Rovers.print();
-        Checkup_Polar_Rovers.print();
-        Checkup_Digging_Rovers.print();
+        Checkup_Normal_Rovers.print(Checkup_Normal_Rovers.getCount());
+        Checkup_Polar_Rovers.print(Checkup_Polar_Rovers.getCount());
+        Checkup_Digging_Rovers.print(Checkup_Digging_Rovers.getCount());
         cout << endl;
     }
     void printDoneList(){
         cout << "================= DONE List(s) =================" << endl;
         cout << CompletedMissions.getCount() << " Missions: ";
-        CompletedMissions.print();
+        CompletedMissions.print(CompletedMissions.getCount());
         cout << endl;
     }
     void printline(){

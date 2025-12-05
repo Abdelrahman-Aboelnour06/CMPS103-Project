@@ -44,22 +44,20 @@ void DATA_STRUCT_TESTING() {
 	cout << "--testing Peek()--\n";
 	Mission *temp;
 	MISSION_QUEUE.peek(temp);
-	Mission temp_obj = *temp;
 	cout << "The Front Element in queue is :\n ";
-	cout << temp_obj<<endl;
+	cout << temp<<endl;
 	/*===================Peek=========================*/
 
 	/*===================Print=========================*/
 	cout << "==Testing print()==\n";
-	MISSION_QUEUE.print();
+	MISSION_QUEUE.print(MISSION_QUEUE.getCount());
 	/*===================Print=========================*/
 	cout << endl;
 	/*===================Dequeue=========================*/
 	cout << "--Testing Dequeue--\n";
 	while (MISSION_QUEUE.dequeue(temp)) {
-		temp_obj = *temp;
 		cout << "Dequeued Element is  : ";
-		cout << temp_obj<<endl;
+		cout << temp<<endl;
 	}
 	/*===================Dequeue=========================*/
 
@@ -94,21 +92,20 @@ void DATA_STRUCT_TESTING() {
 
 	/*===================Print Stack=========================*/
 	cout << "==Testing Print()==\n";
-		DONE_MISSION_STACK.print();
+		DONE_MISSION_STACK.print(DONE_MISSION_STACK.getCount());
 	/*===================Print Stack=========================*/
 
 		/*===================Peek=========================*/
 		cout << "==Testing Peek()==\n";
 		DONE_MISSION_STACK.peek(Mptr);
-		temp_obj = *Mptr;
-		cout << temp_obj<<endl;
+		
+		cout << Mptr<<endl;
 		/*===================Peek=========================*/
 
 		cout << "==Popping All Elements==\n";
 		while (DONE_MISSION_STACK.pop(Mptr)) {
 			cout << "==The Popped Element is : \n";
-			temp_obj = *Mptr;
-			cout << temp_obj<<endl;
+			cout << Mptr<<endl;
 		}
 
 		cout << "== Ending Stack Testing ==\n";
@@ -136,18 +133,16 @@ void DATA_STRUCT_TESTING() {
 		cout << "Testing IS empty\n";
 		MISSION_PRQUEUE.isEmpty() ? cout << "==MISSION_PriQUEUE is empty==\n" : cout << "==MISSION_PriQUEUE is not empty==\n";
 		cout << "Printing PRIQUEUE elements\n";
-		MISSION_PRQUEUE.print();
+		MISSION_PRQUEUE.print(MISSION_PRQUEUE.getCount());
 		cout << "==Testing Peek==\n";
 		int c=1;
 		MISSION_PRQUEUE.peek(temp, c);
-		temp_obj = *temp;
-		cout <<" Pri is : " << c <<" " << temp_obj << endl;
+		cout <<" Pri is : " << c <<" " << temp << endl;
 
 		cout << "== Testing Dequeue == \n ";
 		while (MISSION_PRQUEUE.dequeue(temp, c)) {
-			temp_obj = *temp;
 			cout << "Dequeued Element is : ";
-			cout << temp_obj << " Pri is : " << c << endl;
+			cout << temp << " Pri is : " << c << endl;
 		}
 
 		cout << "==Ending PriQUEUE testing==\n";
@@ -166,10 +161,6 @@ int main()
 	Mstation->FILE_LOADING("input.txt");
 
 	ui.selectMode();
-
-	cout << "Starting simulation...\n";
-	cout << "==============================================\n\n";
-
 	ui.silent_message();
 	while (true)
 	{

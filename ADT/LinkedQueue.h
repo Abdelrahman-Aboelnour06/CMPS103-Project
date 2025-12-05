@@ -59,7 +59,7 @@ public :
 	bool dequeue(T& frntEntry);  
 	bool peek(T& frntEntry)  const;
 	//omar syed
-	 void print() const;
+	 void print(int count) const;
 	//omar syed
 	int getCount() const;
 	~LinkedQueue();
@@ -173,14 +173,21 @@ bool LinkedQueue<T>:: peek(T& frntEntry) const
 
 //print for a queue of pointers only and must have operator overloading note it can not be used to request list
 template<typename T>
-void LinkedQueue<T>::print() const
+void LinkedQueue<T>::print(int count) const
 {
 	Node<T>* temp = frontPtr;
 	if (isEmpty())
 		cout << "Queue is Empty \n";
-	while (temp && temp != backPtr) {
-		cout << temp->getItem()<<endl;
+	int i = 0;
+	while (temp && temp != backPtr && i<count) {
+		if (i == count - 2) {
+			cout << temp->getItem();
+		}
+		else {
+			cout << temp->getItem()<<",";
+		}
 		temp = temp->getNext();
+		i++;
 		if (temp == backPtr)
 			break;
 	}

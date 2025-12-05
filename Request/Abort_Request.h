@@ -26,7 +26,7 @@ public:
     }
 
     void print(ostream& output) {
-        output << "[X," << this->getRequestDay() << " ," << this->getAbortedRequestID() << "]";
+        output << "[X," << this->getRequestDay() << "," << this->getAbortedRequestID() << "]";
     }
 
     void operate(Mars_Station& station) override;

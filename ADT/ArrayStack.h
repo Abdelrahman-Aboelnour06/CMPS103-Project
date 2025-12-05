@@ -62,8 +62,8 @@ public:
 	}  // end peek
 
 	//Omar Syed
-	void print() const {
-		for (int i = top; i >= 0; i--) {
+	void print(int count) const {
+		for (int i = top; i >= top-count+1; i--) {
 			cout << items[i]<<endl;
 		}
 	}

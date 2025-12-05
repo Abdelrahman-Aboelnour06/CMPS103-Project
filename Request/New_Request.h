@@ -37,7 +37,7 @@ public:
     }
 
     void print(ostream& output) {
-        output << "[R," << this->getMissionType() << " ," << this->getRequestDay() <<" ,"<<this->getRequestID()<< "]";
+        output << "[R," << this->getMissionType() << "," << this->getRequestDay() <<","<<this->getRequestID()<< "]";
     }
 
     void operate(Mars_Station& station) override;

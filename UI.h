@@ -38,7 +38,7 @@ public:
     }
 
     void silent_message() {
-        if (mode == 1) {
+        if (mode == 2) {
             cout << "Silent Mode\n";
             cout << "Simulation Starts...\n";
             return;
@@ -69,12 +69,125 @@ public:
             return;
         }
         cout << "Current Day: " << currentDay << "\n";
-        cout << "==============================================\n";
-
-        cout << "\nPress ENTER to display this day's information...";
         cin.get();
+        cout << "\n================== Requests List(s) ================== \n";
+        if (requestsList->getCount() > 10) {
+            cout << requestsList->getCount() << " requests remaining: ";
+            requestsList->print(10);
+            cout << "... and so on\n";
+        }
+        else {
+            cout << requestsList->getCount() << " requests remaining: ";
+            requestsList->print(requestsList->getCount());
+            cout << endl;
+        }
 
-        cout << "==============================================\n\n";
+        cout << "\n================== Ready List(s) ================== \n";
+        cout << readyDiggingMissions->getCount() + readyNormalMissions->getCount() + readyPolarMissions->getCount() << " Missions: ";
+        if (readyNormalMissions->getCount() > 0) {
+            cout << "NMs[";
+            readyNormalMissions->print(readyNormalMissions->getCount());
+            cout << "]";
+        }
+        if (readyPolarMissions->getCount() > 0) {
+            cout << "PMs[";
+            readyPolarMissions->print(readyPolarMissions->getCount());
+            cout << "]";
+        }
+        if (readyDiggingMissions->getCount() > 0) {
+            cout << "DMs[";
+            readyDiggingMissions->print(readyDiggingMissions->getCount());
+            cout << "]";
+        }
+        cout << endl;
+        cout << "\n================== Available Rovers List(s) ================== \n";
+        cout << available_Digging_Rovers->getCount() + available_Normal_Rovers->getCount() + available_Polar_Rovers->getCount() << " Available Rovers: ";
+        if (available_Normal_Rovers->getCount() > 0) {
+            cout << "NR[";
+            available_Normal_Rovers->print(available_Normal_Rovers->getCount());
+            cout << "] ";
+        }
+        
+        if (available_Polar_Rovers->getCount() > 0) {
+            cout << "PR[";
+            available_Polar_Rovers->print(available_Polar_Rovers->getCount());
+            cout << "] ";
+        }
+        
+        if (available_Digging_Rovers->getCount() > 0) {
+            cout << "DR[";
+            available_Digging_Rovers->print(available_Digging_Rovers->getCount());
+            cout << "] ";
+        }
+        cout << endl;
+        cout << "\n================== Out List(s) ================== \n";
+        cout << outMissions->getCount() << " Missions/Rovers: ";
+        outMissions->print(outMissions->getCount());
+        cout << endl;
+        cout << "\n================== Exec List(s) ================== \n";
+        cout << execMissions->getCount() << " Missions/Rovers: ";
+
+        priNode<Mission*>* curr = execMissions->getHead();
+        int pri = 0;
+
+        while (curr != nullptr) {
+            Mission* m = curr->getItem(pri);
+
+            cout << "["
+                << m->getID() << "/"
+                << m->get_assigned_rover_id() << ", "
+                << m->get_remaining_day() << "days] ";
+
+            curr = curr->getNext();
+        }
+
+        cout << endl;
+        cout << "\n================== Back List(s) ================== \n";
+        cout << backMissions->getCount() << " Missions/Rovers: ";
+
+        priNode<Mission*>* curr2 = backMissions->getHead();
+        int pri2 = 0;
+
+        while (curr2 != nullptr) {
+            Mission* m = curr2->getItem(pri2);
+
+            cout << "["
+                << m->getID() << "/"
+                << m->get_assigned_rover_id() << ", "
+                << m->get_remaining_day() << "days] ";
+
+            curr2 = curr2->getNext();
+        }
+
+        cout << endl;
+        cout << "\n================== Aborted List(s) ================== \n";
+        cout << abortedMissions->getCount() << " Missions: ";
+        if(abortedMissions->getCount()>0){
+        cout << "[";
+        abortedMissions->print(abortedMissions->getCount());
+        cout << "]";
+        cout << endl;
+        }
+        cout << endl;
+        cout << "\n================== Checkup List(s) ================== \n";
+        cout << checkupDiggingRovers->getCount() + checkupNormalRovers->getCount() + checkupPolarRovers->getCount()<<" Rovers: ";
+        if (checkupDiggingRovers->getCount() > 0)
+            checkupDiggingRovers->print(checkupDiggingRovers->getCount());
+        if (checkupNormalRovers->getCount() > 0)
+            checkupNormalRovers->print(checkupNormalRovers->getCount());
+        if (checkupPolarRovers->getCount() > 0)
+            checkupPolarRovers->print(checkupPolarRovers->getCount());
+        cout << endl;
+        cout << "\n================== Done List(s) ================== \n";
+        cout << doneMissions->getCount() << " Missions: ";
+        if (doneMissions->getCount() > 0) {
+            cout << "[";
+            doneMissions->print(doneMissions->getCount());
+            cout << "]";
+        }
+        cout << endl;
+        cout << "\n==================================================================\n";
+
     }
 
     void end_message() {
