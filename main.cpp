@@ -199,6 +199,7 @@ int main()
 		{
 			
 			Mstation->generateOutputFile("output.txt");
+
 			ui.end_message();
 			break;
 		}
