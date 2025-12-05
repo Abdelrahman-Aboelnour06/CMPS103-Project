@@ -22,9 +22,12 @@ public:
 
 };
 
-    std::ostream& operator<<(std::ostream& os, const request* & req) {
-        print(&os);
-        return os;
-    }
+std::ostream& operator<<(std::ostream& os,  request* req)
+{
+    if (req)
+        req->print(os);
+    return os;
+}
+
 
 #endif
