@@ -21,6 +21,10 @@ public:
     }
 
     //insert the new node in its correct position according to its priority
+
+    priNode<T>* getHead() {
+        return head;
+    }
     void enqueue(const T& data, int priority) {
         priNode<T>* newNode = new priNode<T>(data, priority);
 
@@ -65,17 +69,19 @@ public:
         return head == nullptr;
     }
 
-    void print() const {
-        if (isEmpty())
-            cout << "PriQueue is Empty \n";
+    void print(int count) const {
+        //if (isEmpty())
+            //cout << "PriQueue is Empty \n";
+        int i = 0;
         priNode<T>* temp = head;
-        while (temp) {
+        while (temp&&i<count) {
             int c=-1;
-            cout << " Pri is : " << c<<"    " << * temp->getItem(c);
+            cout << temp->getItem(c)<<",";
             temp = temp->getNext();
-            cout<<endl;
+            i++;
+            //cout<<endl;
         }
-        cout << "\n";
+        //cout << "\n";
     }
 
     int getCount() const {

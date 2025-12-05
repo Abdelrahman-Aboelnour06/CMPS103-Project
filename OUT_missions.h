@@ -64,5 +64,47 @@ public:
 		}
 		return nullptr; // Mission with the given ID not found
 	}
+
+	int get_mission_id() const{
+		if (isEmpty()) return -1;
+		int pri;
+		return head->getItem(pri)->getID();
+	}
+
+	
+	int get_assigned_rover_id()const {
+		if (isEmpty()) return -1;
+		int pri;
+		return head->getItem(pri)->get_assigned_rover_id();
+	}
+	int get_remaining_day()const {
+		if (isEmpty()) return -1;
+		int pri;
+		return head->getItem(pri)->get_remaining_day();
+	}
+
+	void print(int count) const {
+		priNode<Mission*>* current = head;
+		int printed = 0;
+		int pri;
+
+		while (current != nullptr && printed < count) {
+			Mission* m = current->getItem(pri);
+
+			cout << "["
+				<< m->getID() << "/"
+				<< m->get_assigned_rover_id() << ", "
+				<< m->get_remaining_day() << "days] ";
+
+			current = current->getNext();
+			printed++;
+		}
+	}
+
 };
+//
+//std::ostream& operator<<(std::ostream& output, const OUT_missions* m) {
+//	output << m->get_mission_id() << "/" << m->get_assigned_rover_id()<<"/"<<m->get_remaining_day()<<"days";
+//	return output;
+//}
 #endif

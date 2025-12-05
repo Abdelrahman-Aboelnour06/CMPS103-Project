@@ -449,7 +449,7 @@ public:
                 BackMissions.enqueue(executedmission2, pri2);
             }
         }
-        BackMissions.print();
+        BackMissions.print(BackMissions.getCount());
     }
 
     void moveNRfromcheckup()
@@ -505,7 +505,7 @@ public:
             Out_Missions.dequeue(outmission, pri);
             ExecMissions.enqueue(outmission, pri);
         }
-        ExecMissions.print();
+        ExecMissions.print(ExecMissions.getCount());
     }
     void incrementDay()
     {
@@ -607,28 +607,28 @@ public:
     {
         cout << "================= OUT List(s) =================" << endl;
         cout << Out_Missions.getCount() << " Missions/Rovers: ";
-        Out_Missions.print();
+        Out_Missions.print(Out_Missions.getCount());
         cout << endl;
     }
     void printExecList()
     {
         cout << "================= EXEC List(s) =================" << endl;
         cout << ExecMissions.getCount() << " Missions/Rovers: ";
-        ExecMissions.print();
+        ExecMissions.print(ExecMissions.getCount());
         cout << endl;
     }
     void printBackList()
     {
         cout << "================= BACK List(s) =================" << endl;
         cout << BackMissions.getCount() << " Missions/Rovers: ";
-        BackMissions.print();
+        BackMissions.print(BackMissions.getCount());
         cout << endl;
     }
     void printAbortedList()
     {
         cout << "================= Aborted List(s) =================" << endl;
         cout << AbortedMissions.getCount() << " Missions: ";
-        AbortedMissions.print();
+        AbortedMissions.print(AbortedMissions.getCount());
         cout << endl;
     }
     void printCheckupList()
@@ -636,16 +636,16 @@ public:
         cout << "================= Checkup List(s) =================" << endl;
         int totalCheckup = Checkup_Normal_Rovers.getCount() + Checkup_Polar_Rovers.getCount() + Checkup_Digging_Rovers.getCount();
         cout << totalCheckup << " Rovers: ";
-        Checkup_Normal_Rovers.print();
-        Checkup_Polar_Rovers.print();
-        Checkup_Digging_Rovers.print();
+        Checkup_Normal_Rovers.print(Checkup_Normal_Rovers.getCount());
+        Checkup_Polar_Rovers.print(Checkup_Polar_Rovers.getCount());
+        Checkup_Digging_Rovers.print(Checkup_Digging_Rovers.getCount());
         cout << endl;
     }
     void printDoneList()
     {
         cout << "================= DONE List(s) =================" << endl;
         cout << CompletedMissions.getCount() << " Missions: ";
-        CompletedMissions.print();
+        CompletedMissions.print(CompletedMissions.getCount());
         cout << endl;
     }
     void printline()
@@ -669,21 +669,21 @@ public:
     }
     void simulator()
     {
-        printday();
-        printreqs();
+       // printday();
+       // printreqs();
         ChecknewRequests();
-        printreadylist();
+        //printreadylist();
         moveroversfromcheckuptoavailable();
-        printavailableRoverlist();
+        //printavailableRoverlist();
         assigningMissionsToRovers();
         moveouttoexecuted();
         moveexecutedtoback();
         movebacktodone();
-        printOutlist();
-        printExecList();
-        printBackList();
-        printDoneList();
-        printline();
+        //printOutlist();
+        //printExecList();
+        //printBackList();
+        //printDoneList();
+        //printline();
         incrementDay();
     }
     LinkedQueue<request *> *getRequestsQueue()
@@ -756,7 +756,39 @@ public:
         Ready_Digging_Missions.enqueue(NM);
     }*/
 
-    // ==================================== = Omar Syed======================================/
+    LinkedQueue<Normal_Rovers*>* getAvailableNormalRovers() {
+        return &available_Normal_Rovers;
+    }
+
+    LinkedQueue<Polar_Rovers*>* getAvailablePolarRovers() {
+        return &available_Polar_Rovers;
+    }
+
+    LinkedQueue<Digging_Rovers*>* getAvailableDiggingRovers() {
+        return &available_Digging_Rovers;
+    }
+
+    LinkedQueue<Rescue_Rovers*>* getAvailableRescueRovers() {
+        return &available_Rescue_Rovers;
+    }
+
+    LinkedQueue<Normal_Rovers*>* getCheckupNormalRovers() {
+        return &Checkup_Normal_Rovers;
+    }
+
+    LinkedQueue<Polar_Rovers*>* getCheckupPolarRovers() {
+        return &Checkup_Polar_Rovers;
+    }
+
+    LinkedQueue<Digging_Rovers*>* getCheckupDiggingRovers() {
+        return &Checkup_Digging_Rovers;
+    }
+
+    LinkedQueue<Rescue_Rovers*>* getCheckupRescueRovers() {
+        return &Checkup_Rescue_Rovers;
+    }
+
+    int get_current_day() const { return current_day; }
 };
 
 void New_Request::operate(Mars_Station &station)

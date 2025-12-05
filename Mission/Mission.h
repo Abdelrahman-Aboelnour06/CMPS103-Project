@@ -85,10 +85,12 @@ public:
     int getEDY() const { return EDY; }
     int getTDYs() const { return TDYs; }
     int getFDY() const { return FDY; }
+    int get_assigned_rover_id() { return assignedRover->getRoverID(); }
+    int get_remaining_day() { return JDYs; }
 };
 
 //omar syed
-std::ostream& operator<<(std::ostream& output, const Mission& m) {
-    output << "Mission ID: " << m.getID() << ", location_distance: " << m.getLocation() << ", mission_duration: " << m.getmissionDuration() << ", mission_type: " << m.getMissionType() << ", RDY: " << m.getRDY();
+std::ostream& operator<<(std::ostream& output, const Mission* m) {
+    output << m->getID();
     return output;
 }

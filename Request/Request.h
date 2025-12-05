@@ -17,8 +17,17 @@ public:
     virtual int getRequestID() const = 0;
     virtual int getRequestDay() const = 0;
     virtual void operate (Mars_Station& station) = 0;
+    virtual void print(ostream& output) = 0;
+
 
 };
+
+std::ostream& operator<<(std::ostream& os,  request* req)
+{
+    if (req)
+        req->print(os);
+    return os;
+}
 
 
 #endif

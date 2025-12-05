@@ -24,6 +24,11 @@ public:
     int getRequestDay() const  {
         return request::request_day;
     }
+
+    void print(ostream& output) {
+        output << "[X," << this->getRequestDay() << "," << this->getAbortedRequestID() << "]";
+    }
+
     void operate(Mars_Station& station) override;
 };
 
