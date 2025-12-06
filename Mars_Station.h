@@ -749,6 +749,7 @@ public:
         moveroversfromcheckuptoavailable();
         //printavailableRoverlist();
         assigningMissionsToRovers();
+        movereadytoout();
         moveouttoexecuted();
         moveexecutedtoback();
         movebacktodone();
@@ -758,6 +759,62 @@ public:
         //printDoneList();
         //printline();
         incrementDay();
+    }
+    void movereadytoout()
+    {
+        Mission *readymission = nullptr;
+        while (!Ready_Digging_Missions.isEmpty())
+        {
+            if (!Ready_Digging_Missions.peek(readymission))
+                break;
+
+            if (readymission->getEDY() < 0)
+                break;
+
+            if (readymission->getEDY() <= current_day)
+            {
+                Ready_Digging_Missions.dequeue(readymission);
+                readymission->setmissionstate(STATE::OUT);
+                Out_Missions.enqueue(readymission, readymission->getEDY());
+            }
+            else
+                break;
+        }
+
+        while (!Ready_Polar_Missions.isEmpty())
+        {
+            if (!Ready_Polar_Missions.peek(readymission))
+                break;
+
+            if (readymission->getEDY() < 0)
+                break;
+
+            if (readymission->getEDY() <= current_day)
+            {
+                Ready_Polar_Missions.dequeue(readymission);
+                readymission->setmissionstate(STATE::OUT);
+                Out_Missions.enqueue(readymission, readymission->getEDY());
+            }
+            else
+                break;
+        }
+        while (!Ready_Normal_Missions.isEmpty())
+        {
+            if (!Ready_Normal_Missions.peek(readymission))
+                break;
+
+            if (readymission->getEDY() < 0)
+                break;
+
+            if (readymission->getEDY() <= current_day)
+            {
+                Ready_Normal_Missions.dequeue(readymission);
+                readymission->setmissionstate(STATE::OUT);
+                Out_Missions.enqueue(readymission, readymission->getEDY());
+            }
+            else
+                break;
+        }
     }
     LinkedQueue<request *> *getRequestsQueue()
     {
