@@ -25,54 +25,54 @@ protected:
     Rover* assignedRover;
     char mission_type;
     // 'P' for Polar, 'N' for Normal, 'D' for Digging 'C' for Complex and 'R' for Rescue
-    int RDY; // the day the mission was ready
-    int LDY; // the day the mission was assigned to a rover
-    int WDYs; // Waiting days
-    int JDYs; // the number of days the journey would take to get to the distination (vice versa)
-    int EDY; // the day the mission starts executing
-    int TDYs; // Total time(days) for a rover to reach the target location then execute the mission then come back to the station
-    int FDY; // the day the mission was finished
+    int Ready_Day; // the day the mission was ready
+    int Assigned_to_Rover_Day; // the day the mission was assigned to a rover
+    int Waiting_Days; // Waiting days
+    int Journey_days; // the number of days the journey would take to get to the distination (vice versa)
+    int Execution_start_day; // the day the mission starts executing
+    int Total_days; // Total time(days) for a rover to reach the target location then execute the mission then come back to the station
+    int Finished_day; // the day the mission was finished
 public:
     Mission(int id, int loc, int duration, char M_type, int readyDay)
-        : mission_id(id), location_distance(loc), mission_duration(duration), mission_type(M_type), RDY(readyDay) {
+        : mission_id(id), location_distance(loc), mission_duration(duration), mission_type(M_type), Ready_Day(readyDay) {
         assignedRover = nullptr;
-        LDY = -1;
-        WDYs = 0;
-        JDYs = 0;
-        EDY = -1;
-        TDYs = 0;
-        FDY = -1;
+        Assigned_to_Rover_Day = -1;
+        Waiting_Days = 0;
+        Journey_days = 0;
+        Execution_start_day = -1;
+        Total_days = 0;
+        Finished_day = -1;
         mission_state = STATE::NOTREADY;
     }
     void setRover(Rover* R) {
         assignedRover = R;
     }
-    void setLDY(int d) {
-        LDY = d;
+    void set_assign_to_rover_day(int d) {
+        Assigned_to_Rover_Day = d;
     }
-    void setWDYs() {
-        WDYs = LDY - RDY;
+    void set_waiting_days() {
+        Waiting_Days = Assigned_to_Rover_Day - Ready_Day;
     }
-    void setJDYs() {
+    void setJourney_days() {
         // distance in KM, day on mars = 25h, speed in KM/h
-        JDYs = ceil((location_distance / assignedRover->getSpeed()) / 25.0);
+        Journey_days = ceil((location_distance / assignedRover->getSpeed()) / 25.0);
     }
-    void setEDY() {
-        EDY = LDY + JDYs;
+    void setExecution_start_day() {
+        Execution_start_day = Assigned_to_Rover_Day + Journey_days;
     }
-    void setTDYs() {
-        TDYs = (2 * JDYs) + mission_duration;
+    void setTotal_days() {
+        Total_days = (2 * Journey_days) + mission_duration;
     }
-    void setFDY() {
-        FDY = RDY + WDYs + TDYs;
+    void setFinished_day() {
+        Finished_day = Ready_Day + Waiting_Days + Total_days;
     }
     void setMissionParameters(int currentDay) {
-        setLDY(currentDay);
-        setWDYs();
-        setJDYs();
-        setEDY();
-        setTDYs();
-        setFDY();
+        set_assign_to_rover_day(currentDay);
+        set_waiting_days();
+        setJourney_days();
+        setExecution_start_day();
+        setTotal_days();
+        setFinished_day();
     }
     Rover* getassignedRover() const { return assignedRover; }
     int getID() const { return mission_id; }
@@ -81,15 +81,15 @@ public:
     virtual char getMissionType() const { return mission_type; }
     virtual void setmissionstate(STATE s) { mission_state = s; }
     virtual STATE getmissionstate() const { return mission_state; }
-    int getRDY() const { return RDY; }
-    int getLDY() const { return LDY; }
-    int getWDYs() const { return WDYs; }
-    int getJDYs() const { return JDYs; }
-    int getEDY() const { return EDY; }
-    int getTDYs() const { return TDYs; }
-    int getFDY() const { return FDY; }
+    int get_ready_day() const { return Ready_Day; }
+    int get_assigned_to_rover_day() const { return Assigned_to_Rover_Day; }
+    int get_waiting_days() const { return Waiting_Days; }
+    int get_journey_days() const { return Journey_days; }
+    int get_execution_start_day() const { return Execution_start_day; }
+    int get_total_days() const { return Total_days; }
+    int get_finished_day() const { return Finished_day; }
     int get_assigned_rover_id() { return assignedRover->getRoverID(); }
-    int get_remaining_day() { return JDYs; }
+    int get_remaining_day() { return Journey_days; }
 };
 
 //omar syed

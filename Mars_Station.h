@@ -241,7 +241,8 @@ public:
         return available_Polar_Rovers.isEmpty() && available_Normal_Rovers.isEmpty() && available_Digging_Rovers.isEmpty();
     }
 
-    void assigningMissionsToRovers()
+    void 
+    assigningMissionsToRovers()
     {
         if (isRoversQueuesEmpty())
         {
@@ -274,7 +275,7 @@ public:
             if (!Ready_Polar_Missions.peek(missionPtr))
                 break;
 
-            if (missionPtr->getRDY() != current_day)
+            if (missionPtr->get_ready_day() != current_day)
                 break;
 
             if (!available_Polar_Rovers.isEmpty())
@@ -325,7 +326,7 @@ public:
             if (!Ready_Digging_Missions.peek(missionPtr))
                 break;
 
-            if (missionPtr->getRDY() != current_day)
+            if (missionPtr->get_ready_day() != current_day)
                 break;
 
             if (!available_Digging_Rovers.isEmpty())
@@ -355,7 +356,7 @@ public:
             if (!Ready_Normal_Missions.peek(missionPtr))
                 break;
 
-            if (missionPtr->getRDY() != current_day)
+            if (missionPtr->get_ready_day() != current_day)
                 break;
 
             if (!available_Normal_Rovers.isEmpty())
@@ -386,7 +387,7 @@ public:
     bool autoAbortPMs(Mission *m)
     {
         // any pm waiting in the ready list for more than double its duration should be automatically aborted
-        if ((current_day - m->getRDY()) > (2 * m->getmissionDuration()))
+        if ((current_day - m->get_ready_day()) > (2 * m->getmissionDuration()))
         {
             AbortedMissions.push(m);
             return true;
@@ -433,7 +434,7 @@ public:
             donerover->incrementMissionsDone();
             if (donerover->getMissionsDone() >= donerover->getDaysBeforeCheckup())
             {
-                donerover->setCheckupEndDay(backmission->getFDY() + donerover->getCheckupDuration());
+                donerover->setCheckupEndDay(backmission->get_finished_day() + donerover->getCheckupDuration());
                 donerover->resetMissionsDone();
                 if (donerover->getType() == 'N')
                 {
@@ -482,14 +483,14 @@ public:
             if (!ExecMissions.peek(executedMission, pri))
                 break;
             Rover* r = executedMission->getassignedRover();
-            if (executedMission->getTDYs() == 0) {
-                executedMission->setJDYs();
-                executedMission->setTDYs();
+            if (executedMission->get_total_days() == 0) {
+                executedMission->setJourney_days();
+                executedMission->setTotal_days();
             }
-            if (executedMission->getFDY() < 0) {
-                executedMission->setFDY();
+            if (executedMission->get_finished_day() < 0) {
+                executedMission->setFinished_day();
             }
-            int finishDay = executedMission->getFDY();
+            int finishDay = executedMission->get_finished_day();
             if (finishDay <= current_day) 
             {
                 ExecMissions.dequeue(executedMission, pri);
@@ -569,26 +570,26 @@ public:
         if (!Out_Missions.peek(outmission, pri))
             return;
         Rover* r = outmission->getassignedRover();
-        int assignedDay = outmission->getLDY();
+        int assignedDay = outmission->get_assigned_to_rover_day();
         if (assignedDay < 0) {
   
-            outmission->setLDY(current_day);
-            outmission->setJDYs();
-            outmission->setEDY();
+            outmission->set_assign_to_rover_day(current_day);
+            outmission->setJourney_days();
+            outmission->setExecution_start_day();
         }
-        int travelDays = outmission->getJDYs();
+        int travelDays = outmission->get_journey_days();
         if (travelDays == 0) {
             int dist = outmission->getLocation();
             int speed = r->getSpeed();
             travelDays = (dist / speed) / 25.0;
-            outmission->setJDYs();
-            outmission->setEDY();
+            outmission->setJourney_days();
+            outmission->setExecution_start_day();
         }
-        int arrivalDay = outmission->getLDY() + outmission->getJDYs();
+        int arrivalDay = outmission->get_assigned_to_rover_day() + outmission->get_journey_days();
         if (arrivalDay <= current_day)
         {
             Out_Missions.dequeue(outmission, pri);
-            outmission->setEDY();
+            outmission->setExecution_start_day();
             outmission->setmissionstate(STATE::EXECUTING);
             ExecMissions.enqueue(outmission, pri);
         }
@@ -628,7 +629,7 @@ public:
                     Normal_Rovers *roverPtr = nullptr;
                     available_Normal_Rovers.dequeue(roverPtr);
                     missionPtr->setRover(roverPtr);
-                    Out_Missions.enqueue(missionPtr, missionPtr->getEDY());
+                    Out_Missions.enqueue(missionPtr, missionPtr->get_execution_start_day());
                 }
                 break;
             case 1:
@@ -637,7 +638,7 @@ public:
                     Polar_Rovers *roverPtr = nullptr;
                     available_Polar_Rovers.dequeue(roverPtr);
                     missionPtr->setRover(roverPtr);
-                    Out_Missions.enqueue(missionPtr, missionPtr->getEDY());
+                    Out_Missions.enqueue(missionPtr, missionPtr->get_execution_start_day());
                 }
                 break;
             case 2:
@@ -646,7 +647,7 @@ public:
                     Digging_Rovers *roverPtr = nullptr;
                     available_Digging_Rovers.dequeue(roverPtr);
                     missionPtr->setRover(roverPtr);
-                    Out_Missions.enqueue(missionPtr, missionPtr->getEDY());
+                    Out_Missions.enqueue(missionPtr, missionPtr->get_execution_start_day());
                 }
                 break;
             }
@@ -773,62 +774,120 @@ public:
         //printline();
         incrementDay();
     }
+
+
     void movereadytoout()
     {
         Mission *readymission = nullptr;
+        
+        while (!Ready_Polar_Missions.isEmpty())
+        {
+            if (!Ready_Polar_Missions.peek(readymission))  break;
+
+            if (readymission->get_ready_day() > current_day)      break;
+
+            if (!available_Polar_Rovers.isEmpty()) // PR first
+            {
+                Ready_Polar_Missions.dequeue(readymission);
+                if (!autoAbortPMs(readymission))
+                {
+                    Polar_Rovers *roverPtr;
+                    available_Polar_Rovers.dequeue(roverPtr);
+                    readymission->setRover(roverPtr);
+                    readymission->setMissionParameters(current_day);
+                    readymission->setmissionstate(STATE::OUT);
+                    Out_Missions.enqueue(readymission, readymission->get_execution_start_day());
+                }
+            }
+
+
+            else if (!available_Normal_Rovers.isEmpty()) // NR second
+            {
+                Ready_Polar_Missions.dequeue(readymission);
+                if (!autoAbortPMs(readymission))
+                {
+                    Normal_Rovers *roverPtr;
+                    available_Normal_Rovers.dequeue(roverPtr);
+                    readymission->setRover(roverPtr);
+                    readymission->setMissionParameters(current_day);
+                    readymission->setmissionstate(STATE::OUT);
+                    Out_Missions.enqueue(readymission, readymission->get_execution_start_day());
+                }
+            }
+
+            else if (!available_Digging_Rovers.isEmpty())
+            {
+                Ready_Polar_Missions.dequeue(readymission);
+                if (!autoAbortPMs(readymission))
+                {
+                    Digging_Rovers *roverPtr;
+                    available_Digging_Rovers.dequeue(roverPtr);
+                    readymission->setRover(roverPtr);
+                    readymission->setMissionParameters(current_day);
+                    readymission->setmissionstate(STATE::OUT);
+                    Out_Missions.enqueue(readymission, readymission->get_execution_start_day());
+                }
+            }
+            else
+                break;
+        }
+
         while (!Ready_Digging_Missions.isEmpty())
         {
             if (!Ready_Digging_Missions.peek(readymission))
                 break;
 
-            if (readymission->getEDY() < 0)
+            if (readymission->get_ready_day() > current_day)
                 break;
 
-            if (readymission->getEDY() <= current_day)
+            if (!available_Digging_Rovers.isEmpty()) //DRs only
             {
                 Ready_Digging_Missions.dequeue(readymission);
+                Digging_Rovers *roverPtr;
+                available_Digging_Rovers.dequeue(roverPtr);
+                readymission->setRover(roverPtr);
+                readymission->setMissionParameters(current_day);
                 readymission->setmissionstate(STATE::OUT);
-                Out_Missions.enqueue(readymission, readymission->getEDY());
+                Out_Missions.enqueue(readymission, readymission->get_execution_start_day());
             }
             else
                 break;
         }
 
-        while (!Ready_Polar_Missions.isEmpty())
-        {
-            if (!Ready_Polar_Missions.peek(readymission))
-                break;
-
-            if (readymission->getEDY() < 0)
-                break;
-
-            if (readymission->getEDY() <= current_day)
-            {
-                Ready_Polar_Missions.dequeue(readymission);
-                readymission->setmissionstate(STATE::OUT);
-                Out_Missions.enqueue(readymission, readymission->getEDY());
-            }
-            else
-                break;
-        }
         while (!Ready_Normal_Missions.isEmpty())
         {
             if (!Ready_Normal_Missions.peek(readymission))
                 break;
 
-            if (readymission->getEDY() < 0)
+            if (readymission->get_ready_day() > current_day)
                 break;
 
-            if (readymission->getEDY() <= current_day)
+            if (!available_Normal_Rovers.isEmpty())
             {
                 Ready_Normal_Missions.dequeue(readymission);
+                Normal_Rovers *roverPtr;
+                available_Normal_Rovers.dequeue(roverPtr);
+                readymission->setRover(roverPtr);
+                readymission->setMissionParameters(current_day);
                 readymission->setmissionstate(STATE::OUT);
-                Out_Missions.enqueue(readymission, readymission->getEDY());
+                Out_Missions.enqueue(readymission, readymission->get_execution_start_day());
+            }
+            else if (!available_Polar_Rovers.isEmpty())
+            {
+                Ready_Normal_Missions.dequeue(readymission);
+                Polar_Rovers *roverPtr;
+                available_Polar_Rovers.dequeue(roverPtr);
+                readymission->setRover(roverPtr);
+                readymission->setMissionParameters(current_day);
+                readymission->setmissionstate(STATE::OUT);
+                Out_Missions.enqueue(readymission, readymission->get_execution_start_day());
             }
             else
                 break;
         }
     }
+
+
     LinkedQueue<request *> *getRequestsQueue()
     {
         return &requests;
