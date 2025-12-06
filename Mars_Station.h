@@ -233,7 +233,7 @@ public:
     }
     // omar syed
 
-    // Created By Kirolos Ashraf to assign missions to available rovers
+    // Created By Kirolos Ashraf to assign missions to available rovers / abort
 
     bool isRoversQueuesEmpty()
     {
@@ -393,7 +393,20 @@ public:
         }
         return false;
     }
-    // end of assigning - Created By Kirolos Ashraf
+
+    bool AbortMission(int missionID) {
+        Mission* abortedMission = nullptr;
+        if (abortedMission = Ready_Normal_Missions.AbortMission(missionID)) {
+			AbortedMissions.push(abortedMission);
+			return true;
+        }
+        else if (abortedMission = Out_Missions.AbortMission(missionID)) {
+			AbortedMissions.push(abortedMission);
+            return true;
+        }
+        return false;
+    }
+    // end of assigning / aborting - Created By Kirolos Ashraf
 
     void ChecknewRequests()
     {
@@ -899,5 +912,6 @@ void New_Request::operate(Mars_Station &station)
 
 void Abort_Request::operate(Mars_Station &station)
 {
-    // phase 2
+	int abortedID = getAbortedRequestID();
+	station.AbortMission(abortedID);
 }
