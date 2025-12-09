@@ -3,61 +3,70 @@
 #include <iostream>
 using namespace std;
 
-//This class impelements the priority queue as a sorted list (Linked List)
-//The item with highest priority is at the front of the queue
+// This class impelements the priority queue as a sorted list (Linked List)
+// The item with highest priority is at the front of the queue
 template <typename T>
 class priQueue
 {
 protected:
-    priNode<T>* head;
+    priNode<T> *head;
     int count;
+
 public:
     priQueue() : head(nullptr) { count = 0; }
 
-    ~priQueue() {
+    ~priQueue()
+    {
         T tmp;
         int p;
-        while (dequeue(tmp,p));
+        while (dequeue(tmp, p))
+            ;
     }
 
-    //insert the new node in its correct position according to its priority
+    // insert the new node in its correct position according to its priority
 
-    priNode<T>* getHead() {
+    priNode<T> *getHead()
+    {
         return head;
     }
-    void enqueue(const T& data, int priority) {
-        priNode<T>* newNode = new priNode<T>(data, priority);
+    void enqueue(const T &data, int priority)
+    {
+        priNode<T> *newNode = new priNode<T>(data, priority);
 
-        if (head == nullptr || priority > head->getPri()) {
-            
+        // Maintain ascending order: smallest priority at head
+        if (head == nullptr || priority < head->getPri())
+        {
             newNode->setNext(head);
             head = newNode;
             count++;
             return;
         }
-       
-        priNode<T>* current = head;        
-        while (current->getNext() && priority <= current->getNext()->getPri()) {
+
+        priNode<T> *current = head;
+        while (current->getNext() && priority >= current->getNext()->getPri())
+        {
             current = current->getNext();
         }
-        newNode->setNext( current->getNext());
-        current->setNext( newNode);   
-		count++;
+        newNode->setNext(current->getNext());
+        current->setNext(newNode);
+        count++;
     }
 
-    bool dequeue(T& topEntry, int& pri) {
+    bool dequeue(T &topEntry, int &pri)
+    {
         if (isEmpty())
             return false;
 
         topEntry = head->getItem(pri);
-        priNode<T>* temp = head;
+        priNode<T> *temp = head;
         head = head->getNext();
         delete temp;
-		count--;
+        count--;
         return true;
     }
 
-    bool peek(T& topEntry, int& pri) {
+    bool peek(T &topEntry, int &pri)
+    {
         if (isEmpty())
             return false;
 
@@ -65,26 +74,30 @@ public:
         return true;
     }
 
-    bool isEmpty() const {
+    bool isEmpty() const
+    {
         return head == nullptr;
     }
 
-    void print(int count) const {
-        //if (isEmpty())
-            //cout << "PriQueue is Empty \n";
+    void print(int count) const
+    {
+        // if (isEmpty())
+        // cout << "PriQueue is Empty \n";
         int i = 0;
-        priNode<T>* temp = head;
-        while (temp&&i<count) {
-            int c=-1;
-            cout << temp->getItem(c)<<",";
+        priNode<T> *temp = head;
+        while (temp && i < count)
+        {
+            int c = -1;
+            cout << temp->getItem(c) << ",";
             temp = temp->getNext();
             i++;
-            //cout<<endl;
+            // cout<<endl;
         }
-        //cout << "\n";
+        // cout << "\n";
     }
 
-    int getCount() const {
-		return count;
+    int getCount() const
+    {
+        return count;
     }
 };
