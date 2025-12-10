@@ -932,55 +932,42 @@ bool autoAbortPMs(Mission* m) {
     int get_current_day() const { return current_day; }
 
     void generateOutputFile(string outputfile) {
-        ofstream outFile(outputfile);
-        if (!outFile.is_open()) {
-            cout << "Error opening output file!" << endl;
-            return;
+
+        ofstream out(outputfile);
+        if (!out.is_open()) return;
+
+        out << "FD\tID\tTYP\tLOC\tDUR\tED\tWD\tRID\n";
+
+        ArrayStack<Mission*> temp;
+
+        while (!CompletedMissions.isEmpty()) {
+            Mission* m;
+            CompletedMissions.pop(m);
+            temp.push(m);
         }
 
-        int doneCount = CompletedMissions.getCount();
-        Mission** doneMissionsArray = new Mission * [doneCount];
+        while (!temp.isEmpty()) {
+            Mission* m;
+            temp.pop(m);
 
-        Mission* temp = nullptr;
-        int index = 0;
-        while (CompletedMissions.pop(temp)) {
-            doneMissionsArray[index++] = temp;
+            out << m->get_finished_day() << "\t"
+                << m->getID() << "\t"
+                << m->getMissionType() << "\t"
+                << m->getLocation() << "\t"
+                << m->getmissionDuration() << "\t"
+                << m->get_execution_start_day() << "\t"
+                << m->get_waiting_days() << "\t"
+                << m->get_assigned_rover_id()
+                << "\n";
+
+            CompletedMissions.push(m);  
         }
 
-        for (int i = 0; i < doneCount - 1; i++) {
-            for (int j = 0; j < doneCount - i - 1; j++) {
-                if (doneMissionsArray[j]->get_finished_day() < doneMissionsArray[j + 1]->get_finished_day()) {
-                    Mission* tempMission = doneMissionsArray[j];
-                    doneMissionsArray[j] = doneMissionsArray[j + 1];
-                    doneMissionsArray[j + 1] = tempMission;
-                }
-            }
-        }
+        out << "\n\n";
 
-        
-        outFile << "Fday\tID\tRday\tWdays\tMDUR\tTdays\n";
-        int totalWdays = 0, totalMDUR = 0, totalTdays = 0;
+       
 
-        for (int i = 0; i < doneCount; i++) {
-            Mission* m = doneMissionsArray[i];
-
-            int fday = m->get_finished_day();
-            int id = m->getID();
-            int rday = m->get_ready_day();
-            int wdays = rday - fday;
-            int mdur = m->getmissionDuration();
-            int completionDay = m->get_finished_execution_day() + m->get_journey_days();
-            int tdays = completionDay - fday;
-
-            outFile << m->get_finished_day() << "\t" << m->getID() << "\t" << m->get_ready_day() << "\t"
-                << wdays << "\t" << mdur << "\t" << tdays << "\n";
-
-            totalWdays += wdays;
-            totalMDUR += mdur;
-            totalTdays += tdays;
-        }
-      
-
+        out.close();
 
     }
 
