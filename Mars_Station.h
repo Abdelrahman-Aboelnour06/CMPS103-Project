@@ -940,7 +940,7 @@ public:
             return;
         }
 
-        out << "Fday\tID\tMdays\tMDUR\tTdays\n";
+        out << "Fday\tID\tRday\tWdays\tMDUR\tTdays\n";
 
         int missionCount = CompletedMissions.getCount();
 
@@ -973,15 +973,24 @@ public:
             }
         }
 
+<<<<<<< HEAD
         for (int i = 0; i < missionCount; i++)
         {
 
+=======
+        
+        for (int i = 0; i < missionCount; i++) {    
+>>>>>>> 62377c8832fc22ed4413b97b7da5dea90c5e0e1e
             out << missions[i]->get_finished_day() << "\t"
                 << missions[i]->getID() << "\t"
+                << missions[i]->get_ready_day()<<"\t"
                 << missions[i]->get_waiting_days() << "\t"
                 << missions[i]->getmissionDuration() << "\t"
                 << missions[i]->get_total_days() << "\n";
+<<<<<<< HEAD
 
+=======
+>>>>>>> 62377c8832fc22ed4413b97b7da5dea90c5e0e1e
             totalMissions++;
             totalWaitingDays += missions[i]->get_waiting_days();
             totalExecutionDays += missions[i]->getmissionDuration();
@@ -1011,7 +1020,7 @@ public:
         int abortedCount = AbortedMissions.getCount();
         cout << AbortedMissions.getCount() << endl;
 
-        int abortedNormal = 0, abortedPolar = 0, abortedDigging = 0;
+        int abortedNormal = 0, abortedPolar = 0;
 
         ArrayStack<Mission *> tempAborted;
         while (!AbortedMissions.isEmpty())
@@ -1019,12 +1028,21 @@ public:
             Mission *m;
             AbortedMissions.pop(m);
             char type = m->getMissionType();
+<<<<<<< HEAD
             if (type == 'N')
                 abortedNormal++;
             else if (type == 'P')
                 abortedPolar++;
             else if (type == 'D')
                 abortedDigging++;
+=======
+            if (type == 'N') {
+                abortedNormal++;
+            }
+            else if (type == 'P') {
+                abortedPolar++;
+            }
+>>>>>>> 62377c8832fc22ed4413b97b7da5dea90c5e0e1e
             tempAborted.push(m);
         }
 
@@ -1037,9 +1055,14 @@ public:
 
         normalCount += abortedNormal;
         polarCount += abortedPolar;
+<<<<<<< HEAD
         diggingCount += abortedDigging;
 
         int totalCount = totalMissions + abortedCount;
+=======
+        
+        int totalCount = totalMissions + abortedCount  ;
+>>>>>>> 62377c8832fc22ed4413b97b7da5dea90c5e0e1e
 
         out << "Missions: " << totalCount
             << "\t[N: " << normalCount
@@ -1064,19 +1087,32 @@ public:
             double avgMDUR = totalExecutionDays / (double)totalMissions;
             double avgTdays = totalCompletionDays / (double)totalMissions;
 
+<<<<<<< HEAD
             avgWdays = (int)(avgWdays * 100 + 0.5) / 100.0;
             avgMDUR = (int)(avgMDUR * 100 + 0.5) / 100.0;
             avgTdays = (int)(avgTdays * 100 + 0.5) / 100.0;
+=======
+            
+            avgWdays = (avgWdays * 100 ) / 100.0;
+            avgMDUR = (avgMDUR * 100 ) / 100.0;
+            avgTdays = (avgTdays * 100) / 100.0;
+>>>>>>> 62377c8832fc22ed4413b97b7da5dea90c5e0e1e
 
             out << "Avg Wdays = " << avgWdays
                 << ", Avg MDUR = " << avgMDUR
                 << ", Avg Tdays = " << avgTdays << "\n";
 
             double percentWdays = (totalWaitingDays / (double)totalExecutionDays) * 100;
-            double percentAutoAborted = (abortedCount / (double)totalCount) * 100;
+            double percentAutoAborted = ((double)abortedPolar / abortedCount) * 100;
 
+<<<<<<< HEAD
             percentWdays = (int)(percentWdays * 100 + 0.5) / 100.0;
             percentAutoAborted = (int)(percentAutoAborted * 100 + 0.5) / 100.0;
+=======
+            
+            percentWdays = (percentWdays * 100 ) / 100.0;
+            percentAutoAborted = (percentAutoAborted * 100) / 100.0;
+>>>>>>> 62377c8832fc22ed4413b97b7da5dea90c5e0e1e
 
             out << "% Avg_Wdays/ Avg_MDUR = " << percentWdays << "%, "
                 << "Auto-aborted= " << percentAutoAborted << "%\n";
