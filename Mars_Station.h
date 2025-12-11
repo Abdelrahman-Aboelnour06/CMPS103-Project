@@ -931,45 +931,123 @@ bool autoAbortPMs(Mission* m) {
 
     int get_current_day() const { return current_day; }
 
+    // Add this method to Mars_Station class in Mars_Station.h
+
+    // Add #include <iomanip> at the top of Mars_Station.h with other includes
+// Then add this method to Mars_Station class
+
     void generateOutputFile(string outputfile) {
-
         ofstream out(outputfile);
-        if (!out.is_open()) return;
+        if (!out.is_open()) {
+            cout << "Error: Could not create output file!" << endl;
+            return;
+        }
 
-        out << "FD\tID\tTYP\tLOC\tDUR\tED\tWD\tRID\n";
+        // Mission details section
+        out << "Fday\tID\tMdays\tMDUR\tTdays\n";
 
         ArrayStack<Mission*> temp;
 
+        // Statistics variables
+        int totalMissions = 0;
+        int normalCount = 0, polarCount = 0, diggingCount = 0;
+        int totalWaitingDays = 0;
+        int totalExecutionDays = 0;
+        int totalCompletionDays = 0;
+
+        // Pop all missions to temp stack to process them
         while (!CompletedMissions.isEmpty()) {
             Mission* m;
             CompletedMissions.pop(m);
             temp.push(m);
         }
 
+        // Process missions and write to file
         while (!temp.isEmpty()) {
             Mission* m;
             temp.pop(m);
 
+            // Calculate Mdays (Mission days = waiting + execution + journey)
+            int mdays = m->get_waiting_days();
+
+            // Calculate Tdays (Total days for the mission)
+            int tdays = m->get_total_days();
+
+            // Write mission data
             out << m->get_finished_day() << "\t"
                 << m->getID() << "\t"
-                << m->getMissionType() << "\t"
-                << m->getLocation() << "\t"
+                << mdays << "\t"
                 << m->getmissionDuration() << "\t"
-                << m->get_execution_start_day() << "\t"
-                << m->get_waiting_days() << "\t"
-                << m->get_assigned_rover_id()
-                << "\n";
+                << tdays << "\n";
 
-            CompletedMissions.push(m);  
+            // Accumulate statistics
+            totalMissions++;
+            totalWaitingDays += m->get_waiting_days();
+            totalExecutionDays += m->getmissionDuration();
+            totalCompletionDays += tdays;
+
+            // Count by type
+            char type = m->getMissionType();
+            if (type == 'N') normalCount++;
+            else if (type == 'P') polarCount++;
+            else if (type == 'D') diggingCount++;
+
+            CompletedMissions.push(m);  // Restore to original stack
         }
 
-        out << "\n--------------------------------------------------------------------------------------\n\n";
-        out << "--------------------------------------------------------------------------------------\n\n";
+        out << "....................................\n";
 
-       
+        // Summary section
+        int abortedCount = AbortedMissions.getCount();
+        int totalCount = totalMissions + abortedCount;
+
+        out << "Missions: " << totalCount
+            << "\t[N: " << normalCount
+            << ", P: " << polarCount
+            << ", D: " << diggingCount << "] "
+            << "[" << totalMissions << " DONE, "
+            << abortedCount << " Aborted]\n";
+
+        // Count rovers (assuming you have access to these)
+        int totalNormalRovers = available_Normal_Rovers.getCount() + Checkup_Normal_Rovers.getCount();
+        int totalPolarRovers = available_Polar_Rovers.getCount() + Checkup_Polar_Rovers.getCount();
+        int totalDiggingRovers = available_Digging_Rovers.getCount() + Checkup_Digging_Rovers.getCount();
+        int totalRovers = totalNormalRovers + totalPolarRovers + totalDiggingRovers;
+
+        out << "Rovers: " << totalRovers
+            << "\t[N: " << totalNormalRovers
+            << ", P: " << totalPolarRovers
+            << ", D: " << totalDiggingRovers << "]\n";
+
+        // Calculate averages
+        if (totalMissions > 0) {
+            double avgWdays = totalWaitingDays / (double)totalMissions;
+            double avgMDUR = totalExecutionDays / (double)totalMissions;
+            double avgTdays = totalCompletionDays / (double)totalMissions;
+
+            // Round to 2 decimal places manually
+            avgWdays = (int)(avgWdays * 100 + 0.5) / 100.0;
+            avgMDUR = (int)(avgMDUR * 100 + 0.5) / 100.0;
+            avgTdays = (int)(avgTdays * 100 + 0.5) / 100.0;
+
+            out << "Avg Wdays = " << avgWdays
+                << ", Avg MDUR = " << avgMDUR
+                << ", Avg Tdays = " << avgTdays << "\n";
+
+            // Calculate percentages
+            double percentWdays = (totalWaitingDays / (double)totalExecutionDays) * 100;
+            double percentAutoAborted = (abortedCount / (double)totalCount) * 100;
+
+            // Round percentages
+            percentWdays = (int)(percentWdays * 100 + 0.5) / 100.0;
+            percentAutoAborted = (int)(percentAutoAborted * 100 + 0.5) / 100.0;
+
+            out << "% Avg_Wdays/ Avg_MDUR = " << percentWdays << "%, "
+                << "Auto-aborted= " << percentAutoAborted << "%\n";
+        }
 
         out.close();
-
+        cout << "Output file '" << outputfile << "' created successfully!" << endl;
     }
 
 
