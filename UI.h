@@ -171,12 +171,16 @@ public:
         cout << endl;
         cout << "\n================== Checkup List(s) ================== \n";
         cout << checkupDiggingRovers->getCount() + checkupNormalRovers->getCount() + checkupPolarRovers->getCount()<<" Rovers: ";
-        if (checkupDiggingRovers->getCount() > 0)
-            checkupDiggingRovers->print(checkupDiggingRovers->getCount());
-        if (checkupNormalRovers->getCount() > 0)
-            checkupNormalRovers->print(checkupNormalRovers->getCount());
-        if (checkupPolarRovers->getCount() > 0)
-            checkupPolarRovers->print(checkupPolarRovers->getCount());
+        if (checkupDiggingRovers->getCount() + checkupNormalRovers->getCount() + checkupPolarRovers->getCount()>0) {
+            cout << "[";
+            if (checkupDiggingRovers->getCount() > 0)
+                checkupDiggingRovers->print(checkupDiggingRovers->getCount());
+            if (checkupNormalRovers->getCount() > 0)
+                checkupNormalRovers->print(checkupNormalRovers->getCount());
+            if (checkupPolarRovers->getCount() > 0)
+                checkupPolarRovers->print(checkupPolarRovers->getCount());
+            cout << "]";
+        }
         cout << endl;
         cout << "\n================== Done List(s) ================== \n";
         cout << doneMissions->getCount() << " Missions: ";

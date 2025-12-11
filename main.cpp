@@ -175,6 +175,9 @@ int main()
 			Mstation->getReadyNormalMissions(),
 			Mstation->getAvailableNormalRovers(),
 			Mstation->getAvailablePolarRovers(),
+
+
+
 			Mstation->getAvailableDiggingRovers(),
 			Mstation->getAvailableRescueRovers(),
 			Mstation->getOutMissions(),

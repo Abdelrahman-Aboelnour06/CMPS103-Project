@@ -64,7 +64,12 @@ public:
 	//Omar Syed
 	void print(int count) const {
 		for (int i = top; i >= top-count+1; i--) {
-			cout << items[i]<<endl;
+			if (i == top - count + 1) {
+				cout << items[i];
+			}
+			else {
+				cout << items[i] << ",";
+			}
 		}
 	}
 	//Omar Syed

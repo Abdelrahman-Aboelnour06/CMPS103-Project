@@ -947,7 +947,161 @@ public:
 
     int get_current_day() const { return current_day; }
 
-    void generateOutputFile(string outputfile) {}
+    
+
+    void generateOutputFile(string outputfile) {
+        ofstream out(outputfile);
+        if (!out.is_open()) {
+            cout << "Error: Could not create output file!" << endl;
+            return;
+        }
+
+        out << "Fday\tID\tMdays\tMDUR\tTdays\n";
+
+        int missionCount = CompletedMissions.getCount();
+
+        Mission** missions = new Mission * [missionCount];
+
+        int totalMissions = 0;
+        int normalCount = 0, polarCount = 0, diggingCount = 0;
+        int totalWaitingDays = 0;
+        int totalExecutionDays = 0;
+        int totalCompletionDays = 0;
+
+        int index = 0;
+        while (!CompletedMissions.isEmpty()) {
+            Mission* m;
+            CompletedMissions.pop(m);
+            missions[index++] = m;
+        }
+
+        for (int i = 0; i < missionCount - 1; i++) {
+            for (int j = 0; j < missionCount - i - 1; j++) {
+                if (missions[j]->get_finished_day() > missions[j + 1]->get_finished_day()) {
+                    Mission* temp = missions[j];
+                    missions[j] = missions[j + 1];
+                    missions[j + 1] = temp;
+                }
+            }
+        }
+
+        
+        for (int i = 0; i < missionCount; i++) {    
+                       
+            out << missions[i]->get_finished_day() << "\t"
+                << missions[i]->getID() << "\t"
+                << missions[i]->get_waiting_days() << "\t"
+                << missions[i]->getmissionDuration() << "\t"
+                << missions[i]->get_total_days() << "\n";
+
+            
+            totalMissions++;
+            totalWaitingDays += missions[i]->get_waiting_days();
+            totalExecutionDays += missions[i]->getmissionDuration();
+            totalCompletionDays += missions[i]->get_total_days();
+
+            
+            char type = missions[i]->getMissionType();
+            if (type == 'N') 
+            {
+                normalCount++; 
+            }
+            else if (type == 'P') {
+                polarCount++; 
+            }
+            else if (type == 'D') { 
+                diggingCount++; 
+            }
+
+            CompletedMissions.push(missions[i]);
+        }
+
+        delete[] missions;
+
+        out << "....................................\n";
+
+        
+        int abortedCount = AbortedMissions.getCount();
+        cout << AbortedMissions.getCount() << endl;
+
+        int abortedNormal = 0, abortedPolar = 0, abortedDigging = 0;
+
+        
+        ArrayStack<Mission*> tempAborted;
+        while (!AbortedMissions.isEmpty()) {
+            Mission* m;
+            AbortedMissions.pop(m);
+            char type = m->getMissionType();
+            if (type == 'N') abortedNormal++;
+            else if (type == 'P') abortedPolar++;
+            else if (type == 'D') abortedDigging++;
+            tempAborted.push(m);
+        }
+
+        
+        while (!tempAborted.isEmpty()) {
+            Mission* m;
+            tempAborted.pop(m);
+            AbortedMissions.push(m);
+        }
+
+        
+        normalCount += abortedNormal;
+        polarCount += abortedPolar;
+        diggingCount += abortedDigging;
+        
+        int totalCount = totalMissions + abortedCount  ;
+
+        out << "Missions: " << totalCount
+            << "\t[N: " << normalCount
+            << ", P: " << polarCount
+            << ", D: " << diggingCount << "] "
+            << "[" << totalMissions << " DONE, "
+            << abortedCount << " Aborted]\n";
+
+        
+        int totalNormalRovers = available_Normal_Rovers.getCount() + Checkup_Normal_Rovers.getCount();
+        int totalPolarRovers = available_Polar_Rovers.getCount() + Checkup_Polar_Rovers.getCount();
+        int totalDiggingRovers = available_Digging_Rovers.getCount() + Checkup_Digging_Rovers.getCount();
+        int totalRovers = totalNormalRovers + totalPolarRovers + totalDiggingRovers;
+
+        out << "Rovers: " << totalRovers
+            << "\t[N: " << totalNormalRovers
+            << ", P: " << totalPolarRovers
+            << ", D: " << totalDiggingRovers << "]\n";
+
+        
+        if (totalMissions > 0) {
+            double avgWdays = totalWaitingDays / (double)totalMissions;
+            double avgMDUR = totalExecutionDays / (double)totalMissions;
+            double avgTdays = totalCompletionDays / (double)totalMissions;
+
+            
+            avgWdays = (int)(avgWdays * 100 + 0.5) / 100.0;
+            avgMDUR = (int)(avgMDUR * 100 + 0.5) / 100.0;
+            avgTdays = (int)(avgTdays * 100 + 0.5) / 100.0;
+
+            out << "Avg Wdays = " << avgWdays
+                << ", Avg MDUR = " << avgMDUR
+                << ", Avg Tdays = " << avgTdays << "\n";
+
+            
+            double percentWdays = (totalWaitingDays / (double)totalExecutionDays) * 100;
+            double percentAutoAborted = (abortedCount / (double)totalCount) * 100;
+
+            
+            percentWdays = (int)(percentWdays * 100 + 0.5) / 100.0;
+            percentAutoAborted = (int)(percentAutoAborted * 100 + 0.5) / 100.0;
+
+            out << "% Avg_Wdays/ Avg_MDUR = " << percentWdays << "%, "
+                << "Auto-aborted= " << percentAutoAborted << "%\n";
+        }
+
+        out.close();
+        cout << "Output file '" << outputfile << "' created successfully!" << endl;
+    }
+
+
 
     ArrayStack<Mission *> *getDoneMissions() { return &CompletedMissions; }
 
