@@ -831,7 +831,7 @@ public:
         const int completemissionCount = CompletedMissions.getCount();
         int missionCount = CompletedMissions.getCount() + AbortedMissions.getCount();
 
-        Mission **missions = new Mission *[completemissionCount];
+        Mission**missions = new Mission*[completemissionCount];
 
         int totalMissions = 0;
         int normalCount = 0, polarCount = 0, diggingCount = 0;
@@ -862,33 +862,42 @@ public:
 
         for (int i = 0; i < completemissionCount; i++)
         {
-            out << missions[i]->get_finished_day() << "\t"
-                << missions[i]->getID() << "\t"
-                << missions[i]->get_ready_day() << "\t"
-                << missions[i]->get_waiting_days() << "\t"
-                << missions[i]->getmissionDuration() << "\t"
-                << missions[i]->get_total_days() << "\n";
-            totalMissions++;
-            totalWaitingDays += missions[i]->get_waiting_days();
-            totalExecutionDays += missions[i]->getmissionDuration();
-            totalCompletionDays += missions[i]->get_total_days();
+            Mission* m = missions[i];
 
-            char type = missions[i]->getMissionType();
-            if (type == 'N')
-            {
+            int Rday = m->get_ready_day();
+            int Lday = m->get_assigned_to_rover_day();    
+            int Wdays = Lday - Rday;
+
+            int Tdays = m->getmissionDuration() + m->get_remaining_day();
+            int Fday = Lday + Tdays;
+
+            out << Fday << "\t"
+                << m->getID() << "\t"
+                << Rday << "\t"
+                << Wdays << "\t"
+                << m->getmissionDuration() << "\t"
+                << Tdays << "\n";
+
+            totalMissions++;
+            totalWaitingDays += Wdays;
+            totalExecutionDays += m->getmissionDuration();
+            totalCompletionDays += Tdays;
+
+            char type = m->getMissionType();
+            if (type == 'N') {
                 normalCount++;
             }
-            else if (type == 'P')
-            {
-                polarCount++;
+            else if (type == 'P') {
+                polarCount++; 
             }
-            else if (type == 'D')
-            {
-                diggingCount++;
+            else if (type == 'D') { 
+                diggingCount++; 
             }
 
-            CompletedMissions.push(missions[i]);
+            CompletedMissions.push(m);
         }
+
+
 
         delete[] missions;
 
@@ -899,7 +908,7 @@ public:
 
         int abortedNormal = 0, abortedPolar = 0;
 
-        ArrayStack<Mission *> tempAborted;
+        ArrayStack<Mission*> tempAborted;
         while (!AbortedMissions.isEmpty())
         {
             Mission *m;
