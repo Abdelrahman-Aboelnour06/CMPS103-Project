@@ -931,10 +931,7 @@ bool autoAbortPMs(Mission* m) {
 
     int get_current_day() const { return current_day; }
 
-    // Add this method to Mars_Station class in Mars_Station.h
-
-    // Add #include <iomanip> at the top of Mars_Station.h with other includes
-// Then add this method to Mars_Station class
+    
 
     void generateOutputFile(string outputfile) {
         ofstream out(outputfile);
@@ -943,63 +940,101 @@ bool autoAbortPMs(Mission* m) {
             return;
         }
 
-        // Mission details section
         out << "Fday\tID\tMdays\tMDUR\tTdays\n";
 
-        ArrayStack<Mission*> temp;
+        int missionCount = CompletedMissions.getCount();
 
-        // Statistics variables
+        Mission** missions = new Mission * [missionCount];
+
         int totalMissions = 0;
         int normalCount = 0, polarCount = 0, diggingCount = 0;
         int totalWaitingDays = 0;
         int totalExecutionDays = 0;
         int totalCompletionDays = 0;
 
-        // Pop all missions to temp stack to process them
+        int index = 0;
         while (!CompletedMissions.isEmpty()) {
             Mission* m;
             CompletedMissions.pop(m);
-            temp.push(m);
+            missions[index++] = m;
         }
 
-        // Process missions and write to file
-        while (!temp.isEmpty()) {
-            Mission* m;
-            temp.pop(m);
+        for (int i = 0; i < missionCount - 1; i++) {
+            for (int j = 0; j < missionCount - i - 1; j++) {
+                if (missions[j]->get_finished_day() > missions[j + 1]->get_finished_day()) {
+                    Mission* temp = missions[j];
+                    missions[j] = missions[j + 1];
+                    missions[j + 1] = temp;
+                }
+            }
+        }
 
-            // Calculate Mdays (Mission days = waiting + execution + journey)
-            int mdays = m->get_waiting_days();
+        
+        for (int i = 0; i < missionCount; i++) {    
+                       
+            out << missions[i]->get_finished_day() << "\t"
+                << missions[i]->getID() << "\t"
+                << missions[i]->get_waiting_days() << "\t"
+                << missions[i]->getmissionDuration() << "\t"
+                << missions[i]->get_total_days() << "\n";
 
-            // Calculate Tdays (Total days for the mission)
-            int tdays = m->get_total_days();
-
-            // Write mission data
-            out << m->get_finished_day() << "\t"
-                << m->getID() << "\t"
-                << mdays << "\t"
-                << m->getmissionDuration() << "\t"
-                << tdays << "\n";
-
-            // Accumulate statistics
+            
             totalMissions++;
-            totalWaitingDays += m->get_waiting_days();
-            totalExecutionDays += m->getmissionDuration();
-            totalCompletionDays += tdays;
+            totalWaitingDays += missions[i]->get_waiting_days();
+            totalExecutionDays += missions[i]->getmissionDuration();
+            totalCompletionDays += missions[i]->get_total_days();
 
-            // Count by type
-            char type = m->getMissionType();
-            if (type == 'N') normalCount++;
-            else if (type == 'P') polarCount++;
-            else if (type == 'D') diggingCount++;
+            
+            char type = missions[i]->getMissionType();
+            if (type == 'N') 
+            {
+                normalCount++; 
+            }
+            else if (type == 'P') {
+                polarCount++; 
+            }
+            else if (type == 'D') { 
+                diggingCount++; 
+            }
 
-            CompletedMissions.push(m);  // Restore to original stack
+            CompletedMissions.push(missions[i]);
         }
+
+        delete[] missions;
 
         out << "....................................\n";
 
-        // Summary section
+        
         int abortedCount = AbortedMissions.getCount();
-        int totalCount = totalMissions + abortedCount;
+        cout << AbortedMissions.getCount() << endl;
+
+        int abortedNormal = 0, abortedPolar = 0, abortedDigging = 0;
+
+        
+        ArrayStack<Mission*> tempAborted;
+        while (!AbortedMissions.isEmpty()) {
+            Mission* m;
+            AbortedMissions.pop(m);
+            char type = m->getMissionType();
+            if (type == 'N') abortedNormal++;
+            else if (type == 'P') abortedPolar++;
+            else if (type == 'D') abortedDigging++;
+            tempAborted.push(m);
+        }
+
+        
+        while (!tempAborted.isEmpty()) {
+            Mission* m;
+            tempAborted.pop(m);
+            AbortedMissions.push(m);
+        }
+
+        
+        normalCount += abortedNormal;
+        polarCount += abortedPolar;
+        diggingCount += abortedDigging;
+        
+        int totalCount = totalMissions + abortedCount  ;
 
         out << "Missions: " << totalCount
             << "\t[N: " << normalCount
@@ -1008,7 +1043,7 @@ bool autoAbortPMs(Mission* m) {
             << "[" << totalMissions << " DONE, "
             << abortedCount << " Aborted]\n";
 
-        // Count rovers (assuming you have access to these)
+        
         int totalNormalRovers = available_Normal_Rovers.getCount() + Checkup_Normal_Rovers.getCount();
         int totalPolarRovers = available_Polar_Rovers.getCount() + Checkup_Polar_Rovers.getCount();
         int totalDiggingRovers = available_Digging_Rovers.getCount() + Checkup_Digging_Rovers.getCount();
@@ -1019,13 +1054,13 @@ bool autoAbortPMs(Mission* m) {
             << ", P: " << totalPolarRovers
             << ", D: " << totalDiggingRovers << "]\n";
 
-        // Calculate averages
+        
         if (totalMissions > 0) {
             double avgWdays = totalWaitingDays / (double)totalMissions;
             double avgMDUR = totalExecutionDays / (double)totalMissions;
             double avgTdays = totalCompletionDays / (double)totalMissions;
 
-            // Round to 2 decimal places manually
+            
             avgWdays = (int)(avgWdays * 100 + 0.5) / 100.0;
             avgMDUR = (int)(avgMDUR * 100 + 0.5) / 100.0;
             avgTdays = (int)(avgTdays * 100 + 0.5) / 100.0;
@@ -1034,11 +1069,11 @@ bool autoAbortPMs(Mission* m) {
                 << ", Avg MDUR = " << avgMDUR
                 << ", Avg Tdays = " << avgTdays << "\n";
 
-            // Calculate percentages
+            
             double percentWdays = (totalWaitingDays / (double)totalExecutionDays) * 100;
             double percentAutoAborted = (abortedCount / (double)totalCount) * 100;
 
-            // Round percentages
+            
             percentWdays = (int)(percentWdays * 100 + 0.5) / 100.0;
             percentAutoAborted = (int)(percentAutoAborted * 100 + 0.5) / 100.0;
 
