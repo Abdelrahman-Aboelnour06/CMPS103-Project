@@ -936,7 +936,8 @@ public:
 
         out << "Fday\tID\tRday\tWdays\tMDUR\tTdays\n";
 
-        int missionCount = CompletedMissions.getCount();
+        int completemissionCount = CompletedMissions.getCount();
+        int missionCount = CompletedMissions.getCount() + AbortedMissions.getCount();
 
         Mission **missions = new Mission *[missionCount];
 
@@ -951,7 +952,7 @@ public:
         {
             Mission *m;
             CompletedMissions.pop(m);
-            missions[index++] = m;
+            missions[i++] = m;
         }
 
         for (int i = 0; i < missionCount - 1; i++)
