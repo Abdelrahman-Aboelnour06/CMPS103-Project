@@ -987,21 +987,17 @@ public:
 
         
         for (int i = 0; i < missionCount; i++) {    
-                       
             out << missions[i]->get_finished_day() << "\t"
                 << missions[i]->getID() << "\t"
                 << missions[i]->get_ready_day()<<"\t"
                 << missions[i]->get_waiting_days() << "\t"
                 << missions[i]->getmissionDuration() << "\t"
                 << missions[i]->get_total_days() << "\n";
-
-            
             totalMissions++;
             totalWaitingDays += missions[i]->get_waiting_days();
             totalExecutionDays += missions[i]->getmissionDuration();
             totalCompletionDays += missions[i]->get_total_days();
 
-            
             char type = missions[i]->getMissionType();
             if (type == 'N') 
             {
@@ -1080,9 +1076,9 @@ public:
             double avgTdays = totalCompletionDays / (double)totalMissions;
 
             
-            avgWdays = (int)(avgWdays * 100 ) / 100.0;
-            avgMDUR = (int)(avgMDUR * 100 ) / 100.0;
-            avgTdays = (int)(avgTdays * 100) / 100.0;
+            avgWdays = (avgWdays * 100 ) / 100.0;
+            avgMDUR = (avgMDUR * 100 ) / 100.0;
+            avgTdays = (avgTdays * 100) / 100.0;
 
             out << "Avg Wdays = " << avgWdays
                 << ", Avg MDUR = " << avgMDUR
@@ -1093,8 +1089,8 @@ public:
             double percentAutoAborted = ((double)abortedPolar / abortedCount) * 100;
 
             
-            percentWdays = (int)(percentWdays * 100 + 0.5) / 100.0;
-            percentAutoAborted = (int)(percentAutoAborted * 100 + 0.5) / 100.0;
+            percentWdays = (percentWdays * 100 ) / 100.0;
+            percentAutoAborted = (percentAutoAborted * 100) / 100.0;
 
             out << "% Avg_Wdays/ Avg_MDUR = " << percentWdays << "%, "
                 << "Auto-aborted= " << percentAutoAborted << "%\n";
