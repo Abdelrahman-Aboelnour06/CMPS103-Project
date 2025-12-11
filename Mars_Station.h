@@ -936,10 +936,10 @@ public:
 
         out << "Fday\tID\tRday\tWdays\tMDUR\tTdays\n";
 
-        int completemissionCount = CompletedMissions.getCount();
+        const int completemissionCount = CompletedMissions.getCount();
         int missionCount = CompletedMissions.getCount() + AbortedMissions.getCount();
 
-        Mission **missions = new Mission *[missionCount];
+        Mission **missions = new Mission *[completemissionCount];
 
         int totalMissions = 0;
         int normalCount = 0, polarCount = 0, diggingCount = 0;
@@ -1000,7 +1000,8 @@ public:
 
         delete[] missions;
 
-        out << "....................................\n";
+        out << "\n-----------------------------------------------------------\n\n";
+        out << "-----------------------------------------------------------\n\n";
 
         int abortedCount = AbortedMissions.getCount();
 
