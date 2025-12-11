@@ -1,0 +1,4 @@
+Fday	ID	Mdays	MDUR	Tdays
+....................................
+Missions: 0	[N: 0, P: 0, D: 0] [0 DONE, 0 Aborted]
+Rovers: 30	[N: 15, P: 10, D: 5]
