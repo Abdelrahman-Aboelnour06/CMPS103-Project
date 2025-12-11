@@ -851,7 +851,7 @@ public:
         {
             for (int j = 0; j < completemissionCount - i - 1; j++)
             {
-                if (missions[j]->get_finished_day() > missions[j + 1]->get_finished_day())
+                if ((missions[j]->get_assigned_to_rover_day()+ missions[j]->getmissionDuration() + missions[j]->get_remaining_day()) > (missions[j+1]->get_assigned_to_rover_day() + missions[j+1]->getmissionDuration() + missions[j+1]->get_remaining_day()))
                 {
                     Mission *temp = missions[j];
                     missions[j] = missions[j + 1];
@@ -954,8 +954,6 @@ public:
             << ", P: " << totalPolarRovers
             << ", D: " << totalDiggingRovers << "]\n";
 
-        if (totalMissions > 0)
-        {
             double avgWdays = totalWaitingDays / (double)totalMissions;
             double avgMDUR = totalExecutionDays / (double)totalMissions;
             double avgTdays = totalCompletionDays / (double)totalMissions;
@@ -976,7 +974,6 @@ public:
 
             out << "% Avg_Wdays/ Avg_MDUR = " << percentWdays << "%, "
                 << "Auto-aborted= " << percentAutoAborted << "%\n";
-        }
         out.close();
     }
 
