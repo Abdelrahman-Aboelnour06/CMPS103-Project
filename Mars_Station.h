@@ -528,8 +528,9 @@ public:
     {
         Mission *backmission = nullptr;
         int pri;
-        while (!BackMissions.isEmpty() && BackMissions.peek(backmission, pri))
+        while (!BackMissions.isEmpty())
         {
+            BackMissions.peek(backmission, pri);
             int finDay = backmission->get_finished_execution_day() + backmission->get_journey_days();
             if (finDay > current_day)
             {
@@ -594,40 +595,19 @@ public:
     {
         Mission *execmission = nullptr;
         int pri;
-        while (!ExecMissions.isEmpty() && ExecMissions.peek(execmission, pri))
+        while (!ExecMissions.isEmpty())
         {
-            // verify mission has an assigned rover
-            Rover *r = execmission->getassignedRover();
-            if (!r)
-                break; // can't complete without a rover
-            // ensure mission parameters are initialized
+            ExecMissions.peek(execmission, pri);
             int finishDay = execmission->get_finished_execution_day();
-            if (finishDay < 0)
+            if (finishDay > current_day)
             {
-                // finished_execution_day not set, try to compute it
-                int execStartDay = execmission->get_execution_start_day();
-                if (execStartDay < 0)
-                {
-                    // execution start day also not initialized, skip this mission
-                    // debug removed
-                    break;
-                }
-                // compute: finished_execution_day = execution_start_day + mission_duration
-                finishDay = execStartDay + execmission->getmissionDuration();
-            }
-
-            // debug removed
-            // only move to back if execution has finished
-            if (finishDay <= current_day)
-            {
-                ExecMissions.dequeue(execmission, pri);
-                // debug removed
-                execmission->setmissionstate(STATE::BACK);
-                BackMissions.enqueue(execmission, pri);
+                break;
             }
             else
             {
-                break;
+                ExecMissions.dequeue(execmission, pri);
+                execmission->setmissionstate(STATE::BACK);
+                BackMissions.enqueue(execmission, pri);
             }
         }
     }
@@ -698,11 +678,9 @@ public:
         while (!Out_Missions.isEmpty() && Out_Missions.peek(outmission, pri))
         {
             int execDay = outmission->get_execution_start_day();
-            // debug removed
-            if (execDay <= current_day)
+            if (execDay == current_day)
             {
                 Out_Missions.dequeue(outmission, pri);
-                // debug removed
                 outmission->setmissionstate(STATE::EXECUTING);
                 ExecMissions.enqueue(outmission, pri);
             }
@@ -947,20 +925,21 @@ public:
 
     int get_current_day() const { return current_day; }
 
-    
-
-    void generateOutputFile(string outputfile) {
+    void generateOutputFile(string outputfile)
+    {
         ofstream out(outputfile);
-        if (!out.is_open()) {
+        if (!out.is_open())
+        {
             cout << "Error: Could not create output file!" << endl;
             return;
         }
 
         out << "Fday\tID\tRday\tWdays\tMDUR\tTdays\n";
 
-        int missionCount = CompletedMissions.getCount();
+        int completemissionCount = CompletedMissions.getCount();
+        int missionCount = CompletedMissions.getCount() + AbortedMissions.getCount();
 
-        Mission** missions = new Mission * [missionCount];
+        Mission **missions = new Mission *[missionCount];
 
         int totalMissions = 0;
         int normalCount = 0, polarCount = 0, diggingCount = 0;
@@ -969,27 +948,31 @@ public:
         int totalCompletionDays = 0;
 
         int index = 0;
-        while (!CompletedMissions.isEmpty()) {
-            Mission* m;
+        while (!CompletedMissions.isEmpty())
+        {
+            Mission *m;
             CompletedMissions.pop(m);
             missions[index++] = m;
         }
 
-        for (int i = 0; i < missionCount - 1; i++) {
-            for (int j = 0; j < missionCount - i - 1; j++) {
-                if (missions[j]->get_finished_day() > missions[j + 1]->get_finished_day()) {
-                    Mission* temp = missions[j];
+        for (int i = 0; i < completemissionCount - 1; i++)
+        {
+            for (int j = 0; j < completemissionCount - i - 1; j++)
+            {
+                if (missions[j]->get_finished_day() > missions[j + 1]->get_finished_day())
+                {
+                    Mission *temp = missions[j];
                     missions[j] = missions[j + 1];
                     missions[j + 1] = temp;
                 }
             }
         }
 
-        
-        for (int i = 0; i < missionCount; i++) {    
+        for (int i = 0; i < completemissionCount; i++)
+        {
             out << missions[i]->get_finished_day() << "\t"
                 << missions[i]->getID() << "\t"
-                << missions[i]->get_ready_day()<<"\t"
+                << missions[i]->get_ready_day() << "\t"
                 << missions[i]->get_waiting_days() << "\t"
                 << missions[i]->getmissionDuration() << "\t"
                 << missions[i]->get_total_days() << "\n";
@@ -999,15 +982,17 @@ public:
             totalCompletionDays += missions[i]->get_total_days();
 
             char type = missions[i]->getMissionType();
-            if (type == 'N') 
+            if (type == 'N')
             {
-                normalCount++; 
+                normalCount++;
             }
-            else if (type == 'P') {
-                polarCount++; 
+            else if (type == 'P')
+            {
+                polarCount++;
             }
-            else if (type == 'D') { 
-                diggingCount++; 
+            else if (type == 'D')
+            {
+                diggingCount++;
             }
 
             CompletedMissions.push(missions[i]);
@@ -1017,39 +1002,39 @@ public:
 
         out << "....................................\n";
 
-        
         int abortedCount = AbortedMissions.getCount();
         cout << AbortedMissions.getCount() << endl;
 
         int abortedNormal = 0, abortedPolar = 0;
 
-        
-        ArrayStack<Mission*> tempAborted;
-        while (!AbortedMissions.isEmpty()) {
-            Mission* m;
+        ArrayStack<Mission *> tempAborted;
+        while (!AbortedMissions.isEmpty())
+        {
+            Mission *m;
             AbortedMissions.pop(m);
             char type = m->getMissionType();
-            if (type == 'N') {
+            if (type == 'N')
+            {
                 abortedNormal++;
             }
-            else if (type == 'P') {
+            else if (type == 'P')
+            {
                 abortedPolar++;
             }
             tempAborted.push(m);
         }
 
-        
-        while (!tempAborted.isEmpty()) {
-            Mission* m;
+        while (!tempAborted.isEmpty())
+        {
+            Mission *m;
             tempAborted.pop(m);
             AbortedMissions.push(m);
         }
 
-        
         normalCount += abortedNormal;
         polarCount += abortedPolar;
-        
-        int totalCount = totalMissions + abortedCount  ;
+
+        int totalCount = totalMissions + abortedCount;
 
         out << "Missions: " << totalCount
             << "\t[N: " << normalCount
@@ -1058,7 +1043,6 @@ public:
             << "[" << totalMissions << " DONE, "
             << abortedCount << " Aborted]\n";
 
-        
         int totalNormalRovers = available_Normal_Rovers.getCount() + Checkup_Normal_Rovers.getCount();
         int totalPolarRovers = available_Polar_Rovers.getCount() + Checkup_Polar_Rovers.getCount();
         int totalDiggingRovers = available_Digging_Rovers.getCount() + Checkup_Digging_Rovers.getCount();
@@ -1069,27 +1053,24 @@ public:
             << ", P: " << totalPolarRovers
             << ", D: " << totalDiggingRovers << "]\n";
 
-        
-        if (totalMissions > 0) {
+        if (totalMissions > 0)
+        {
             double avgWdays = totalWaitingDays / (double)totalMissions;
             double avgMDUR = totalExecutionDays / (double)totalMissions;
             double avgTdays = totalCompletionDays / (double)totalMissions;
 
-            
-            avgWdays = (avgWdays * 100 ) / 100.0;
-            avgMDUR = (avgMDUR * 100 ) / 100.0;
+            avgWdays = (avgWdays * 100) / 100.0;
+            avgMDUR = (avgMDUR * 100) / 100.0;
             avgTdays = (avgTdays * 100) / 100.0;
 
             out << "Avg Wdays = " << avgWdays
                 << ", Avg MDUR = " << avgMDUR
                 << ", Avg Tdays = " << avgTdays << "\n";
 
-            
             double percentWdays = (totalWaitingDays / (double)totalExecutionDays) * 100;
             double percentAutoAborted = ((double)abortedPolar / abortedCount) * 100;
 
-            
-            percentWdays = (percentWdays * 100 ) / 100.0;
+            percentWdays = (percentWdays * 100) / 100.0;
             percentAutoAborted = (percentAutoAborted * 100) / 100.0;
 
             out << "% Avg_Wdays/ Avg_MDUR = " << percentWdays << "%, "
@@ -1099,8 +1080,6 @@ public:
         out.close();
         cout << "Output file '" << outputfile << "' created successfully!" << endl;
     }
-
-
 
     ArrayStack<Mission *> *getDoneMissions() { return &CompletedMissions; }
 
