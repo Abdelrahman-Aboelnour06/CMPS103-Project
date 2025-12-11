@@ -952,12 +952,12 @@ public:
         {
             Mission *m;
             CompletedMissions.pop(m);
-            missions[i++] = m;
+            missions[index++] = m;
         }
 
-        for (int i = 0; i < missionCount - 1; i++)
+        for (int i = 0; i < completemissionCount - 1; i++)
         {
-            for (int j = 0; j < missionCount - i - 1; j++)
+            for (int j = 0; j < completemissionCount - i - 1; j++)
             {
                 if (missions[j]->get_finished_day() > missions[j + 1]->get_finished_day())
                 {
@@ -968,7 +968,7 @@ public:
             }
         }
 
-        for (int i = 0; i < missionCount; i++)
+        for (int i = 0; i < completemissionCount; i++)
         {
             out << missions[i]->get_finished_day() << "\t"
                 << missions[i]->getID() << "\t"
