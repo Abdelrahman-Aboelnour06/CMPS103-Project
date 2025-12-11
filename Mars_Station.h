@@ -958,9 +958,10 @@ public:
 
         out << "Fday\tID\tRday\tWdays\tMDUR\tTdays\n";
 
-        int missionCount = CompletedMissions.getCount();
+        int completemissionCount = CompletedMissions.getCount();
+        int missionCount = CompletedMissions.getCount()+AbortedMissions.getCount();
 
-        Mission** missions = new Mission * [missionCount];
+        Mission** missions = new Mission * [completemissionCount];
 
         int totalMissions = 0;
         int normalCount = 0, polarCount = 0, diggingCount = 0;
@@ -968,15 +969,15 @@ public:
         int totalExecutionDays = 0;
         int totalCompletionDays = 0;
 
-        int index = 0;
+        int i = 0;
         while (!CompletedMissions.isEmpty()) {
             Mission* m;
             CompletedMissions.pop(m);
-            missions[index++] = m;
+            missions[i++] = m;
         }
 
-        for (int i = 0; i < missionCount - 1; i++) {
-            for (int j = 0; j < missionCount - i - 1; j++) {
+        for (int i = 0; i < completemissionCount - 1; i++) {
+            for (int j = 0; j < completemissionCount - i - 1; j++) {
                 if (missions[j]->get_finished_day() > missions[j + 1]->get_finished_day()) {
                     Mission* temp = missions[j];
                     missions[j] = missions[j + 1];
@@ -986,7 +987,7 @@ public:
         }
 
         
-        for (int i = 0; i < missionCount; i++) {    
+        for (int i = 0; i < completemissionCount; i++) {
             out << missions[i]->get_finished_day() << "\t"
                 << missions[i]->getID() << "\t"
                 << missions[i]->get_ready_day()<<"\t"
@@ -1059,9 +1060,9 @@ public:
             << abortedCount << " Aborted]\n";
 
         
-        int totalNormalRovers = available_Normal_Rovers.getCount() + Checkup_Normal_Rovers.getCount();
-        int totalPolarRovers = available_Polar_Rovers.getCount() + Checkup_Polar_Rovers.getCount();
-        int totalDiggingRovers = available_Digging_Rovers.getCount() + Checkup_Digging_Rovers.getCount();
+        int totalNormalRovers = available_Normal_Rovers.getCount() ;
+        int totalPolarRovers = available_Polar_Rovers.getCount() ;
+        int totalDiggingRovers = available_Digging_Rovers.getCount();
         int totalRovers = totalNormalRovers + totalPolarRovers + totalDiggingRovers;
 
         out << "Rovers: " << totalRovers
