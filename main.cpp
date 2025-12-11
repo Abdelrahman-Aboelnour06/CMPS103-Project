@@ -175,9 +175,6 @@ int main()
 			Mstation->getReadyNormalMissions(),
 			Mstation->getAvailableNormalRovers(),
 			Mstation->getAvailablePolarRovers(),
-
-
-
 			Mstation->getAvailableDiggingRovers(),
 			Mstation->getAvailableRescueRovers(),
 			Mstation->getOutMissions(),
@@ -200,9 +197,7 @@ int main()
 			Mstation->getBackMissions()->isEmpty() &&
 			Mstation->getOutMissions()->isEmpty())
 		{
-			
 			Mstation->generateOutputFile("output.txt");
-
 			ui.end_message();
 			break;
 		}

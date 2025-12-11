@@ -1003,7 +1003,6 @@ public:
         out << "....................................\n";
 
         int abortedCount = AbortedMissions.getCount();
-        cout << AbortedMissions.getCount() << endl;
 
         int abortedNormal = 0, abortedPolar = 0;
 
@@ -1076,9 +1075,7 @@ public:
             out << "% Avg_Wdays/ Avg_MDUR = " << percentWdays << "%, "
                 << "Auto-aborted= " << percentAutoAborted << "%\n";
         }
-
         out.close();
-        cout << "Output file '" << outputfile << "' created successfully!" << endl;
     }
 
     ArrayStack<Mission *> *getDoneMissions() { return &CompletedMissions; }
