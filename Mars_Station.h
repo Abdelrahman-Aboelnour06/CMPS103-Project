@@ -164,10 +164,10 @@ public:
         file >> roverCounts[0] >> roverCounts[1] >> roverCounts[2];
         file >> roverSpeed[0] >> roverSpeed[1] >> roverSpeed[2];
         file >> checkupNum;
-        checkupDurations = new int[checkupNum];
+        checkupDurations = new int[3];
 
         i = 0;
-        while (i < checkupNum)
+        while (i < 3)
         {
             file >> checkupDurations[i];
             i++;
