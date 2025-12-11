@@ -82,6 +82,9 @@ public:
     {
         finished_execution_day = Execution_start_day + mission_duration;
     }
+    void setFinished_day_parameterized(int day) {
+		Finished_day = day;
+    }
     void setMissionParameters(int currentDay)
     {
         set_assign_to_rover_day(currentDay);
