@@ -567,6 +567,8 @@ public:
             {
                 Checkup_Rescue_Rovers.enqueue(dynamic_cast<Rescue_Rovers *>(donerover));
             }
+            donerover->resetMissionsDone();
+            donerover->setCheckupEndDay(current_day + donerover->getCheckupDuration());
         }
         else
         {
