@@ -956,7 +956,7 @@ public:
             return;
         }
 
-        out << "Fday\tID\tMdays\tMDUR\tTdays\n";
+        out << "Fday\tID\tRday\tWdays\tMDUR\tTdays\n";
 
         int missionCount = CompletedMissions.getCount();
 
@@ -990,6 +990,7 @@ public:
                        
             out << missions[i]->get_finished_day() << "\t"
                 << missions[i]->getID() << "\t"
+                << missions[i]->get_ready_day()<<"\t"
                 << missions[i]->get_waiting_days() << "\t"
                 << missions[i]->getmissionDuration() << "\t"
                 << missions[i]->get_total_days() << "\n";
@@ -1024,7 +1025,7 @@ public:
         int abortedCount = AbortedMissions.getCount();
         cout << AbortedMissions.getCount() << endl;
 
-        int abortedNormal = 0, abortedPolar = 0, abortedDigging = 0;
+        int abortedNormal = 0, abortedPolar = 0;
 
         
         ArrayStack<Mission*> tempAborted;
@@ -1032,9 +1033,12 @@ public:
             Mission* m;
             AbortedMissions.pop(m);
             char type = m->getMissionType();
-            if (type == 'N') abortedNormal++;
-            else if (type == 'P') abortedPolar++;
-            else if (type == 'D') abortedDigging++;
+            if (type == 'N') {
+                abortedNormal++;
+            }
+            else if (type == 'P') {
+                abortedPolar++;
+            }
             tempAborted.push(m);
         }
 
@@ -1048,7 +1052,6 @@ public:
         
         normalCount += abortedNormal;
         polarCount += abortedPolar;
-        diggingCount += abortedDigging;
         
         int totalCount = totalMissions + abortedCount  ;
 
@@ -1077,9 +1080,9 @@ public:
             double avgTdays = totalCompletionDays / (double)totalMissions;
 
             
-            avgWdays = (int)(avgWdays * 100 + 0.5) / 100.0;
-            avgMDUR = (int)(avgMDUR * 100 + 0.5) / 100.0;
-            avgTdays = (int)(avgTdays * 100 + 0.5) / 100.0;
+            avgWdays = (int)(avgWdays * 100 ) / 100.0;
+            avgMDUR = (int)(avgMDUR * 100 ) / 100.0;
+            avgTdays = (int)(avgTdays * 100) / 100.0;
 
             out << "Avg Wdays = " << avgWdays
                 << ", Avg MDUR = " << avgMDUR
@@ -1087,7 +1090,7 @@ public:
 
             
             double percentWdays = (totalWaitingDays / (double)totalExecutionDays) * 100;
-            double percentAutoAborted = (abortedCount / (double)totalCount) * 100;
+            double percentAutoAborted = ((double)abortedPolar / abortedCount) * 100;
 
             
             percentWdays = (int)(percentWdays * 100 + 0.5) / 100.0;
