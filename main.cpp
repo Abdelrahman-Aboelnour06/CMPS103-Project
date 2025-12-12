@@ -165,8 +165,10 @@ int main()
 	while (true)
 	{
 		
+		ui.current_day_message(Mstation->get_current_day());
 
-		
+		Mstation->simulator();
+
 		ui.displayDay(
 			Mstation->get_current_day(),  
 			Mstation->getRequestsQueue(),
@@ -188,7 +190,7 @@ int main()
 			Mstation->getDoneMissions()
 		);
 
-		Mstation->simulator();
+		
 		if (Mstation->getRequestsQueue()->isEmpty() &&
 			Mstation->getReadyNormalMissions()->isEmpty() &&
 			Mstation->getReadyDiggingMissions()->isEmpty() &&

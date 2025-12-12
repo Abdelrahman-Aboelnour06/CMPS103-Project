@@ -25,10 +25,12 @@ public:
 
             if (uInput == 1) {
                 mode = 1; // Interactive
+                cin.ignore();
                 
             }
             else if (uInput == 2) {
                 mode = 2; // Silent
+
                 
             }
             else {
@@ -44,6 +46,11 @@ public:
             return;
         }
         return;
+    }
+
+    void current_day_message(int currentDay) {
+        cout << "Current Day: " << currentDay << "\n";
+        cin.get();
     }
 
     
@@ -68,8 +75,7 @@ public:
         if (mode != 1) {
             return;
         }
-        cout << "Current Day: " << currentDay << "\n";
-        cin.get();
+       
         cout << "\n================== Requests List(s) ================== \n";
         if (requestsList->getCount() > 10) {
             cout << requestsList->getCount() << " requests remaining: ";
