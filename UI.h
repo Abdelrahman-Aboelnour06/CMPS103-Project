@@ -49,8 +49,13 @@ public:
     }
 
     void current_day_message(int currentDay) {
+        if(mode==1){
         cout << "Current Day: " << currentDay << "\n";
         cin.get();
+        }
+        else {
+            return;
+        }
     }
 
     
