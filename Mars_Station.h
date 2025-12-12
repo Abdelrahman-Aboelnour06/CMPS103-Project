@@ -275,6 +275,9 @@ public:
                     available_Polar_Rovers.dequeue(roverPtr);
                     missionPtr->setRover(roverPtr);
                 }
+                else {
+                    continue; // skip to next iteration if mission was aborted
+                }
             }
             else if (!available_Normal_Rovers.isEmpty())
             {
@@ -285,6 +288,9 @@ public:
                     available_Normal_Rovers.dequeue(roverPtr);
                     missionPtr->setRover(roverPtr);
                 }
+                else {
+                    continue; // skip to next iteration if mission was aborted
+                }
             }
             else if (!available_Digging_Rovers.isEmpty())
             {
@@ -294,6 +300,9 @@ public:
                     Digging_Rovers *roverPtr;
                     available_Digging_Rovers.dequeue(roverPtr);
                     missionPtr->setRover(roverPtr);
+                }
+                else {
+                    continue; // skip to next iteration if mission was aborted
                 }
             }
             else
