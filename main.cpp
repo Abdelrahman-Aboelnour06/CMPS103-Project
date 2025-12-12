@@ -158,7 +158,7 @@ int main()
 
 	
 	UI ui;
-	Mstation->FILE_LOADING("test5.txt");
+	Mstation->FILE_LOADING("test_final.txt");
 
 	ui.selectMode();
 	ui.silent_message();
