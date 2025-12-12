@@ -266,6 +266,7 @@ public:
         while (!Ready_Polar_Missions.isEmpty())
         {
             Mission *missionPtr = nullptr;
+            bool assigned = false;
             if (!available_Polar_Rovers.isEmpty())
             {
                 Ready_Polar_Missions.dequeue(missionPtr);
@@ -274,6 +275,7 @@ public:
                     Polar_Rovers *roverPtr;
                     available_Polar_Rovers.dequeue(roverPtr);
                     missionPtr->setRover(roverPtr);
+                    assigned = true;
                 }
                 else {
                     continue; // skip to next iteration if mission was aborted
@@ -287,6 +289,7 @@ public:
                     Normal_Rovers *roverPtr;
                     available_Normal_Rovers.dequeue(roverPtr);
                     missionPtr->setRover(roverPtr);
+                    assigned = true;
                 }
                 else {
                     continue; // skip to next iteration if mission was aborted
@@ -300,6 +303,7 @@ public:
                     Digging_Rovers *roverPtr;
                     available_Digging_Rovers.dequeue(roverPtr);
                     missionPtr->setRover(roverPtr);
+                    assigned = true;
                 }
                 else {
                     continue; // skip to next iteration if mission was aborted
@@ -310,11 +314,14 @@ public:
                 // No available rovers
                 break;
             }
+            if (assigned)
+            {
             // set other mission parameters
-            missionPtr->setMissionParameters(current_day);
             // add to �UT missions
+            missionPtr->setMissionParameters(current_day);
             Out_Missions.enqueue(missionPtr, missionPtr->get_execution_start_day());
             missionPtr->setmissionstate(STATE::OUT);
+            }
         }
     }
     void assignDMs()

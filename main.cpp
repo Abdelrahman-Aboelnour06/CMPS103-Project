@@ -158,7 +158,7 @@ int main()
 
 	
 	UI ui;
-	Mstation->FILE_LOADING("test_final.txt");
+	Mstation->FILE_LOADING("testcase_final6.txt");
 
 	ui.selectMode();
 	ui.silent_message();
@@ -197,7 +197,11 @@ int main()
 			Mstation->getReadyPolarMissions()->isEmpty() &&
 			Mstation->getExecMissions()->isEmpty() &&
 			Mstation->getBackMissions()->isEmpty() &&
-			Mstation->getOutMissions()->isEmpty())
+			Mstation->getOutMissions()->isEmpty() &&
+			Mstation->getCheckupDiggingRovers()->isEmpty() &&
+			Mstation->getCheckupNormalRovers()->isEmpty() &&
+			Mstation->getCheckupPolarRovers()->isEmpty()
+			)
 		{
 			Mstation->generateOutputFile("output.txt");
 			ui.end_message();

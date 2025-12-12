@@ -1,0 +1,11 @@
+Fday	ID	Rday	Wdays	MDUR	Tdays
+121	99	1	0	100	120
+
+-----------------------------------------------------------
+
+-----------------------------------------------------------
+
+Missions: 52	[N: 1, P: 51, D: 0] [1 DONE, 51 Aborted]
+Rovers: 1	[N: 1, P: 0, D: 0]
+Avg Wdays = 0, Avg MDUR = 100, Avg Tdays = 120
+% Avg_Wdays/ Avg_MDUR = 0%, Auto-aborted= 1%
