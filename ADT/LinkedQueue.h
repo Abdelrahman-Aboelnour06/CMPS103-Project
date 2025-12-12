@@ -176,20 +176,22 @@ template<typename T>
 void LinkedQueue<T>::print(int count) const
 {
 	Node<T>* temp = frontPtr;
-	if (isEmpty())
+
+	if (isEmpty()) {
 		cout << "Queue is Empty \n";
+		return;
+	}
+
 	int i = 0;
-	while (temp && temp != backPtr && i<count) {
-		if (i == count - 2) {
-			cout << temp->getItem();
+	while (temp != nullptr && i < count) {
+		cout << temp->getItem();
+
+		if (i < count - 1 && temp->getNext() != nullptr) {
+			cout << ",";
 		}
-		else {
-			cout << temp->getItem()<<",";
-		}
+
 		temp = temp->getNext();
 		i++;
-		if (temp == backPtr)
-			break;
 	}
 }
 ///////////////////////////////////////////////////////////////////////////////////
