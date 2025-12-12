@@ -980,7 +980,7 @@ public:
             }
 
             out << "% Avg_Wdays/ Avg_MDUR = " << Wdays_MDUR << "%, "
-                << "Auto-aborted= " << AutoAborted << "%\n";
+                << "Auto-aborted= " << AutoAborted*100 << "%\n";
         out.close();
     }
 
