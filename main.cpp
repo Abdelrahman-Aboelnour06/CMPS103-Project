@@ -158,15 +158,17 @@ int main()
 
 	
 	UI ui;
-	Mstation->FILE_LOADING("input.txt");
+	Mstation->FILE_LOADING("testcase_final6.txt");
 
 	ui.selectMode();
 	ui.silent_message();
 	while (true)
 	{
 		
+		ui.current_day_message(Mstation->get_current_day());
 
-		
+		Mstation->simulator();
+
 		ui.displayDay(
 			Mstation->get_current_day(),  
 			Mstation->getRequestsQueue(),
@@ -175,9 +177,6 @@ int main()
 			Mstation->getReadyNormalMissions(),
 			Mstation->getAvailableNormalRovers(),
 			Mstation->getAvailablePolarRovers(),
-
-
-
 			Mstation->getAvailableDiggingRovers(),
 			Mstation->getAvailableRescueRovers(),
 			Mstation->getOutMissions(),
@@ -191,18 +190,20 @@ int main()
 			Mstation->getDoneMissions()
 		);
 
-		Mstation->simulator();
+		
 		if (Mstation->getRequestsQueue()->isEmpty() &&
 			Mstation->getReadyNormalMissions()->isEmpty() &&
 			Mstation->getReadyDiggingMissions()->isEmpty() &&
 			Mstation->getReadyPolarMissions()->isEmpty() &&
 			Mstation->getExecMissions()->isEmpty() &&
 			Mstation->getBackMissions()->isEmpty() &&
-			Mstation->getOutMissions()->isEmpty())
+			Mstation->getOutMissions()->isEmpty() &&
+			Mstation->getCheckupDiggingRovers()->isEmpty() &&
+			Mstation->getCheckupNormalRovers()->isEmpty() &&
+			Mstation->getCheckupPolarRovers()->isEmpty()
+			)
 		{
-			
 			Mstation->generateOutputFile("output.txt");
-
 			ui.end_message();
 			break;
 		}
