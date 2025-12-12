@@ -64,6 +64,7 @@ public:
         LinkedQueue<Mission*>* readyDiggingMissions,
         LinkedQueue<Mission*>* readyPolarMissions,
         RDY_NM* readyNormalMissions,
+        LinkedQueue<Complex_Mission*>* readyComplexMissions,
         LinkedQueue<Normal_Rovers*>* available_Normal_Rovers,
         LinkedQueue<Polar_Rovers*>* available_Polar_Rovers,
         LinkedQueue<Digging_Rovers*>* available_Digging_Rovers,
@@ -108,6 +109,11 @@ public:
         if (readyDiggingMissions->getCount() > 0) {
             cout << "DMs[";
             readyDiggingMissions->print(readyDiggingMissions->getCount());
+            cout << "]";
+        }
+        if (readyComplexMissions->getCount() > 0) {
+            cout << "CMs[";
+            readyComplexMissions->print(readyComplexMissions->getCount());
             cout << "]";
         }
         cout << endl;

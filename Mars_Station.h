@@ -247,6 +247,9 @@ public:
         {
             return;
         }
+        if (!Ready_Complex_Missions.isEmpty()){
+            assignCMs();
+        }
         if (!Ready_Polar_Missions.isEmpty())
         {
             assignPMs(); // start assigning PMs
@@ -259,6 +262,46 @@ public:
         if (!Ready_Normal_Missions.isEmpty() && (!available_Normal_Rovers.isEmpty() || !available_Polar_Rovers.isEmpty()))
         {
             assignNMs(); // start assigning NMs
+        }
+    }
+    void assignCMs()
+    {
+        while (!Ready_Complex_Missions.isEmpty())
+        {
+            Complex_Mission *missionPtr = nullptr;
+            if (!available_Digging_Rovers.isEmpty() && (!available_Polar_Rovers.isEmpty() || !available_Normal_Rovers.isEmpty()))
+            {
+                 if (!available_Normal_Rovers.isEmpty())
+                {
+                    Ready_Complex_Missions.dequeue(missionPtr);
+                    Digging_Rovers *dRoverPtr;
+                    Normal_Rovers *nRoverPtr;
+                    available_Digging_Rovers.dequeue(dRoverPtr);
+                    available_Normal_Rovers.dequeue(nRoverPtr);
+                    missionPtr->setRover(dRoverPtr, nRoverPtr);
+                }
+                else
+                if (!available_Polar_Rovers.isEmpty())
+                {
+                    Ready_Complex_Missions.dequeue(missionPtr);
+                    Digging_Rovers *dRoverPtr;
+                    Polar_Rovers *pRoverPtr;
+                    available_Digging_Rovers.dequeue(dRoverPtr);
+                    available_Polar_Rovers.dequeue(pRoverPtr);
+                    missionPtr->setRover(dRoverPtr, pRoverPtr);
+                }
+               
+            }
+            else
+            {
+                // No available rovers
+                break;
+            }
+            // set other mission parameters
+            missionPtr->setMissionParameters(current_day);
+            // add to OUT missions
+            Out_Missions.enqueue(missionPtr, missionPtr->get_execution_start_day());
+            missionPtr->setmissionstate(STATE::OUT);
         }
     }
     void assignPMs()
@@ -439,7 +482,22 @@ public:
             {
                 break;
             }
-            else if (backmission->getmissionstate() == STATE::ABORTED)
+            else
+            if (backmission->getMissionType() == 'C')
+            {
+                BackMissions.dequeue(backmission, pri);
+                CompletedMissions.push(backmission);
+                backmission->setmissionstate(STATE::DONE);
+                Digging_Rovers *dRover = dynamic_cast<Digging_Rovers *>(backmission->getassignedRover());
+                Rover* nRover = dynamic_cast<Rover *>(backmission->getassignedRover2());
+                dRover->incrementMissionsDone();
+                nRover->incrementMissionsDone();
+                Rovermaintancecheckup(dRover);
+                Rovermaintancecheckup(nRover);
+                
+            }
+            else 
+            if (backmission->getmissionstate() == STATE::ABORTED)
             {
                 BackMissions.dequeue(backmission, pri);
                 AbortedMissions.push(backmission);
@@ -794,6 +852,11 @@ public:
         Ready_Digging_Missions.enqueue(NM);
     }*/
 
+    LinkedQueue<Complex_Mission *> *getReadyComplexMissionsQueue()
+    {
+        return &Ready_Complex_Missions;
+    }
+    
     LinkedQueue<Normal_Rovers *> *getAvailableNormalRovers()
     {
         return &available_Normal_Rovers;
@@ -853,7 +916,7 @@ public:
         Mission **missions = new Mission *[completemissionCount];
 
         int totalMissions = 0;
-        int normalCount = 0, polarCount = 0, diggingCount = 0;
+        int normalCount = 0, polarCount = 0, diggingCount = 0,complexcount=0;
         int totalWDAY = 0;
         int totalMDUR = 0;
         int totalTDays = 0;
@@ -915,6 +978,11 @@ public:
             {
                 diggingCount++;
             }
+            else
+            if (type == 'C')
+            {
+                complexcount++;
+            }
 
             CompletedMissions.push(m);
         }
@@ -960,7 +1028,7 @@ public:
         out << "Missions: " << totalCount
             << "\t[N: " << normalCount
             << ", P: " << polarCount
-            << ", D: " << diggingCount << "] "
+            << ", D: " << diggingCount << ", C: " << complexcount << "] "
             << "[" << totalMissions << " DONE, "
             << abortedCount << " Aborted]\n";
 

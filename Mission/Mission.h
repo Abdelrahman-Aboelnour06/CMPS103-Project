@@ -49,7 +49,7 @@ public:
         Finished_day = -1;
         mission_state = STATE::NOTREADY;
     }
-    void setRover(Rover *R)
+    virtual void setRover(Rover *R)
     {
         assignedRover = R;
     }
@@ -85,6 +85,7 @@ public:
     void setFinished_day_parameterized(int day) {
 		Finished_day = day;
     }
+    
     void setMissionParameters(int currentDay)
     {
         set_assign_to_rover_day(currentDay);
@@ -95,7 +96,8 @@ public:
         setFinished_day();
         set_finished_execution_day();
     }
-    Rover *getassignedRover() const { return assignedRover; }
+    virtual Rover *getassignedRover() const { return assignedRover; }
+    virtual Rover* getassignedRover2() const { return nullptr; }
     int getID() const { return mission_id; }
     int getLocation() const { return location_distance; }
     int getmissionDuration() const { return mission_duration; }

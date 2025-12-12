@@ -18,7 +18,7 @@ class Complex_Mission : public Mission {
 
     void set_Digging_Rover(Digging_Rovers* R) {
         assignedDigRover = R;
-        setRover(R); // Also set the base class Rover pointer
+        Mission::setRover(R); // Also set the base class Rover pointer
     }
 
     Digging_Rovers* get_Assigned_Digging_Rover() const {
@@ -26,5 +26,16 @@ class Complex_Mission : public Mission {
     }
 
     char getMissionType() const override { return 'C'; }
+
+    void setRover(Digging_Rovers* DR1, Rover* R2){
+        assignedDigRover = DR1;
+        Mission::setRover(R2); 
+    }
+    Rover *getassignedRover() const override {
+        return assignedDigRover;
+    }
+    Rover* getassignedRover2() const override {
+        return Mission::getassignedRover();
+    }
 
 };
