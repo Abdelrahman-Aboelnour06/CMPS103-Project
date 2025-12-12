@@ -835,9 +835,9 @@ public:
 
         int totalMissions = 0;
         int normalCount = 0, polarCount = 0, diggingCount = 0;
-        int totalWaitingDays = 0;
-        int totalExecutionDays = 0;
-        int totalCompletionDays = 0;
+        int totalWDAY = 0;
+        int totalMDUR = 0;
+        int totalTDays = 0;
 
         int index = 0;
         while (!CompletedMissions.isEmpty())
@@ -879,9 +879,9 @@ public:
                 << Tdays << "\n";
 
             totalMissions++;
-            totalWaitingDays += Wdays;
-            totalExecutionDays += m->getmissionDuration();
-            totalCompletionDays += Tdays;
+            totalWDAY += Wdays;
+            totalMDUR += m->getmissionDuration();
+            totalTDays += Tdays;
 
             char type = m->getMissionType();
             if (type == 'N') {
@@ -944,36 +944,27 @@ public:
             << "[" << totalMissions << " DONE, "
             << abortedCount << " Aborted]\n";
 
-        int totalNormalRovers = available_Normal_Rovers.getCount() + Checkup_Normal_Rovers.getCount();
-        int totalPolarRovers = available_Polar_Rovers.getCount() + Checkup_Polar_Rovers.getCount();
-        int totalDiggingRovers = available_Digging_Rovers.getCount() + Checkup_Digging_Rovers.getCount();
-        int totalRovers = totalNormalRovers + totalPolarRovers + totalDiggingRovers;
+        out << "Rovers: " << available_Normal_Rovers.getCount() + available_Polar_Rovers.getCount() + available_Digging_Rovers.getCount()
+            << "\t[N: " << available_Normal_Rovers.getCount()
+            << ", P: " << available_Polar_Rovers.getCount()
+            << ", D: " << available_Digging_Rovers.getCount() << "]\n";
 
-        out << "Rovers: " << totalRovers
-            << "\t[N: " << totalNormalRovers
-            << ", P: " << totalPolarRovers
-            << ", D: " << totalDiggingRovers << "]\n";
-
-            double avgWdays = totalWaitingDays / (double)totalMissions;
-            double avgMDUR = totalExecutionDays / (double)totalMissions;
-            double avgTdays = totalCompletionDays / (double)totalMissions;
-
-            avgWdays = (avgWdays * 100) / 100.0;
-            avgMDUR = (avgMDUR * 100) / 100.0;
-            avgTdays = (avgTdays * 100) / 100.0;
+            double avgWdays = (double)totalWDAY / totalMissions;
+            double avgMDUR = (double)totalMDUR / totalMissions;
+            double avgTdays = (double)totalTDays / totalMissions;
 
             out << "Avg Wdays = " << avgWdays
                 << ", Avg MDUR = " << avgMDUR
                 << ", Avg Tdays = " << avgTdays << "\n";
 
-            double percentWdays = (totalWaitingDays / (double)totalExecutionDays) * 100;
-            double percentAutoAborted = ((double)abortedPolar / abortedCount) * 100;
+            double Wdays_MDUR = (avgWdays / avgMDUR)*100;
+            double AutoAborted = 0;
+            if (abortedCount != 0) {
+                AutoAborted = ((double)abortedPolar / abortedCount);
+            }
 
-            percentWdays = (percentWdays * 100) / 100.0;
-            percentAutoAborted = (percentAutoAborted * 100) / 100.0;
-
-            out << "% Avg_Wdays/ Avg_MDUR = " << percentWdays << "%, "
-                << "Auto-aborted= " << percentAutoAborted << "%\n";
+            out << "% Avg_Wdays/ Avg_MDUR = " << Wdays_MDUR << "%, "
+                << "Auto-aborted= " << AutoAborted << "%\n";
         out.close();
     }
 
