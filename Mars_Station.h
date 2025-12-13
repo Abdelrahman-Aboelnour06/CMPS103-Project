@@ -36,6 +36,8 @@ class Mars_Station
 {
 private:
     int current_day;
+    int failure_probability;
+    int number_of_failed_missions=0;
     int NORMAL_ROVER_SPEED;
     int POLAR_ROVER_SPEED;
     int DIGGING_ROVER_SPEED;
@@ -45,20 +47,23 @@ private:
     LinkedQueue<Complex_Mission *> Ready_Complex_Missions;
     RDY_NM Ready_Normal_Missions;
     OUT_missions Out_Missions;
+    priQueue<Mission *> Rescue_Missions;
     priQueue<Mission *> ExecMissions;
     priQueue<Mission *> BackMissions;
     ArrayStack<Mission *> CompletedMissions;
     ArrayStack<Mission *> AbortedMissions;
+    LinkedQueue<Mission*> Failed_Missions;
     LinkedQueue<Normal_Rovers *> available_Normal_Rovers;
     LinkedQueue<Polar_Rovers *> available_Polar_Rovers;
     LinkedQueue<Digging_Rovers *> available_Digging_Rovers;
     LinkedQueue<Rescue_Rovers *> available_Rescue_Rovers;
-    LinkedQueue<Normal_Rovers *> Checkup_Normal_Rovers;
-    LinkedQueue<Polar_Rovers *> Checkup_Polar_Rovers;
-    LinkedQueue<Digging_Rovers *> Checkup_Digging_Rovers;
-    LinkedQueue<Rescue_Rovers *> Checkup_Rescue_Rovers;
+    priQueue<Normal_Rovers *> Checkup_Normal_Rovers;
+    priQueue<Polar_Rovers *> Checkup_Polar_Rovers;
+    priQueue<Digging_Rovers *> Checkup_Digging_Rovers;
+    priQueue<Rescue_Rovers *> Checkup_Rescue_Rovers;
 
 public:
+
     Mars_Station() : current_day(1) {}
     ~Mars_Station()
     {
@@ -91,19 +96,22 @@ public:
         while (!Checkup_Normal_Rovers.isEmpty())
         {
             Normal_Rovers *roverPtr = nullptr;
-            Checkup_Normal_Rovers.dequeue(roverPtr);
+            int pri;
+            Checkup_Normal_Rovers.dequeue(roverPtr,pri);
             delete roverPtr;
         }
         while (!Checkup_Polar_Rovers.isEmpty())
         {
             Polar_Rovers *roverPtr = nullptr;
-            Checkup_Polar_Rovers.dequeue(roverPtr);
+            int pri;
+            Checkup_Polar_Rovers.dequeue(roverPtr,pri);
             delete roverPtr;
         }
         while (!Checkup_Digging_Rovers.isEmpty())
         {
             Digging_Rovers *roverPtr = nullptr;
-            Checkup_Digging_Rovers.dequeue(roverPtr);
+            int pri;
+            Checkup_Digging_Rovers.dequeue(roverPtr,pri);
             delete roverPtr;
         }
         while (!AbortedMissions.isEmpty())
@@ -144,13 +152,22 @@ public:
         }
     }
 
+
+    int getprobability_of_failure() const
+    {
+        return failure_probability;
+    }
     // omar syed
+    void setFailureProbability(int p)
+    {
+        failure_probability = p;
+    }
     void FILE_LOADING(string fileName)
     {
         // read data from a file and store it into data structures
         // open the file
-        int roverCounts[3] = {0, 0, 0};
-        int roverSpeed[3] = {0, 0, 0};
+        int roverCounts[4] = {0, 0, 0, 0};
+        int roverSpeed[4] = {0, 0, 0, 0};
         int *checkupDurations = nullptr;
         int checkupNum = 0;
         ifstream file(fileName);
@@ -161,13 +178,13 @@ public:
         }
         // read data from the file
         int i = 0;
-        file >> roverCounts[0] >> roverCounts[1] >> roverCounts[2];
-        file >> roverSpeed[0] >> roverSpeed[1] >> roverSpeed[2];
+        file >> roverCounts[0] >> roverCounts[1] >> roverCounts[2] >> roverCounts[3];
+        file >> roverSpeed[0] >> roverSpeed[1] >> roverSpeed[2] >> roverSpeed[3];
         file >> checkupNum;
-        checkupDurations = new int[3];
+        checkupDurations = new int[4];
 
         i = 0;
-        while (i < 3)
+        while (i < 4)
         {
             file >> checkupDurations[i];
             i++;
@@ -175,6 +192,7 @@ public:
         Digging_Rovers *nDptr = nullptr;
         Polar_Rovers *nPptr = nullptr;
         Normal_Rovers *nNptr = nullptr;
+        Rescue_Rovers *nRptr;
         for (int j = 0; j < roverCounts[0]; j++)
         {
             nDptr = new Digging_Rovers(roverSpeed[0], checkupNum, checkupDurations[0]);
@@ -193,6 +211,18 @@ public:
             this->available_Normal_Rovers.enqueue(nNptr);
             NORMAL_ROVER_SPEED = roverSpeed[2];
         }
+        for (int j = 0; j < roverCounts[3]; j++)
+        {
+            nRptr = new Rescue_Rovers(roverSpeed[3], checkupNum, checkupDurations[3]);
+            this->available_Rescue_Rovers.enqueue(nRptr);
+        }
+
+        delete[] checkupDurations;
+
+
+        int probability_of_failure;
+        file >> probability_of_failure;
+        this->setFailureProbability(probability_of_failure);
 
         int requestNum;
         file >> requestNum;
@@ -243,12 +273,15 @@ public:
 
     void assigningMissionsToRovers()
     {
+        assignRescueMissions();
+            
         if (isRoversQueuesEmpty())
         {
             return;
         }
+
         if (!Ready_Complex_Missions.isEmpty()){
-            assignCMs();
+            assignCMs(); // start assigning CMs
         }
         if (!Ready_Polar_Missions.isEmpty())
         {
@@ -263,7 +296,145 @@ public:
         {
             assignNMs(); // start assigning NMs
         }
+
     }
+   void checkMissionFailure() {
+    Mission* m = nullptr;
+    int pri = 0;
+    
+    // --- Handle Out_Missions ---
+    int count = Out_Missions.getCount();
+    priQueue<Mission*> tempQueue; // Temporary queue to hold survivors
+    
+    // 1. Process all missions in Out_Missions
+    for (int i = 0; i < count; i++) {
+        Out_Missions.dequeue(m, pri);
+        int randProb = rand() % 100 + 1; 
+        
+        bool isRescueRover = (m->getassignedRover()->getType() == 'R');
+
+        if (randProb <= failure_probability && !isRescueRover) { 
+            handleFailure(m); 
+            number_of_failed_missions++;   
+        } else {
+            // Store survivor in tempQueue instead of putting it back immediately
+            tempQueue.enqueue(m, pri);
+        }
+    }
+
+    // 2. Restore survivors from tempQueue back to Out_Missions
+    while (!tempQueue.isEmpty()) {
+        tempQueue.dequeue(m, pri);
+        Out_Missions.enqueue(m, pri);
+    }
+
+    // --- Handle ExecMissions ---
+    count = ExecMissions.getCount();
+    
+    // 3. Process all missions in ExecMissions
+    for (int i = 0; i < count; i++) {
+        ExecMissions.dequeue(m, pri);
+        int randProb = rand() % 100 + 1;
+        
+        bool isRescueRover = (m->getassignedRover()->getType() == 'R');
+
+        if (randProb <= failure_probability && !isRescueRover) {
+            handleFailure(m);
+            number_of_failed_missions++;
+        } else {
+            // Store survivor in tempQueue
+            tempQueue.enqueue(m, pri);
+        }
+    }
+
+    // 4. Restore survivors from tempQueue back to ExecMissions
+    while (!tempQueue.isEmpty()) {
+        tempQueue.dequeue(m, pri);
+        ExecMissions.enqueue(m, pri);
+    }
+}
+    void handleFailure(Mission* m) {
+    Rover* failedRover = m->getassignedRover();
+    
+    // Calculate journey back
+    int journeyBack = 0;
+    if (m->getmissionstate() == STATE::OUT) {
+        journeyBack = current_day - m->get_assigned_to_rover_day();
+    } else {
+        journeyBack = m->get_journey_days();
+    }
+    
+    // 1. Handle Failed Rover (r1)
+    if(failedRover) {
+        failedRover->setCheckupEndDay(current_day + journeyBack + failedRover->getCheckupDuration());
+        failedRover->resetMissionsDone(); 
+        
+        char rType = failedRover->getType();
+        if (rType == 'N') Checkup_Normal_Rovers.enqueue((Normal_Rovers*)failedRover, failedRover->getCheckupEndDay());
+        else if (rType == 'P') Checkup_Polar_Rovers.enqueue((Polar_Rovers*)failedRover, failedRover->getCheckupEndDay());
+        else if (rType == 'D') Checkup_Digging_Rovers.enqueue((Digging_Rovers*)failedRover, failedRover->getCheckupEndDay());
+        else if (rType == 'R') Checkup_Rescue_Rovers.enqueue((Rescue_Rovers*)failedRover, failedRover->getCheckupEndDay());
+    }
+
+    // 2. Handle Second Rover (r2) for Complex Missions
+    if (m->getMissionType() == 'C') {
+        Complex_Mission* cMission = dynamic_cast<Complex_Mission*>(m);
+        Rover* rover2 = cMission->getassignedRover2();
+        
+        if (rover2) {
+            // Recalculate journey for r2 if needed, or use same logic
+            int journeyBack2 = ceil((double)m->getLocation() / rover2->getSpeed() / 25.0);
+            
+            rover2->setCheckupEndDay(current_day + journeyBack2 + rover2->getCheckupDuration());
+            rover2->resetMissionsDone();
+
+            char rType2 = rover2->getType();
+            if (rType2 == 'N') Checkup_Normal_Rovers.enqueue((Normal_Rovers*)rover2, rover2->getCheckupEndDay());
+            else if (rType2 == 'P') Checkup_Polar_Rovers.enqueue((Polar_Rovers*)rover2, rover2->getCheckupEndDay());
+            else if (rType2 == 'D') Checkup_Digging_Rovers.enqueue((Digging_Rovers*)rover2, rover2->getCheckupEndDay());
+            // Note: r2 is never 'R' type in a normal complex mission setup
+            cMission->setRover(nullptr, nullptr); // Clear both rovers
+        }
+    }
+
+    m->setmissionstate(STATE::FAILED);
+    m->setRover(nullptr); // Clear r1 so it can be replaced by Rescue Rover
+    Failed_Missions.enqueue(m); 
+}
+
+
+void assignRescueMissions()
+{
+    Mission* failedMission = nullptr;
+    Rescue_Rovers* rescueRover = nullptr;
+
+    while (!Failed_Missions.isEmpty() && !available_Rescue_Rovers.isEmpty())
+    {
+        Failed_Missions.dequeue(failedMission);
+        available_Rescue_Rovers.dequeue(rescueRover);
+
+        // FIX: Explicitly handle Complex Missions to ensure the internal pointer is updated
+        if (failedMission->getMissionType() == 'C') {
+            Complex_Mission* cMission = dynamic_cast<Complex_Mission*>(failedMission);
+            if (cMission) {
+                
+                cMission->setRover((Digging_Rovers*)rescueRover, nullptr); 
+            } 
+            else {
+                failedMission->setRover(rescueRover);
+            }
+        } 
+        else {
+            failedMission->setRover(rescueRover);
+        }
+
+        failedMission->setMissionParameters(current_day); 
+        failedMission->setmissionstate(STATE::OUT); 
+        
+        Out_Missions.enqueue(failedMission, failedMission->get_execution_start_day());
+    }
+}
+
     void assignCMs()
     {
         while (!Ready_Complex_Missions.isEmpty())
@@ -294,7 +465,6 @@ public:
             }
             else
             {
-                // No available rovers
                 break;
             }
             // set other mission parameters
@@ -468,123 +638,156 @@ public:
             requests.peek(temp);
         }
     }
+void movebacktodone_abort()
+{
+    Mission *backmission = nullptr;
+    int pri;
+    int count = BackMissions.getCount(); 
+    priQueue<Mission *> tempQueue;
 
-    void movebacktodone_abort()
+    for (int i = 0; i < count; i++)
     {
-        Mission *backmission = nullptr;
-        int pri;
-        while (!BackMissions.isEmpty())
+        BackMissions.dequeue(backmission, pri);
+
+        int finDay = backmission->get_finished_day(); 
+
+        if (finDay <= current_day) 
         {
-            BackMissions.peek(backmission, pri);
-            int finDay = backmission->get_finished_day();
-            // int finDay = backmission->get_finished_execution_day() + backmission->get_journey_days();
-            if (finDay > current_day)
-            {
-                break;
-            }
-            else
             if (backmission->getMissionType() == 'C')
             {
-                BackMissions.dequeue(backmission, pri);
                 CompletedMissions.push(backmission);
                 backmission->setmissionstate(STATE::DONE);
-                Digging_Rovers *dRover = dynamic_cast<Digging_Rovers *>(backmission->getassignedRover());
-                Rover* nRover = dynamic_cast<Rover *>(backmission->getassignedRover2());
-                dRover->incrementMissionsDone();
-                nRover->incrementMissionsDone();
-                Rovermaintancecheckup(dRover);
-                Rovermaintancecheckup(nRover);
-                
+
+                Complex_Mission* cMission = dynamic_cast<Complex_Mission*>(backmission);
+                if (cMission) {
+                    Rover* r1 = cMission->getassignedRover();
+                    
+                    bool isRescued = (r1 && r1->getType() == 'R');
+
+                    if (r1) {
+                        r1->incrementMissionsDone();
+                        Rovermaintancecheckup(r1);
+                    }
+                    
+                    if (!isRescued) {
+                        Rover* r2 = cMission->getassignedRover2();
+                        if (r2) {
+                            r2->incrementMissionsDone();
+                            Rovermaintancecheckup(r2);
+                        }
+                    }
+                }
             }
-            else 
-            if (backmission->getmissionstate() == STATE::ABORTED)
+            else if (backmission->getmissionstate() == STATE::ABORTED)
             {
-                BackMissions.dequeue(backmission, pri);
                 AbortedMissions.push(backmission);
-                Rover *abortrover = nullptr;
-                abortrover = backmission->getassignedRover();
-                Rovermaintancecheckup(abortrover);
+                Rover *abortrover = backmission->getassignedRover();
+                if (abortrover) Rovermaintancecheckup(abortrover);
             }
             else
             {
-                BackMissions.dequeue(backmission, pri);
                 CompletedMissions.push(backmission);
                 backmission->setmissionstate(STATE::DONE);
-                Rover *donerover = nullptr;
-                donerover = backmission->getassignedRover();
-                donerover->incrementMissionsDone();
-                Rovermaintancecheckup(donerover);
+                Rover *donerover = backmission->getassignedRover();
+                if (donerover) {
+                    donerover->incrementMissionsDone();
+                    Rovermaintancecheckup(donerover);
+                }
             }
         }
+        else
+        {
+            tempQueue.enqueue(backmission, pri);
+        }
     }
+    while (!tempQueue.isEmpty())
+    {
+        tempQueue.dequeue(backmission, pri);
+        BackMissions.enqueue(backmission, pri);
+    }
+}
     void Rovermaintancecheckup(Rover *donerover)
     {
         if (donerover->getMissionsDone() >= donerover->getDaysBeforeCheckup())
         {
+            donerover->setCheckupEndDay(current_day + donerover->getCheckupDuration());
+            donerover->resetMissionsDone();
+            
             if (donerover->getType() == 'N')
             {
-                Checkup_Normal_Rovers.enqueue(dynamic_cast<Normal_Rovers *>(donerover));
+                Checkup_Normal_Rovers.enqueue(dynamic_cast<Normal_Rovers *>(donerover), donerover->getCheckupEndDay());
             }
             else if (donerover->getType() == 'P')
             {
-                Checkup_Polar_Rovers.enqueue(dynamic_cast<Polar_Rovers *>(donerover));
+                Checkup_Polar_Rovers.enqueue(dynamic_cast<Polar_Rovers *>(donerover), donerover->getCheckupEndDay());
             }
             else if (donerover->getType() == 'D')
             {
-                Checkup_Digging_Rovers.enqueue(dynamic_cast<Digging_Rovers *>(donerover));
+                Checkup_Digging_Rovers.enqueue(dynamic_cast<Digging_Rovers *>(donerover), donerover->getCheckupEndDay());
             }
             else if (donerover->getType() == 'R')
             {
-                Checkup_Rescue_Rovers.enqueue(dynamic_cast<Rescue_Rovers *>(donerover));
+                Checkup_Rescue_Rovers.enqueue(dynamic_cast<Rescue_Rovers *>(donerover), donerover->getCheckupEndDay());
             }
-            donerover->resetMissionsDone();
-            donerover->setCheckupEndDay(current_day + donerover->getCheckupDuration());
+        }
+        // else
+        // {
+        //     if (donerover->getType() == 'N')
+        //     {
+        //         available_Normal_Rovers.enqueue(dynamic_cast<Normal_Rovers *>(donerover));
+        //     }
+        //     else if (donerover->getType() == 'P')
+        //     {
+        //         available_Polar_Rovers.enqueue(dynamic_cast<Polar_Rovers *>(donerover));
+        //     }
+        //     else if (donerover->getType() == 'D')
+        //     {
+        //         available_Digging_Rovers.enqueue(dynamic_cast<Digging_Rovers *>(donerover));
+        //     }
+        //     else if (donerover->getType() == 'R')
+        //     {
+        //         available_Rescue_Rovers.enqueue(dynamic_cast<Rescue_Rovers *>(donerover));
+        //     }
+        // }
+    }
+void moveexecutedtoback()
+{
+    Mission *execmission = nullptr;
+    int pri;
+    int count = ExecMissions.getCount(); // Get the number of executing missions
+    priQueue<Mission *> tempQueue; // Temporary queue to hold missions
+
+    // Iterate through ALL missions in the Execution list
+    for (int i = 0; i < count; i++)
+    {
+        ExecMissions.dequeue(execmission, pri);
+        
+        int finishDay = execmission->get_finished_execution_day();
+        
+        // Check if the mission has finished execution
+        if (finishDay <= current_day)
+        {
+            // Move to Back List
+            execmission->setmissionstate(STATE::BACK);
+            BackMissions.enqueue(execmission, execmission->get_journey_days());
         }
         else
         {
-            if (donerover->getType() == 'N')
-            {
-                available_Normal_Rovers.enqueue(dynamic_cast<Normal_Rovers *>(donerover));
-            }
-            else if (donerover->getType() == 'P')
-            {
-                available_Polar_Rovers.enqueue(dynamic_cast<Polar_Rovers *>(donerover));
-            }
-            else if (donerover->getType() == 'D')
-            {
-                available_Digging_Rovers.enqueue(dynamic_cast<Digging_Rovers *>(donerover));
-            }
-            else if (donerover->getType() == 'R')
-            {
-                available_Rescue_Rovers.enqueue(dynamic_cast<Rescue_Rovers *>(donerover));
-            }
+            // Not finished yet, put it back
+            tempQueue.enqueue(execmission, pri);
         }
     }
-    void moveexecutedtoback()
+    while (!tempQueue.isEmpty())
     {
-        Mission *execmission = nullptr;
-        int pri;
-        while (!ExecMissions.isEmpty())
-        {
-            ExecMissions.peek(execmission, pri);
-            int finishDay = execmission->get_finished_execution_day();
-            if (finishDay > current_day)
-            {
-                break;
-            }
-            else
-            {
-                ExecMissions.dequeue(execmission, pri);
-                execmission->setmissionstate(STATE::BACK);
-                BackMissions.enqueue(execmission, pri);
-            }
-        }
+        tempQueue.dequeue(execmission, pri);
+        ExecMissions.enqueue(execmission, pri);
     }
-
+}
     void moveNRfromcheckup()
     {
         Normal_Rovers *firstNrover = nullptr;
-        if (Checkup_Normal_Rovers.dequeue(firstNrover))
+        int pri;
+        if (Checkup_Normal_Rovers.dequeue(firstNrover, pri))
         {
             available_Normal_Rovers.enqueue(firstNrover);
         }
@@ -593,7 +796,8 @@ public:
     void movePRfromcheckup()
     {
         Polar_Rovers *firstProver = nullptr;
-        if (Checkup_Polar_Rovers.dequeue(firstProver))
+        int pri;
+        if (Checkup_Polar_Rovers.dequeue(firstProver,pri))
         {
             available_Polar_Rovers.enqueue(firstProver);
         }
@@ -602,44 +806,86 @@ public:
     void moveDRfromcheckup()
     {
         Digging_Rovers *firstDrover = nullptr;
-        if (Checkup_Digging_Rovers.dequeue(firstDrover))
+        int pri;
+        if (Checkup_Digging_Rovers.dequeue(firstDrover,pri))
         {
             available_Digging_Rovers.enqueue(firstDrover);
         }
     }
     void moveroversfromcheckuptoavailable()
-    {
-        Normal_Rovers *nr = nullptr;
-        Polar_Rovers *pr = nullptr;
-        Digging_Rovers *dr = nullptr;
-        while (!Checkup_Normal_Rovers.isEmpty())
-        {
-            if (!Checkup_Normal_Rovers.peek(nr))
-                break;
-            if (nr->getCheckupEndDay() == current_day)
-                moveNRfromcheckup();
-            else
-                break;
-        }
-        while (!Checkup_Polar_Rovers.isEmpty())
-        {
-            if (!Checkup_Polar_Rovers.peek(pr))
-                break;
-            if (pr->getCheckupEndDay() == current_day)
-                movePRfromcheckup();
-            else
-                break;
-        }
-        while (!Checkup_Digging_Rovers.isEmpty())
-        {
-            if (!Checkup_Digging_Rovers.peek(dr))
-                break;
-            if (dr->getCheckupEndDay() == current_day)
-                moveDRfromcheckup();
-            else
-                break;
+{
+    int pri;
+    int count;
+    priQueue<Normal_Rovers*> tempQueueN;
+    priQueue<Polar_Rovers*> tempQueueP;
+    priQueue<Digging_Rovers*> tempQueueD;
+    priQueue<Rescue_Rovers*> tempQueueR;
+
+    // 1. Normal Rovers
+    Normal_Rovers* nr = nullptr;
+    count = Checkup_Normal_Rovers.getCount();
+    for (int i = 0; i < count; i++) {
+        Checkup_Normal_Rovers.dequeue(nr, pri);
+        // FIX: Check <= current_day to release any overdue rovers
+        if (nr->getCheckupEndDay() <= current_day) { 
+            available_Normal_Rovers.enqueue(nr);
+        } else {
+            tempQueueN.enqueue(nr, pri);
         }
     }
+    while (!tempQueueN.isEmpty()) {
+        tempQueueN.dequeue(nr, pri);
+        Checkup_Normal_Rovers.enqueue(nr, pri);
+    }
+
+    // 2. Polar Rovers
+    Polar_Rovers* pr = nullptr;
+    count = Checkup_Polar_Rovers.getCount();
+    for (int i = 0; i < count; i++) {
+        Checkup_Polar_Rovers.dequeue(pr, pri);
+        if (pr->getCheckupEndDay() <= current_day) {
+            available_Polar_Rovers.enqueue(pr);
+        } else {
+            tempQueueP.enqueue(pr, pri);
+        }
+    }
+    while (!tempQueueP.isEmpty()) {
+        tempQueueP.dequeue(pr, pri);
+        Checkup_Polar_Rovers.enqueue(pr, pri);
+    }
+
+    // 3. Digging Rovers
+    Digging_Rovers* dr = nullptr;
+    count = Checkup_Digging_Rovers.getCount();
+    for (int i = 0; i < count; i++) {
+        Checkup_Digging_Rovers.dequeue(dr, pri);
+        if (dr->getCheckupEndDay() <= current_day) {
+            available_Digging_Rovers.enqueue(dr);
+        } else {
+            tempQueueD.enqueue(dr, pri);
+        }
+    }
+    while (!tempQueueD.isEmpty()) {
+        tempQueueD.dequeue(dr, pri);
+        Checkup_Digging_Rovers.enqueue(dr, pri);
+    }
+
+    // 4. Rescue Rovers
+    Rescue_Rovers* rr = nullptr;
+    count = Checkup_Rescue_Rovers.getCount();
+    for (int i = 0; i < count; i++) {
+        Checkup_Rescue_Rovers.dequeue(rr, pri);
+        if (rr->getCheckupEndDay() <= current_day) {
+            available_Rescue_Rovers.enqueue(rr);
+        } else {
+            tempQueueR.enqueue(rr, pri);
+        }
+    }
+    while (!tempQueueR.isEmpty()) {
+        tempQueueR.dequeue(rr, pri);
+        Checkup_Rescue_Rovers.enqueue(rr, pri);
+    }
+}
     void moveouttoexecuted()
     {
         Mission *outmission = nullptr;
@@ -651,7 +897,7 @@ public:
             {
                 Out_Missions.dequeue(outmission, pri);
                 outmission->setmissionstate(STATE::EXECUTING);
-                ExecMissions.enqueue(outmission, pri);
+                ExecMissions.enqueue(outmission, outmission->get_finished_execution_day());
             }
             else
             {
@@ -663,124 +909,23 @@ public:
     {
         current_day++;
     }
-    void printday()
-    {
-        cout << "Current Day: " << current_day << endl;
-    }
-    void printreqs()
-    {
-        cout << "================= Requests List =================" << endl;
-        cout << requests.getCount() << " requests remaining: " << endl;
-        // requests.print();
-        print_req(requests);
-        cout << endl;
-    }
-    void printreadylist()
-    {
-        cout << "================= Ready List(s) =================" << endl;
-        int totalReady = Ready_Normal_Missions.getCount() + Ready_Polar_Missions.getCount() + Ready_Digging_Missions.getCount();
-        cout << totalReady << " Missions: ";
-        cout << "NMs";
-        Ready_Normal_Missions.print(Ready_Normal_Missions.getCount());
-        cout << " PMs";
-        Ready_Polar_Missions.print(Ready_Polar_Missions.getCount());
-        cout << " DMs";
-        Ready_Digging_Missions.print(Ready_Digging_Missions.getCount());
-        cout << endl;
-    }
-    void printavailableRoverlist()
-    {
-        int totalRovers = available_Normal_Rovers.getCount() + available_Polar_Rovers.getCount() + available_Digging_Rovers.getCount();
-        cout << totalRovers << " Available Rovers: ";
-        cout << "NR ";
-        available_Normal_Rovers.print(available_Normal_Rovers.getCount());
-        cout << " PR ";
-        available_Polar_Rovers.print(available_Polar_Rovers.getCount());
-        cout << " DR ";
-        available_Digging_Rovers.print(available_Digging_Rovers.getCount());
-        cout << endl;
-    }
-    void printOutlist()
-    {
-        cout << "================= OUT List(s) =================" << endl;
-        cout << Out_Missions.getCount() << " Missions/Rovers: ";
-        Out_Missions.print(Out_Missions.getCount());
-        cout << endl;
-    }
-    void printExecList()
-    {
-        cout << "================= EXEC List(s) =================" << endl;
-        cout << ExecMissions.getCount() << " Missions/Rovers: ";
-        ExecMissions.print(ExecMissions.getCount());
-        cout << endl;
-    }
-    void printBackList()
-    {
-        cout << "================= BACK List(s) =================" << endl;
-        cout << BackMissions.getCount() << " Missions/Rovers: ";
-        BackMissions.print(BackMissions.getCount());
-        cout << endl;
-    }
-    void printAbortedList()
-    {
-        cout << "================= Aborted List(s) =================" << endl;
-        cout << AbortedMissions.getCount() << " Missions: ";
-        AbortedMissions.print(AbortedMissions.getCount());
-        cout << endl;
-    }
-    void printCheckupList()
-    {
-        cout << "================= Checkup List(s) =================" << endl;
-        int totalCheckup = Checkup_Normal_Rovers.getCount() + Checkup_Polar_Rovers.getCount() + Checkup_Digging_Rovers.getCount();
-        cout << totalCheckup << " Rovers: ";
-        Checkup_Normal_Rovers.print(Checkup_Normal_Rovers.getCount());
-        Checkup_Polar_Rovers.print(Checkup_Polar_Rovers.getCount());
-        Checkup_Digging_Rovers.print(Checkup_Digging_Rovers.getCount());
-        cout << endl;
-    }
-    void printDoneList()
-    {
-        cout << "================= DONE List(s) =================" << endl;
-        cout << CompletedMissions.getCount() << " Missions: ";
-        CompletedMissions.print(CompletedMissions.getCount());
-        cout << endl;
-    }
-    void printline()
-    {
-        cout << "===============================================" << endl;
-    }
-    void printall()
-    {
-        // cout << "Current Day: " << current_day << endl;
-        printday();
-        printreqs();
-        printreadylist();
-        printavailableRoverlist();
-        printOutlist();
-        printExecList();
-        printBackList();
-        printAbortedList();
-        printCheckupList();
-        printDoneList();
-        printline();
-    }
+   
     void simulator()
     {
         ChecknewRequests();
         moveroversfromcheckuptoavailable();
+        checkMissionFailure();
         assigningMissionsToRovers();
         moveouttoexecuted();
         moveexecutedtoback();
         movebacktodone_abort();
-        // printday();
-        // printreqs();
-        // printreadylist();
-        // printOutlist();
-        // printExecList();
-        // printBackList();
-        // printDoneList();
-        // printline();
         incrementDay();
+    }
+   
+
+    LinkedQueue<Mission *> *getFailedMissions()
+    {
+        return &Failed_Missions;
     }
     LinkedQueue<request *> *getRequestsQueue()
     {
@@ -814,43 +959,7 @@ public:
     {
         return &Ready_Complex_Missions;
     }
-    //// ==================================== = Omar Syed======================================/
-    // void SET_AVAIL_PR(Polar_Rovers*& Avail_PR) {
-    //     available_Polar_Rovers.enqueue(Avail_PR);
-    //     POLAR_ROVER_SPEED = Avail_PR->getSpeed();
-    // }
-
-    // void SET_AVAIL_DR(Digging_Rovers*& Avail_DR) {
-    //     available_Digging_Rovers.enqueue(Avail_DR);
-    //     DIGGING_ROVER_SPEED = Avail_DR->getSpeed();
-    // }
-
-    // void SET_AVAIL_NR(Normal_Rovers*& Avail_NR) {
-    //     available_Normal_Rovers.enqueue(Avail_NR);
-    //     NORMAL_ROVER_SPEED = Avail_NR->getSpeed();
-    // }
-
-    /*  void SET_REQUEST_QUEUE(request* requestptr) {
-          requests.enqueue(requestptr);
-      }
-      LinkedQueue<Polar_Rovers*>GET_AVAIL_PR()const {
-          return available_Polar_Rovers;
-      }
-      LinkedQueue<Digging_Rovers*>GET_AVAIL_DR()const {
-          return available_Digging_Rovers;
-      }
-      LinkedQueue<Normal_Rovers*>GET_AVAIL_NR()const {
-          return available_Normal_Rovers;
-      }*/
-    /*void SET_RDM(Mission*DM) {
-        Ready_Digging_Missions.enqueue(DM);
-    }
-    void SET_RPM(Mission*PM) {
-        Ready_Digging_Missions.enqueue(PM);
-    }
-    void SET_RNM(Mission*NM) {
-        Ready_Digging_Missions.enqueue(NM);
-    }*/
+   
 
     LinkedQueue<Complex_Mission *> *getReadyComplexMissionsQueue()
     {
@@ -877,22 +986,22 @@ public:
         return &available_Rescue_Rovers;
     }
 
-    LinkedQueue<Normal_Rovers *> *getCheckupNormalRovers()
+    priQueue<Normal_Rovers *> *getCheckupNormalRovers()
     {
         return &Checkup_Normal_Rovers;
     }
 
-    LinkedQueue<Polar_Rovers *> *getCheckupPolarRovers()
+    priQueue<Polar_Rovers *> *getCheckupPolarRovers()
     {
         return &Checkup_Polar_Rovers;
     }
 
-    LinkedQueue<Digging_Rovers *> *getCheckupDiggingRovers()
+    priQueue<Digging_Rovers *> *getCheckupDiggingRovers()
     {
         return &Checkup_Digging_Rovers;
     }
 
-    LinkedQueue<Rescue_Rovers *> *getCheckupRescueRovers()
+    priQueue<Rescue_Rovers *> *getCheckupRescueRovers()
     {
         return &Checkup_Rescue_Rovers;
     }
@@ -1054,6 +1163,7 @@ public:
 
         out << "% Avg_Wdays/ Avg_MDUR = " << Wdays_MDUR << "%, "
             << "Auto-aborted= " << AutoAborted * 100 << "%\n";
+        out << "Num of failed missions: " << number_of_failed_missions << "\n";
         out.close();
     }
 

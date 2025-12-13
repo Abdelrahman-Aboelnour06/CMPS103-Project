@@ -7,12 +7,14 @@ def generate_mars_station_input():
     
     # --- Configuration ---
     # Rovers: Normal, Polar, Digging
-    n_rovers = [random.randint(0, 20), random.randint(0, 16), random.randint(0, 12)] 
+    n_rovers = [random.randint(1, 20), random.randint(1, 16), random.randint(1, 12), random.randint(1, 5)] 
     # Speeds
-    speeds = [random.randint(0, 30), random.randint(0, 18), random.randint(0, 22)]
+    speeds = [random.randint(1, 30), random.randint(1, 18), random.randint(1, 22), random.randint(1, 25)]
     # Checkups: N missions before checkup, Checkup Duration (N, P, D)
-    checkups = [random.randint(0, 11), random.randint(0, 9), random.randint(0, 12), random.randint(0, 10)]
-    
+    checkups = [random.randint(1, 11), random.randint(1, 9), random.randint(1, 12), random.randint(1, 10),random.randint(1,7)]
+    # Failure Probability (0-100)
+    failure_probability = round(random.random() * 100)
+
     
     # Lists to track state
     events = []
@@ -23,7 +25,7 @@ def generate_mars_station_input():
 
     for _ in range(total_events):
         # 20% chance to increment the day, keeping requests clumped
-        if random.random() < 0.2:
+        if random.random() < 0.8:
             current_day += random.randint(0, 1)
         
         # Decide Event Type: 90% New Request, 10% Cancel
@@ -60,12 +62,14 @@ def generate_mars_station_input():
     # --- Write to File ---
     with open(filename, "w") as f:
         # Line 1: Rover Counts
-        f.write(f"{n_rovers[0]} {n_rovers[1]} {n_rovers[2]}\n")
+        f.write(f"{n_rovers[0]} {n_rovers[1]} {n_rovers[2]} {n_rovers[3]}\n")
         # Line 2: Rover Speeds
-        f.write(f"{speeds[0]} {speeds[1]} {speeds[2]}\n")
+        f.write(f"{speeds[0]} {speeds[1]} {speeds[2]} {speeds[3]}\n")
         # Line 3: Checkup Config
-        f.write(f"{checkups[0]} {checkups[1]} {checkups[2]} {checkups[3]}\n")
-        # Line 4: Total Events
+        f.write(f"{checkups[0]} {checkups[1]} {checkups[2]} {checkups[3]} {checkups[4]}\n")
+        # Line 4: Failure Probability
+        f.write(f"{failure_probability}\n")
+        # Line 5: Total Events
         f.write(f"{total_events}\n")
         # Events
         for event in events:

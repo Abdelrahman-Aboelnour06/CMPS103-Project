@@ -23,7 +23,7 @@ class Rescue_Rovers : public Rover
         return checkup_duration;
     }
     int getRoverID() const override {
-        return rover_id;
+        return Rover::rover_id;
     }
     int getMissionsDone() const override {
         return missions_done;
@@ -37,8 +37,8 @@ class Rescue_Rovers : public Rover
 
 };
 
-std::ostream& operator<<(std::ostream& os, const Rescue_Rovers& rover) {
-        os << "Rescue Rover ID: " << rover.getRoverID() << ", Speed: " << rover.getSpeed() << ", Days Before Checkup: " << rover.getDaysBeforeCheckup() << ", Checkup Duration: " << rover.getCheckupDuration() << ", Missions Done: " << rover.getMissionsDone();
-           return os;
-    }
+std::ostream& operator<<(std::ostream& os, const Rescue_Rovers* rover) {
+    os << rover->getRoverID();
+    return os;
+}
 
