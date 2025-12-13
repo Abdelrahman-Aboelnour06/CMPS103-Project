@@ -14,78 +14,7 @@
 using namespace std;
 
 /*-----------------------------Omar Syed-----------------------------*/
-
-int main() 
-{
-
-	Mars_Station* Mstation = new Mars_Station;
-
-	
-	UI ui;
-	Mstation->FILE_LOADING("input_10.txt");
-
-	ui.selectMode();
-	ui.silent_message();
-	while (true)
-	{
-		
-		ui.current_day_message(Mstation->get_current_day());
-
-		Mstation->simulator();
-
-		ui.displayDay(
-			Mstation->get_current_day(),  
-			Mstation->getRequestsQueue(),
-			Mstation->getReadyDiggingMissions(),
-			Mstation->getReadyPolarMissions(),  
-			Mstation->getReadyNormalMissions(),
-			Mstation->getReadyComplexMissions(),
-			Mstation->getAvailableNormalRovers(),
-			Mstation->getAvailablePolarRovers(),
-			Mstation->getAvailableDiggingRovers(),
-			Mstation->getAvailableRescueRovers(),
-			Mstation->getOutMissions(),
-			Mstation->getExecMissions(),
-			Mstation->getBackMissions(),
-			Mstation->getAbortedMissions(),
-			Mstation->getCheckupNormalRovers(),
-			Mstation->getCheckupPolarRovers(),
-			Mstation->getCheckupDiggingRovers(),
-			Mstation->getCheckupRescueRovers(),
-			Mstation->getDoneMissions(),
-			Mstation->getFailedMissions()
-		);
-
-		
-		if (Mstation->getRequestsQueue()->isEmpty() &&
-			Mstation->getReadyNormalMissions()->isEmpty() &&
-			Mstation->getReadyDiggingMissions()->isEmpty() &&
-			Mstation->getReadyPolarMissions()->isEmpty() &&
-			Mstation->getExecMissions()->isEmpty() &&
-			Mstation->getBackMissions()->isEmpty() &&
-			Mstation->getOutMissions()->isEmpty() &&
-			Mstation->getCheckupDiggingRovers()->isEmpty() &&
-			Mstation->getCheckupNormalRovers()->isEmpty() &&
-			Mstation->getCheckupPolarRovers()->isEmpty() &&
-			Mstation->getCheckupRescueRovers()->isEmpty() &&
-			Mstation->getFailedMissions()->isEmpty()
-			)
-		{
-			Mstation->generateOutputFile("output.txt");
-			ui.end_message();
-			break;
-		}
-	}
-	//cout << Mstation->getprobability_of_failure();
-	delete Mstation;
-
-
-	
-
-	return 0;
-}
-
-/*-----------------------------Omar Syed-----------------------------*/void DATA_STRUCT_TESTING() {
+void DATA_STRUCT_TESTING() {
 	cout << "--Testing Queue--\n";
 	cout << "--Creating a Queue to missions--\n";
 	
@@ -221,3 +150,72 @@ int main()
 	/*===================PriQueue=========================*/
 
 }
+
+int main() 
+{
+
+	Mars_Station* Mstation = new Mars_Station;
+
+	
+	UI ui;
+	Mstation->FILE_LOADING("input_125.txt");
+
+	ui.selectMode();
+	ui.silent_message();
+	while (true)
+	{
+		
+		ui.current_day_message(Mstation->get_current_day());
+
+		Mstation->simulator();
+
+		ui.displayDay(
+			Mstation->get_current_day(),  
+			Mstation->getRequestsQueue(),
+			Mstation->getReadyDiggingMissions(),
+			Mstation->getReadyPolarMissions(),  
+			Mstation->getReadyNormalMissions(),
+			Mstation->getReadyComplexMissions(),
+			Mstation->getAvailableNormalRovers(),
+			Mstation->getAvailablePolarRovers(),
+			Mstation->getAvailableDiggingRovers(),
+			Mstation->getAvailableRescueRovers(),
+			Mstation->getOutMissions(),
+			Mstation->getExecMissions(),
+			Mstation->getBackMissions(),
+			Mstation->getAbortedMissions(),
+			Mstation->getCheckupNormalRovers(),
+			Mstation->getCheckupPolarRovers(),
+			Mstation->getCheckupDiggingRovers(),
+			Mstation->getCheckupRescueRovers(),
+			Mstation->getDoneMissions()
+		);
+
+		
+		if (Mstation->getRequestsQueue()->isEmpty() &&
+			Mstation->getReadyNormalMissions()->isEmpty() &&
+			Mstation->getReadyDiggingMissions()->isEmpty() &&
+			Mstation->getReadyPolarMissions()->isEmpty() &&
+			Mstation->getExecMissions()->isEmpty() &&
+			Mstation->getBackMissions()->isEmpty() &&
+			Mstation->getOutMissions()->isEmpty() &&
+			Mstation->getCheckupDiggingRovers()->isEmpty() &&
+			Mstation->getCheckupNormalRovers()->isEmpty() &&
+			Mstation->getCheckupPolarRovers()->isEmpty()
+			)
+		{
+			Mstation->generateOutputFile("output.txt");
+			ui.end_message();
+			break;
+		}
+	}
+
+	delete Mstation;
+
+
+
+
+	return 0;
+}
+
+/*-----------------------------Omar Syed-----------------------------*/

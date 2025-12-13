@@ -73,12 +73,11 @@ public:
         priQueue<Mission*>* execMissions,
         priQueue<Mission*>* backMissions,
         ArrayStack<Mission*>* abortedMissions,
-        priQueue<Normal_Rovers*>* checkupNormalRovers,
-        priQueue<Polar_Rovers*>* checkupPolarRovers,
-        priQueue<Digging_Rovers*>* checkupDiggingRovers,
-        priQueue<Rescue_Rovers*>* checkupRescueRovers,
-        ArrayStack<Mission*>* doneMissions,
-        LinkedQueue<Mission*>* failedMissions) {
+        LinkedQueue<Normal_Rovers*>* checkupNormalRovers,
+        LinkedQueue<Polar_Rovers*>* checkupPolarRovers,
+        LinkedQueue<Digging_Rovers*>* checkupDiggingRovers,
+        LinkedQueue<Rescue_Rovers*>* checkupRescueRovers,
+        ArrayStack<Mission*>* doneMissions) {
         if (mode != 1) {
             return;
         }
@@ -118,14 +117,6 @@ public:
             cout << "]";
         }
         cout << endl;
-        cout << "\n================== In-Emergency Missions ================== \n";
-        cout << failedMissions->getCount() << " Missions waiting for Rescue: ";
-        if (failedMissions->getCount() > 0) {
-            cout << "[";
-            failedMissions->print(failedMissions->getCount());
-            cout << "]";
-        }
-        cout << endl;
         cout << "\n================== Available Rovers List(s) ================== \n";
         cout << available_Digging_Rovers->getCount() + available_Normal_Rovers->getCount() + available_Polar_Rovers->getCount() << " Available Rovers: ";
         if (available_Normal_Rovers->getCount() > 0) {
@@ -145,12 +136,6 @@ public:
             available_Digging_Rovers->print(available_Digging_Rovers->getCount());
             cout << "] ";
         }
-        if (available_Rescue_Rovers->getCount() > 0) {
-            cout << "RR[";
-            available_Rescue_Rovers->print(available_Rescue_Rovers->getCount());
-            cout << "] ";
-        }
-
         cout << endl;
         cout << "\n================== Out List(s) ================== \n";
         cout << outMissions->getCount() << " Missions/Rovers: ";
@@ -202,8 +187,8 @@ public:
         }
         cout << endl;
         cout << "\n================== Checkup List(s) ================== \n";
-        cout << checkupDiggingRovers->getCount() + checkupNormalRovers->getCount() + checkupPolarRovers->getCount() + checkupRescueRovers->getCount() <<" Rovers: ";
-        if (checkupDiggingRovers->getCount() + checkupNormalRovers->getCount() + checkupPolarRovers->getCount()>0 + checkupRescueRovers->getCount()>0) {
+        cout << checkupDiggingRovers->getCount() + checkupNormalRovers->getCount() + checkupPolarRovers->getCount()<<" Rovers: ";
+        if (checkupDiggingRovers->getCount() + checkupNormalRovers->getCount() + checkupPolarRovers->getCount()>0) {
             cout << "[";
             if (checkupDiggingRovers->getCount() > 0)
                 checkupDiggingRovers->print(checkupDiggingRovers->getCount());
@@ -211,8 +196,6 @@ public:
                 checkupNormalRovers->print(checkupNormalRovers->getCount());
             if (checkupPolarRovers->getCount() > 0)
                 checkupPolarRovers->print(checkupPolarRovers->getCount());
-            if (checkupRescueRovers->getCount() > 0)
-                checkupRescueRovers->print(checkupRescueRovers->getCount());
             cout << "]";
         }
         cout << endl;
