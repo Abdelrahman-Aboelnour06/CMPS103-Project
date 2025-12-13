@@ -68,7 +68,6 @@ public:
         LinkedQueue<Normal_Rovers*>* available_Normal_Rovers,
         LinkedQueue<Polar_Rovers*>* available_Polar_Rovers,
         LinkedQueue<Digging_Rovers*>* available_Digging_Rovers,
-        LinkedQueue<Rescue_Rovers*>* available_Rescue_Rovers,
         OUT_missions* outMissions,
         priQueue<Mission*>* execMissions,
         priQueue<Mission*>* backMissions,
@@ -76,7 +75,6 @@ public:
         LinkedQueue<Normal_Rovers*>* checkupNormalRovers,
         LinkedQueue<Polar_Rovers*>* checkupPolarRovers,
         LinkedQueue<Digging_Rovers*>* checkupDiggingRovers,
-        LinkedQueue<Rescue_Rovers*>* checkupRescueRovers,
         ArrayStack<Mission*>* doneMissions) {
         if (mode != 1) {
             return;
@@ -95,7 +93,7 @@ public:
         }
 
         cout << "\n================== Ready List(s) ================== \n";
-        cout << readyDiggingMissions->getCount() + readyNormalMissions->getCount() + readyPolarMissions->getCount() << " Missions: ";
+        cout << readyDiggingMissions->getCount() + readyNormalMissions->getCount() + readyPolarMissions->getCount() + readyComplexMissions->getCount() << " Missions: ";
         if (readyNormalMissions->getCount() > 0) {
             cout << "NMs[";
             readyNormalMissions->print(readyNormalMissions->getCount());

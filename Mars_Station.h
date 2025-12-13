@@ -772,14 +772,6 @@ public:
         moveouttoexecuted();
         moveexecutedtoback();
         movebacktodone_abort();
-        // printday();
-        // printreqs();
-        // printreadylist();
-        // printOutlist();
-        // printExecList();
-        // printBackList();
-        // printDoneList();
-        // printline();
         incrementDay();
     }
     LinkedQueue<request *> *getRequestsQueue()

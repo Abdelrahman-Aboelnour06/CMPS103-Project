@@ -57,6 +57,7 @@ public:
 				}
 				Mission* abortedMission = currentMission;
 				delete current; // Free the memory of the node
+				count--;
 				return abortedMission; // Return the aborted mission
 			}
 			previous = current;

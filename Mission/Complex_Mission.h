@@ -39,3 +39,9 @@ class Complex_Mission : public Mission {
     }
 
 };
+
+std::ostream &operator<<(std::ostream &output, const Complex_Mission *m)
+{
+    output << m->getID();
+    return output;
+}

@@ -7,11 +7,11 @@ def generate_mars_station_input():
     
     # --- Configuration ---
     # Rovers: Normal, Polar, Digging
-    n_rovers = [random.randint(0, 20), random.randint(0, 16), random.randint(0, 12)] 
+    n_rovers = [random.randint(1, 20), random.randint(1, 16), random.randint(1, 12)] 
     # Speeds
-    speeds = [random.randint(0, 30), random.randint(0, 18), random.randint(0, 22)]
+    speeds = [random.randint(1, 30), random.randint(1, 18), random.randint(1, 22)]
     # Checkups: N missions before checkup, Checkup Duration (N, P, D)
-    checkups = [random.randint(0, 11), random.randint(0, 9), random.randint(0, 12), random.randint(0, 10)]
+    checkups = [random.randint(1, 11), random.randint(1, 9), random.randint(1, 12), random.randint(1, 10)]
     
     
     # Lists to track state
